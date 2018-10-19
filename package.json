@@ -6,11 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/**/*.js",
-    "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/**/*.js",
+    "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js",
+    "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js",
     "api:server": "./server/athena.js"
   },
   "dependencies": {
+    "barrkeep": "^1.3.1",
+    "requireindex": "^1.2.0",
     "restify": "^7.2.1",
     "uuid": "^3.3.2",
     "vue": "^2.5.17",

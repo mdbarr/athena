@@ -31,10 +31,19 @@ function Models(athena) {
 
       athena.util.addPrivate(this, 'status', {
         uptime: 0, // seconds
-        health: 'healhty', // health, offline, unhealthy??
+        health: 'healthy', // health, offline, unhealthy??
         graph: new Array(50).fill(0), //
         lastUpdate: null,
         lastChecked: null
+      });
+
+      athena.util.addPrivate(this, 'computed', {
+        get parent() {
+          return athena.store.resolve(this.parent);
+        },
+        get children() {
+          return this.children.map((x) => athena.store.resolve(x));
+        }
       });
     }
 

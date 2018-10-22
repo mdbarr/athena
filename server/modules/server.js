@@ -27,5 +27,5 @@ module.exports = function(athena) {
     }
   }
 
-  athena.model.register('server', Server);
+  athena.models.Node.register('server', Server);
 };

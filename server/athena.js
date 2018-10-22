@@ -2,7 +2,12 @@
 
 require('barrkeep');
 
-const defaults = {};
+const defaults = {
+  database: {
+    url: 'mongodb://localhost:27017',
+    name: 'athena'
+  }
+};
 
 function Athena(config = {}) {
   const self = this;
@@ -15,18 +20,27 @@ function Athena(config = {}) {
   //////////
 
   self.util = require('./util')(self);
+  self.store = require('./store')(self);
   self.models = require('./models')(self);
   self.modules = require('./modules')(self);
 
-  self.store = {};
-
   //////////
 
-  //
-  self.boot = function() {
-    // Load all models from database
+  self.boot = function(callback) {
+    callback = self.util.callback(callback);
 
-    // Start check on each node (setInterval, queue/setInterval, setTimeout -> setTimeout)
+    // Load all models from database
+    self.store.boot(function(error) {
+
+      // Start check on each node (setInterval, queue/setInterval, setTimeout -> setTimeout)
+      callback(error);
+    });
+  };
+
+  self.stop = function(callback) {
+    callback = self.util.callback(callback);
+    self.store.stop();
+    callback();
   };
 
   //////////

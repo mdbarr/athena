@@ -7,6 +7,19 @@ function Models(athena) {
 
   //////////
 
+  const eventProxy = function(emitter, object, eventName) {
+    return new Proxy(object, {
+      set: function(obj, prop, value) {
+        obj[prop] = value;
+        emitter.emit(eventName, object);
+      }
+    });
+  };
+
+  //////////
+
+  const nodes = {};
+
   class Node extends EventEmitter {
     constructor({
       id,
@@ -14,61 +27,77 @@ function Models(athena) {
       parent = 'root',
       children = [],
       icon = 'network',
-      metadata = {}
+      metadata = {},
+      sync = true
     } = {}) {
       super();
 
-      athena.util.addPrivate(this, 'athena', athena);
+      const node = this;
 
-      this.id = id || athena.util.id();
-      this.object = 'node';
-      this.name = name || 'Unnamed';
-      this.type = 'node';
-      this.parent = parent;
-      this.children = children;
-      this.icon = icon;
-      this.metadata = metadata;
+      athena.util.addPrivate(node, 'athena', athena);
 
-      athena.util.addPrivate(this, 'status', {
+      node.id = id || athena.util.id();
+      node.object = 'node';
+      node.name = name || 'Unnamed';
+      node.type = 'node';
+      node.parent = parent;
+      node.children = children;
+      node.icon = icon;
+      node.metadata = metadata;
+      node.sync = sync;
+
+      athena.util.addPrivate(node, 'status', eventProxy(node, {
         uptime: 0, // seconds
         health: 'healthy', // health, offline, unhealthy??
         graph: new Array(50).fill(0), //
         lastUpdate: null,
         lastChecked: null
-      });
+      }, 'status'));
 
-      athena.util.addPrivate(this, 'computed', {
+      athena.util.addPrivate(node, '_cache');
+      athena.util.addPrivate(node, 'computed', {
         get parent() {
-          return athena.store.resolve(this.parent);
+          if (!node._cache.parent) {
+            node._cache.parent = athena.store.resolve(node.parent);
+          }
+          return node._cache.parent;
         },
         get children() {
-          return this.children.map((x) => athena.store.resolve(x));
+          if (!node._cache.children) {
+            node._cache.children = node.children.map((x) => athena.store.resolve(x));
+          }
+          return node._cache.children;
         }
       });
     }
 
+    static register(type, Constructor) {
+      self[Constructor.name] = Constructor;
+      nodes[type] = Constructor;
+    }
+
     serialize() {
       const object = {};
-      for (const item of this) {
+      for (const item in this) {
+        if (item.startsWith('_') ||
+            this.propertyIsEnumerable(item) === false ||
+            item === 'domain') {
+          continue;
+        }
         object[item] = this[item];
       }
       return object;
     }
   }
 
-  const nodes = {
-    node: Node
-  };
+  Node.register('node', Node);
 
-  this.node = {};
-  this.node.register = function(type, Constructor) {
-    nodes[type] = Constructor;
-  };
-
-  this.node.create = function(object) {
+  this.node = function(object) {
     const type = object.type || 'node';
     const Constructor = nodes[type] || nodes.node;
-    return new Constructor(object);
+    const node = new Constructor(object);
+
+    return eventProxy(node, node, 'changed');
   };
 
   //////////

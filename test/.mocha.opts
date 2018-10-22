@@ -1,0 +1,5 @@
+--async-only
+--require should
+--ui bdd
+--timeout 30000
+--slow 10000

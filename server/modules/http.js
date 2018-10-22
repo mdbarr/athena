@@ -33,8 +33,8 @@ module.exports = function(athena) {
     }
   }
 
-  athena.model.register('http', HTTP);
-  athena.model.register('https', HTTP);
+  athena.models.Node.register('http', HTTP);
+  athena.models.Node.register('https', HTTP);
 
   class API extends HTTP {
     constructor({
@@ -64,5 +64,5 @@ module.exports = function(athena) {
     }
   }
 
-  athena.model.register('api', API);
+  athena.models.Node.register('api', API);
 };

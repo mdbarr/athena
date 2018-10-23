@@ -13,7 +13,7 @@ describe('Basic Spec', function() {
   });
 
   it('should create the root node', function(done) {
-    root = athena.models.node({
+    root = athena.nodes.create({
       name: 'root',
       id: '1599655d-e358-4c6e-a5da-8b6058b2e435',
       parent: null,

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(athena) {
-  class Server extends athena.models.Node {
+  class Server extends athena.nodes.Node {
     constructor({
       id, name, parent, children, address, latency = -1, icon = 'server-network', metadata
     }) {
@@ -27,5 +27,5 @@ module.exports = function(athena) {
     }
   }
 
-  athena.models.Node.register('server', Server);
+  athena.nodes.register('server', Server);
 };

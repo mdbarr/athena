@@ -2,7 +2,7 @@
 
 module.exports = function(athena) {
 
-  class HTTP extends athena.models.Node {
+  class HTTP extends athena.nodes.Node {
     constructor({
       id, name, parent, children, address, port = 443, icon = 'web', metadata,
       method = 'GET', url, statusCode = 200, payload = null, headers = {},
@@ -33,8 +33,8 @@ module.exports = function(athena) {
     }
   }
 
-  athena.models.Node.register('http', HTTP);
-  athena.models.Node.register('https', HTTP);
+  athena.nodes.register('http', HTTP);
+  athena.nodes.register('https', HTTP);
 
   class API extends HTTP {
     constructor({
@@ -64,5 +64,5 @@ module.exports = function(athena) {
     }
   }
 
-  athena.models.Node.register('api', API);
+  athena.nodes.register('api', API);
 };

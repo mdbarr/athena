@@ -21,6 +21,7 @@ function Athena(config = {}) {
 
   self.util = require('./util')(self);
   self.store = require('./store')(self);
+  self.nodes = require('./nodes')(self);
   self.models = require('./models')(self);
   self.modules = require('./modules')(self);
 

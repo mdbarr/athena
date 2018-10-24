@@ -54,8 +54,16 @@ function Nodes(athena) {
         lastChecked: null
       }, 'status'));
 
-      athena.util.addPrivate(node, '_cache');
+      athena.util.addPrivate(node, '_cache', {});
       athena.util.addPrivate(node, 'computed', {
+        get health() {
+          const health = {
+            self: node.status.health,
+            aggregate: node.status.health
+          };
+
+          return health;
+        },
         get parent() {
           if (!node._cache.parent) {
             node._cache.parent = athena.store.resolve(node.parent);

@@ -20,9 +20,11 @@
       </v-list-tile>
     </v-list>
   </v-navigation-drawer>
-  <v-toolbar app fixed clipped-left dense color="blue-grey darken-1">
-    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-    <v-toolbar-title>Athena</v-toolbar-title>
+  <v-toolbar app fixed clipped-left dense class="athena-toolbar">
+    <v-btn icon @click.stop="drawer = !drawer">
+      <img src="./assets/athena.svg" width="32" color="white">
+    </v-btn>
+    <v-toolbar-title class="satyr">ATHENA</v-toolbar-title>
   </v-toolbar>
   <v-content>
     <router-view></router-view>
@@ -30,6 +32,7 @@
   <v-footer app fixed>
     <span class="pl-2">&copy; 2018</span>
   </v-footer>
+  <img src="./assets/owl.svg" class="owl">
 </v-app>
 </template>
 
@@ -42,10 +45,31 @@ export default {
     }
   }
 }
+// #347597
 </script>
 
 <style>
-.athena-logo {
-    font-size: 12px;
+@font-face {
+    font-family: 'Satyr';
+    src: url('./assets/satyr.ttf')  format('truetype');
 }
+.satyr {
+    font-family: Satyr;
+    font-size: 28px;
+    letter-spacing: 12px;
+    margin-top: 8px;
+}
+
+.athena-toolbar {
+    background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);
+}
+
+.owl {
+    position: absolute;
+    width: 400px;
+    right: 40px;
+    bottom: 40px;
+    z-index: 0;
+}
+
 </style>

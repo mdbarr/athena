@@ -22,9 +22,9 @@
   </v-navigation-drawer>
   <v-toolbar app fixed clipped-left dense class="athena-toolbar">
     <v-btn icon @click.stop="drawer = !drawer">
-      <img src="./assets/athena.svg" width="32" color="white">
+      <img src="./assets/athena.svg" width="32">
     </v-btn>
-    <v-toolbar-title class="satyr">ATHENA</v-toolbar-title>
+    <img src="./assets/athena-text.svg" class="athena-title">
     <v-spacer></v-spacer>
     <v-menu offset-y>
       <v-btn slot="activator" flat>
@@ -72,13 +72,10 @@ export default {
     font-family: 'Satyr';
     src: url('./assets/satyr.ttf')  format('truetype');
 }
-.satyr {
-    font-family: Satyr;
-    font-size: 28px;
-    letter-spacing: 12px;
-    margin-top: 8px;
+.athena-title {
+    height: 32px;
+    padding-left: 8px;
 }
-
 .athena-toolbar {
     background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
     background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);

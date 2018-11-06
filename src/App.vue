@@ -68,10 +68,6 @@ export default {
 </script>
 
 <style>
-@font-face {
-    font-family: 'Satyr';
-    src: url('./assets/satyr.ttf')  format('truetype');
-}
 .athena-title {
     height: 32px;
     padding-left: 8px;

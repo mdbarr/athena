@@ -28,59 +28,63 @@
 </script>
 
 <style>
-* {
-    font-family: monospace
-}
 .node-title {
     border-left: 12px solid #3f647f;
-    height: 32px;
-    padding: 0;
-    line-height: 32px !important;
+    font-family: monospace;
     font-size: 20px;
+    font-weight: 700;
+    height: 32px;
+    line-height: 32px !important;
+    padding: 0;
     text-align: center;
 }
 .node-title-icon {
-    position: absolute;
     left: 16px;
+    position: absolute;
 }
 .node-title-shift {
-    position: relative;
     left: -12px;
+    position: relative;
 }
 .node-status {
-    height: 28px;
     background-color: #3f647f;
-    padding-left: 6px;
-    line-height: 26px !important;
+    font-family: monospace;
     font-size: 18px;
+    font-weight: 700;
+    height: 28px;
+    line-height: 26px !important;
+    padding-left: 6px;
 }
 .node-child-divider {
-    width: 30px;
-    border-left: 28px solid transparent;
     border-bottom: 28px solid #CA392D;
-    padding: 0px;
+    border-left: 28px solid transparent;
     float: right;
+    padding: 0px;
+    width: 30px;
 }
 .node-child-status {
-    float: right;
-    width: 30%;
-    height: 28px;
     background-color: #CA392D;
+    float: right;
+    font-family: monospace;
+    font-weight: 700;
+    height: 28px;
     padding: 0px;
+    width: 30%;
 }
 .node-folder {
+    background-color: #262626;
     float: right;
     height: 28px;
-    width: 46px;
     text-align: right;
-    background-color: #262626;
+    width: 46px;
 }
 .node-folder:hover {
     background-color: #666;
 }
 .node-info {
     border-left: 12px solid #3f647f;
-    padding: 4px;
+    font-family: monospace;
     min-height: 100px;
+    padding: 4px;
 }
 </style>

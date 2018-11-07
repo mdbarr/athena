@@ -44,6 +44,17 @@
     </v-menu>
   </v-toolbar>
   <v-content>
+    <v-progress-linear v-if="false" :indeterminate="true" color="white" height="2" class="athena-progress"></v-progress-linear>
+    <div v-else height="2"></div>
+    <v-breadcrumbs :items="crumbs" dark class="athena-breadcrumbs">
+      <v-icon slot="divider">mdi-chevron-right</v-icon>
+      <template slot="item" slot-scope="props">
+        <a class="athena-breadcrumb-link" :href="props.item.href">
+          <v-icon v-if="props.item.icon" small>{{ 'mdi-' + props.item.icon }}</v-icon>
+          <span v-else>{{ props.item.text.toUpperCase() }}</span>
+        </a>
+      </template>
+    </v-breadcrumbs>
     <router-view></router-view>
   </v-content>
   <v-footer app fixed class="pa-3" height="28">
@@ -60,7 +71,17 @@ export default {
   name: 'App',
   data () {
     return {
-      drawer: false
+      drawer: false,
+      crumbs: [ {
+        text: 'dashboard',
+        disabled: false,
+        href: 'breadcrumbs_dashboard',
+        icon: 'view-dashboard'
+      }, {
+        text: 'Root',
+        disabled: false,
+        href: 'breadcrumbs_root'
+      } ]
     }
   }
 }
@@ -84,5 +105,21 @@ export default {
     right: 40px;
     bottom: 40px;
     z-index: 0;
+}
+
+.athena-progress {
+    margin: 0px;
+}
+
+.athena-breadcrumb-link {
+    text-decoration: none;
+    color: white;
+}
+.athena-breadcrumb-link:hover {
+    text-decoration: underline;
+    color: white;
+}
+.athena-breadcrumbs {
+    padding: 8px 0px 4px 12px;
 }
 </style>

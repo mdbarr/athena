@@ -26,19 +26,28 @@
     </v-btn>
     <img src="./assets/athena-text.svg" class="athena-title">
     <v-spacer></v-spacer>
-    <v-menu offset-y>
+    <v-menu offset-y left>
       <v-btn slot="activator" flat>
         Mark &nbsp; <v-icon>mdi-account-circle</v-icon>
       </v-btn>
       <v-list>
         <v-list-tile @click="navigate('profile')">
-          <v-list-tile-title>Profile</v-list-tile-title>
+           <v-list-tile-content>
+             <v-list-tile-title>Profile</v-list-tile-title>
+           </v-list-tile-content>
+           <v-list-tile-avatar><v-icon small>mdi-account-edit</v-icon></v-list-tile-avatar>
         </v-list-tile>
         <v-list-tile @click="navigate('settings')">
-          <v-list-tile-title>Settings</v-list-tile-title>
+          <v-list-tile-content>
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-avatar><v-icon small>mdi-settings-outline</v-icon></v-list-tile-avatar>
         </v-list-tile>
         <v-list-tile @click="logout()">
-          <v-list-tile-title>Logout</v-list-tile-title>
+          <v-list-tile-content>
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-avatar><v-icon small>mdi-logout-variant</v-icon></v-list-tile-avatar>
         </v-list-tile>
       </v-list>
     </v-menu>
@@ -47,12 +56,12 @@
     <v-progress-linear v-if="false" :indeterminate="true" color="white" height="2" class="athena-progress"></v-progress-linear>
     <div v-else height="2"></div>
     <v-breadcrumbs :items="crumbs" dark class="athena-breadcrumbs">
-      <v-icon slot="divider">mdi-chevron-right</v-icon>
+      <v-icon slot="divider">mdi-arrow-right-bold</v-icon>
       <template slot="item" slot-scope="props">
-        <a class="athena-breadcrumb-link" :href="props.item.href">
+        <router-link class="athena-breadcrumb-link" :to="props.item.href">
           <v-icon v-if="props.item.icon" small>{{ 'mdi-' + props.item.icon }}</v-icon>
           <span v-else>{{ props.item.text.toUpperCase() }}</span>
-        </a>
+        </router-link>
       </template>
     </v-breadcrumbs>
     <router-view></router-view>
@@ -76,7 +85,7 @@ export default {
         text: 'dashboard',
         disabled: false,
         href: 'breadcrumbs_dashboard',
-        icon: 'view-dashboard'
+        icon: 'bank'
       }, {
         text: 'Root',
         disabled: false,
@@ -110,7 +119,6 @@ export default {
 .athena-progress {
     margin: 0px;
 }
-
 .athena-breadcrumb-link {
     text-decoration: none;
     color: white;

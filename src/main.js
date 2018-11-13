@@ -7,6 +7,10 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+Vue.filter('uppercase', function (value) {
+  return (value || '').toUpperCase()
+})
+
 new Vue({
   data: {
     state: store.state

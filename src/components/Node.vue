@@ -2,18 +2,18 @@
 <v-flex>
   <v-card width="400">
     <div class="node-title">
-      <i class="mdi mdi-server-network node-title-icon"></i>
-      <span>service a-b-c</span>
+      <i :class="icon"></i>
+      <span>{{ node.title }}</span>
     </div>
     <div class="node-status">
-      <i class="mdi mdi-check-circle-outline"></i> ONLINE
-      <div class="node-folder">
+      <i :class="statusIcon"></i> {{ node.status | uppercase }}
+      <div class="node-folder" v-if="node.children && node.children.length">
         <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
       </div>
-      <div class="node-child-status">
+      <div class="node-child-status" v-if="node.aggregate === 'offline'">
         <i class="mdi mdi-alert-circle"></i>
       </div>
-      <div class="node-child-divider"></div>
+      <div class="node-child-divider" v-if="node.aggregate === 'offline'"></div>
     </div>
     <div class="node-info">
       information
@@ -25,8 +25,25 @@
 <script>
 export default {
   name: 'athena-node',
+  props: {
+    node: Object
+  },
   data () {
     return {
+    }
+  },
+  computed: {
+    icon () {
+      return 'mdi mdi-' + this.node.icon + ' node-title-icon'
+    },
+    statusIcon () {
+      if (this.node.status === 'online') {
+        return 'mdi mdi-check-circle-outline'
+      } else if (this.node.status === 'offline') {
+        return 'mdi mdi-alert-outline'
+      } else {
+        return 'mdi mdi-help-rhombus-outline'
+      }
     }
   }
 }

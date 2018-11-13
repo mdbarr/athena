@@ -1,6 +1,6 @@
 {
   "name": "athena",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -12,7 +12,7 @@
     "api:server": "./server/athena.js"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-rc.1",
+    "@babel/polyfill": "^7.0.0",
     "barrkeep": "^1.3.1",
     "mongodb": "^3.1.8",
     "requireindex": "^1.2.0",

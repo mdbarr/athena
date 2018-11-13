@@ -1,30 +1,35 @@
 <template>
-<v-layout>
-  <v-flex xs12 sm2 pa-3>
-    <v-card md-2>
-      <div class="node-title">
-        <i class="mdi mdi-server-network node-title-icon"></i>
-        <span>service a-b-c</span>
+<v-flex>
+  <v-card width="400">
+    <div class="node-title">
+      <i class="mdi mdi-server-network node-title-icon"></i>
+      <span>service a-b-c</span>
+    </div>
+    <div class="node-status">
+      <i class="mdi mdi-check-circle-outline"></i> ONLINE
+      <div class="node-folder">
+        <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
       </div>
-      <div class="node-status">
-        <i class="mdi mdi-check-circle-outline"></i> ONLINE
-        <div class="node-folder">
-          <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
-        </div>
-        <div class="node-child-status">
-          <i class="mdi mdi-alert-circle"></i>
-        </div>
-        <div class="node-child-divider"></div>
+      <div class="node-child-status">
+        <i class="mdi mdi-alert-circle"></i>
       </div>
-      <div class="node-info">
-        information
-      </div>
-    </v-card>
-  </v-flex>
-</v-layout>
+      <div class="node-child-divider"></div>
+    </div>
+    <div class="node-info">
+      information
+    </div>
+  </v-card>
+</v-flex>
 </template>
 
 <script>
+export default {
+  name: 'athena-node',
+  data () {
+    return {
+    }
+  }
+}
 </script>
 
 <style>

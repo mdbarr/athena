@@ -16,7 +16,8 @@
         </v-flex>
         <v-flex sm6>
           <div class="athena-filter">
-            <v-text-field lavel="Filter" prepend-icon="mdi-filter-outline" clearable solo></v-text-field>
+            <v-icon small>mdi-filter-outline</v-icon>
+            <input type="text" id="filter" class="athena-filter-input" placeholder="Filter" v-model="filter">
           </div>
         </v-flex>
       </v-layout>
@@ -46,6 +47,7 @@ export default {
   data () {
     return {
       state: store.state,
+      filter: '',
       crumbs: [ {
         text: 'dashboard',
         disabled: false,
@@ -83,6 +85,29 @@ export default {
 }
 .athena-filter {
     position: absolute;
+    top: 8px;
     right: 8px;
+    height: 24px;
+}
+.athena-filter-input {
+    color: white;
+    outline: none;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 200px;
+    border-bottom: 1px solid #ddd;
+}
+.athena-filter-input:focus {
+    animation: athena-input 300ms forwards;
+    border-bottom: 2px solid #4c7999;
+}
+
+@keyframes athena-input {
+    from {
+        border-bottom: 1px solid #ddd;
+    }
+    to {
+        border-bottom: 2px solid #4c7999;
+    }
 }
 </style>

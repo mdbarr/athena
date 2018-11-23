@@ -15,8 +15,8 @@ module.exports = function(athena) {
         metadata
       });
 
-      this.address = address;
-      this.latency = latency;
+      this.config.address = address;
+      this.config.latency = latency;
 
       // Agent
       this.status.loadavg = [ 0, 0, 0 ];

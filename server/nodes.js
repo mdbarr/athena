@@ -27,6 +27,8 @@ function Nodes(athena) {
       parent = 'root',
       children = [],
       icon = 'network',
+      trigger = 'none',
+      delegate = null,
       metadata = {},
       sync = true
     } = {}) {
@@ -34,60 +36,94 @@ function Nodes(athena) {
 
       const node = this;
 
-      athena.util.addPrivate(node, 'athena', athena);
+      athena.util.addPrivate(node, '_athena', athena);
 
-      node.id = id || athena.util.id();
-      node.object = 'node';
-      node.name = name || 'Unnamed';
-      node.type = 'node';
-      node.parent = parent;
-      node.children = children;
-      node.icon = icon;
-      node.metadata = metadata;
-      node.sync = sync;
+      node.config = eventProxy(node, {
+        id: id || athena.util.id(),
+        object: 'node',
+        name: name || 'Unnamed',
 
-      athena.util.addPrivate(node, 'status', eventProxy(node, {
+        type: 'node',
+        parent,
+        children,
+        icon,
+        trigger,
+        delegate,
+        metadata,
+        sync
+      }, 'config');
+
+      node.status = eventProxy(node, {
+        enabled: false,
         uptime: 0, // seconds
         health: 'healthy', // health, offline, unhealthy??
         graph: new Array(50).fill(0), //
         lastUpdate: null,
         lastChecked: null
-      }, 'status'));
+      }, 'status');
 
-      athena.util.addPrivate(node, '_cache', {});
-      athena.util.addPrivate(node, 'computed', {
-        get health() {
-          const health = {
-            self: node.status.health,
-            aggregate: node.status.health
-          };
+      node.actions = {
+        serialize: node.serialize,
+        enable: node.enable,
+        disable: node.disable
+      };
 
-          return health;
-        },
-        get parent() {
-          if (!node._cache.parent) {
-            node._cache.parent = athena.store.resolve(node.parent);
+      athena.util.addPrivate(node, '_cache', {
+        computeTable: {}
+      });
+
+      node.computed = new Proxy({}, {
+        get: function(object, property) {
+          if (property === 'health') {
+            const health = {
+              self: node.status.health,
+              aggregate: node.status.health
+            };
+            return health;
+          } else if (property === 'parent') {
+            if (!node._cache.parent) {
+              node._cache.parent = athena.store.resolve(node.parent);
+            }
+            return node._cache.parent;
+          } else if (property === 'children') {
+            if (!node._cache.children) {
+              node._cache.children = node.children.map((x) => athena.store.resolve(x));
+            }
+            return node._cache.children;
+          } else if (node._cache.computeTable[property] &&
+                     typeof node._cache.computeTable[property] === 'function') {
+            return node._cache.computeTable[property](object, property);
           }
-          return node._cache.parent;
         },
-        get children() {
-          if (!node._cache.children) {
-            node._cache.children = node.children.map((x) => athena.store.resolve(x));
+        set: function(object, property, value) {
+          if (typeof value === 'function') {
+            node._cache.computeTable[property] = value;
           }
-          return node._cache.children;
         }
       });
     }
 
+    enable() {
+      if (!this.enabled) {
+        this.enabled = true;
+      }
+    }
+
+    disable() {
+      if (this.enabled) {
+        this.enabled = true;
+      }
+    }
+
     serialize() {
       const object = {};
-      for (const item in this) {
+      for (const item in this.config) {
         if (item.startsWith('_') ||
-            this.propertyIsEnumerable(item) === false ||
+            this.config.propertyIsEnumerable(item) === false ||
             item === 'domain') {
           continue;
         }
-        object[item] = this[item];
+        object[item] = this.config[item];
       }
       return object;
     }
@@ -103,7 +139,7 @@ function Nodes(athena) {
     const Constructor = nodes[type] || nodes.node;
     const node = new Constructor(object);
 
-    return eventProxy(node, node, 'changed');
+    return node;
   };
 
   self.register('node', Node);

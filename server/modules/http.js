@@ -18,15 +18,15 @@ module.exports = function(athena) {
         metadata
       });
 
-      this.address = address;
-      this.port = port;
-      this.method = method;
-      this.url = url;
-      this.statusCode = statusCode;
-      this.payload = payload;
-      this.headers = headers;
-      this.contentType = contentType;
-      this.contentLength = contentLength;
+      this.config.address = address;
+      this.config.port = port;
+      this.config.method = method;
+      this.config.url = url;
+      this.config.statusCode = statusCode;
+      this.config.payload = payload;
+      this.config.headers = headers;
+      this.config.contentType = contentType;
+      this.config.contentLength = contentLength;
 
       this.status.elapsed = 0;
       this.status.response = null;
@@ -60,7 +60,7 @@ module.exports = function(athena) {
         contentLength
       });
 
-      this.type = 'api';
+      this.config.type = 'api';
     }
   }
 

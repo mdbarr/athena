@@ -103,6 +103,17 @@ function Nodes(athena) {
       });
     }
 
+    describe() {
+      return {
+        name: 'String',
+        parent: 'String',
+        icon: 'String',
+        trigger: 'String',
+        metadata: 'Object',
+        sync: 'Boolean'
+      };
+    }
+
     enable() {
       if (!this.enabled) {
         this.enabled = true;

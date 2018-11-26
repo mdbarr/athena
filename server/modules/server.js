@@ -29,3 +29,5 @@ module.exports = function(athena) {
 
   athena.nodes.register('server', Server);
 };
+
+module.exports.dependencies = 'node';

@@ -4,6 +4,17 @@
     <div class="node-title">
       <i :class="icon"></i>
       <span>{{ node.title }}</span>
+      <v-menu offset-y left light nudge-top="2" class="node-menu">
+        <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
+        <v-list dense>
+          <v-list-tile @click="() => {}">
+            <v-list-tile-content>
+              <v-list-tile-title>Update</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-avatar><v-icon small>mdi-update</v-icon></v-list-tile-avatar>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </div>
     <div class="node-status">
       <i :class="statusIcon"></i> {{ node.status | uppercase }}
@@ -59,10 +70,18 @@ export default {
     line-height: 32px !important;
     padding: 0;
     text-align: center;
+    width: 100%;
 }
 .node-title-icon {
     left: 16px;
     position: absolute;
+}
+.node-menu {
+    position: absolute;
+    right: 8px;
+}
+.node-menu-icon:hover {
+    color: #5F97BF;
 }
 .node-title-shift {
     left: -12px;

@@ -1,10 +1,15 @@
 'use strict';
 
+const modules = {};
+
 class Module {
-  constructor(name, loader) {
+  constructor(name, dependencies, loader, resolved = false) {
     this.name = name;
+    this.dependencies = dependencies;
     this.loader = loader;
     this.edges = [];
+    this.resolved = resolved;
+    this.loaded = false;
   }
 
   dependsOn(module) {
@@ -12,35 +17,58 @@ class Module {
   }
 
   resolve(resolved = [], seen = new WeakSet()) {
-    console.log(this.name);
-    seen.add(this);
-    for (const edge of this.edges) {
-      if (!resolved.includes(edge)) {
-        if (seen.has(edge)) {
-          console.log('Circular reference detected: %s -> %s', this.name, edge.name);
-          throw new Error('Circular reference');
+    if (!this.resolved) {
+      for (const item of this.dependencies) {
+        if (modules[item]) {
+          this.dependsOn(modules[item]);
         }
-
-        edge.resolve(resolved, seen);
       }
+
+      for (const edge of this.edges) {
+        if (!resolved.includes(edge)) {
+          if (seen.has(edge)) {
+            console.log('Circular reference detected: %s -> %s', this.name, edge.name);
+            throw new Error('Circular reference');
+          }
+
+          edge.resolve(resolved, seen);
+        }
+      }
+      resolved.push(this);
+      this.resolved = resolved;
     }
-    resolved.push(this);
-    return resolved;
+    return this.resolved;
+  }
+
+  load(athena) {
+    if (!this.loaded) {
+      this.loader(athena);
+      this.loaded = true;
+    }
   }
 }
 
 module.exports = function(athena) {
   const index = require('requireindex')(__dirname);
 
-  const node = new Module('node', () => {});
-  const modules = [ node ];
+  modules.node = new Module('node', [], () => {}, []);
 
   for (const key in index) {
-    const module = new Module(key, index[key]);
-    modules.push(module);
+    const item = index[key];
+    let dependencies = item.dependencies || 'node';
+    if (!Array.isArray(dependencies)) {
+      dependencies = [ dependencies ];
+    }
 
-    if (typeof index[key] === 'function') {
-      index[key] = index[key](athena);
+    const module = new Module(key, dependencies, index[key]);
+    modules[key] = module;
+  }
+
+  for (const module in modules) {
+    const path = modules[module].resolve();
+    //console.pp(path);
+    for (const item of path) {
+      item.load(athena);
     }
   }
 

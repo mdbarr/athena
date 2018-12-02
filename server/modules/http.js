@@ -66,3 +66,5 @@ module.exports = function(athena) {
 
   athena.nodes.register('api', API);
 };
+
+module.exports.dependencies = 'node';

@@ -126,6 +126,17 @@ function Nodes(athena) {
       }
     }
 
+    describe() {
+      return {
+        name: 'String',
+        parent: 'String',
+        icon: 'String',
+        trigger: 'String',
+        metadata: 'Object',
+        sync: 'Boolean'
+      };
+    }
+
     serialize() {
       const object = {};
       for (const item in this.config) {

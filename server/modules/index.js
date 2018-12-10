@@ -2,6 +2,15 @@
 
 const modules = {};
 
+const moduleRegExp = /^athena-module-(.*)$/;
+
+const fields = [
+  'dependencies',
+  'devDependencies',
+  'peerDependencies',
+  'optionalDependencies'
+];
+
 class Module {
   constructor(name, dependencies, loader, resolved = false) {
     this.name = name;
@@ -49,24 +58,43 @@ class Module {
 }
 
 module.exports = function(athena) {
+  // Built-in modules
   const index = require('requireindex')(__dirname);
 
+  // Contrib modules
+  const project = require('../../package');
+  for (const field of fields) {
+    if (project[field]) {
+      for (const key in project[field]) {
+        if (moduleRegExp.test(key)) {
+          index[key] = require(key);
+        }
+      }
+    }
+  }
+
+  // Dependency resolver
   modules.node = new Module('node', [], () => {}, []);
 
   for (const key in index) {
     const item = index[key];
+
+    if (!item.name && !item.load) {
+      continue;
+    }
+
     let dependencies = item.dependencies || 'node';
     if (!Array.isArray(dependencies)) {
       dependencies = [ dependencies ];
     }
 
-    const module = new Module(key, dependencies, index[key]);
-    modules[key] = module;
+    const module = new Module(item.name, dependencies, item.load);
+    modules[item.name] = module;
   }
 
   for (const module in modules) {
     const path = modules[module].resolve();
-    //console.pp(path);
+
     for (const item of path) {
       item.load(athena);
     }

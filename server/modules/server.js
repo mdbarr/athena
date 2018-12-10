@@ -1,35 +1,37 @@
 'use strict';
 
-module.exports = function(athena) {
-  class Server extends athena.nodes.Node {
-    constructor({
-      id, name, parent, children, address, latency = -1,
-      icon = 'server-network', metadata
-    }) {
-      super({
-        id,
-        name,
-        parent,
-        children,
-        icon,
-        metadata
-      });
+module.exports = {
+  name: 'server',
+  dependencies: 'node',
+  load: function(athena) {
+    class Server extends athena.nodes.Node {
+      constructor({
+        id, name, parent, children, address, latency = -1,
+        icon = 'server-network', metadata
+      }) {
+        super({
+          id,
+          name,
+          parent,
+          children,
+          icon,
+          metadata
+        });
 
-      this.config.type = 'server';
+        this.config.type = 'server';
 
-      this.config.address = address;
-      this.config.latency = latency;
+        this.config.address = address;
+        this.config.latency = latency;
 
-      // Agent
-      this.status.loadavg = [ 0, 0, 0 ];
-      this.status.cpu = 0;
-      this.status.mem = 0;
-      this.status.freeMem = 0;
-      this.status.processes = [];
+        // Agent
+        this.status.loadavg = [ 0, 0, 0 ];
+        this.status.cpu = 0;
+        this.status.mem = 0;
+        this.status.freeMem = 0;
+        this.status.processes = [];
+      }
     }
+
+    athena.nodes.register('server', Server);
   }
-
-  athena.nodes.register('server', Server);
 };
-
-module.exports.dependencies = 'node';

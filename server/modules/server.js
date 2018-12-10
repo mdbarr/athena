@@ -3,17 +3,19 @@
 module.exports = function(athena) {
   class Server extends athena.nodes.Node {
     constructor({
-      id, name, parent, children, address, latency = -1, icon = 'server-network', metadata
+      id, name, parent, children, address, latency = -1,
+      icon = 'server-network', metadata
     }) {
       super({
         id,
         name,
-        type: 'server',
         parent,
         children,
         icon,
         metadata
       });
+
+      this.config.type = 'server';
 
       this.config.address = address;
       this.config.latency = latency;

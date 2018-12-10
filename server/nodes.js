@@ -12,6 +12,8 @@ function Nodes(athena) {
       set: function(obj, prop, value) {
         obj[prop] = value;
         emitter.emit(eventName, object);
+        athena.events.emit(eventName, object);
+        return true;
       }
     });
   };
@@ -30,6 +32,7 @@ function Nodes(athena) {
       trigger = 'none',
       delegate = null,
       metadata = {},
+      ephemeral = false,
       sync = true
     } = {}) {
       super();
@@ -50,8 +53,11 @@ function Nodes(athena) {
         trigger,
         delegate,
         metadata,
-        sync
+        sync,
+        ephemeral
       }, 'config');
+
+      node.id = node.config.id;
 
       node.status = eventProxy(node, {
         enabled: false,
@@ -59,13 +65,15 @@ function Nodes(athena) {
         health: 'healthy', // health, offline, unhealthy??
         graph: new Array(50).fill(0), //
         lastUpdate: null,
-        lastChecked: null
+        lastChecked: null,
+        aggregate: []
       }, 'status');
 
       node.actions = {
         serialize: node.serialize,
         enable: node.enable,
-        disable: node.disable
+        disable: node.disable,
+        save: () => {}
       };
 
       athena.util.addPrivate(node, '_cache', {
@@ -77,7 +85,7 @@ function Nodes(athena) {
           if (property === 'health') {
             const health = {
               self: node.status.health,
-              aggregate: node.status.health
+              aggregate: node.status.aggregate
             };
             return health;
           } else if (property === 'parent') {
@@ -101,17 +109,13 @@ function Nodes(athena) {
           }
         }
       });
-    }
 
-    describe() {
-      return {
-        name: 'String',
-        parent: 'String',
-        icon: 'String',
-        trigger: 'String',
-        metadata: 'Object',
-        sync: 'Boolean'
-      };
+      node.on('config', function() {
+        node.id = node.config.id;
+        if (node.enabled && !node.ephemeral) {
+          node.actions.save();
+        }
+      });
     }
 
     enable() {
@@ -124,6 +128,19 @@ function Nodes(athena) {
       if (this.enabled) {
         this.enabled = true;
       }
+    }
+
+    addChild(child) {
+      const node = this;
+      const childId = node.config.children.length;
+
+      child.on('status', function() {
+        if (child.enabled) {
+          node.status.aggregate.splice(childId, 1, child.status.health);
+        }
+      });
+
+      node.config.children.push(child.id);
     }
 
     describe() {
@@ -160,6 +177,8 @@ function Nodes(athena) {
     const type = object.type || 'node';
     const Constructor = nodes[type] || nodes.node;
     const node = new Constructor(object);
+
+    athena.events.emit('create', object, node);
 
     return node;
   };

@@ -6,6 +6,10 @@ const defaults = {
   database: {
     url: 'mongodb://localhost:27017',
     name: 'athena'
+  },
+  log: {
+    enabled: true,
+    file: 'athena.log'
   }
 };
 
@@ -20,6 +24,8 @@ function Athena(config = {}) {
   //////////
 
   self.util = require('./util')(self);
+  self.logger = require('./logger')(self);
+  self.events = require('./events')(self);
   self.store = require('./store')(self);
   self.nodes = require('./nodes')(self);
   self.models = require('./models')(self);

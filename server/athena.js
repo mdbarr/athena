@@ -27,6 +27,7 @@ function Athena(config = {}) {
   self.logger = require('./logger')(self);
   self.events = require('./events')(self);
   self.store = require('./store')(self);
+  self.triggers = require('./triggers')(self);
   self.nodes = require('./nodes')(self);
   self.models = require('./models')(self);
   self.modules = require('./modules')(self);

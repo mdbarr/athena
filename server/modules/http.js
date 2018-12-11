@@ -6,9 +6,10 @@ module.exports = {
   load: function(athena) {
     class HTTP extends athena.nodes.Node {
       constructor({
-        id, name, parent, children, address, port = 443, icon = 'web', metadata,
-        method = 'GET', url, statusCode = 200, payload = null, headers = {},
-        contentType = 'text/html', contentLength = -1
+        id, name, parent, children, address, port = 443, icon = 'web',
+        triggers, metadata, method = 'GET', url, statusCode = 200,
+        payload = null, headers = {}, contentType = 'text/html',
+        contentLength = -1
       }) {
         super({
           id,
@@ -17,6 +18,7 @@ module.exports = {
           parent,
           children,
           icon,
+          triggers,
           metadata
         });
 

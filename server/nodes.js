@@ -29,7 +29,7 @@ function Nodes(athena) {
       parent = 'root',
       children = [],
       icon = 'network',
-      trigger = 'none',
+      triggers = [],
       delegate = null,
       metadata = {},
       ephemeral = false,
@@ -50,7 +50,7 @@ function Nodes(athena) {
         parent,
         children,
         icon,
-        trigger,
+        triggers,
         delegate,
         metadata,
         sync,
@@ -148,7 +148,7 @@ function Nodes(athena) {
         name: 'String',
         parent: 'String',
         icon: 'String',
-        trigger: 'String',
+        triggers: 'Array',
         metadata: 'Object',
         sync: 'Boolean'
       };
@@ -165,6 +165,10 @@ function Nodes(athena) {
         object[item] = this.config[item];
       }
       return object;
+    }
+
+    trigger(...args) {
+      this.emit('trigger', ...args);
     }
   }
 

@@ -7,7 +7,7 @@ module.exports = {
     class Server extends athena.nodes.Node {
       constructor({
         id, name, parent, children, address, latency = -1,
-        icon = 'server-network', metadata
+        icon = 'server-network', triggers, metadata
       }) {
         super({
           id,
@@ -15,6 +15,7 @@ module.exports = {
           parent,
           children,
           icon,
+          triggers,
           metadata
         });
 

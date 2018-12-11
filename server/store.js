@@ -26,9 +26,13 @@ function Store(athena) {
 
       self.db = self.client.db(athena.config.database.name);
 
+      // Create ephemeral root node
+
       // Load nodes
 
       // Set linkages
+
+      // Activate triggers
 
       callback(null, self.db);
     });

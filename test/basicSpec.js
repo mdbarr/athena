@@ -31,7 +31,7 @@ describe('Basic Spec', function() {
       parent: root.id,
       type: 'server',
       sync: false,
-      address: 'localhost'
+      address: '127.0.0.1'
     });
     console.pp(server.serialize());
   });

@@ -63,15 +63,19 @@ export default {
         id: 1,
         title: 'Service A',
         icon: 'server-network',
-        status: 'offline',
-        aggregate: 'online',
+        status: {
+          health: 'healthy',
+          aggregate: 'healthy'
+        },
         children: []
       }, {
         id: 2,
         title: 'Service B',
         icon: 'web',
-        status: 'online',
-        aggregate: 'offline',
+        status: {
+          health: 'healthy',
+          aggregate: 'failed'
+        },
         children: [ 1 ]
       } ]
     }

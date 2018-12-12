@@ -21,7 +21,6 @@ describe('Basic Spec', function() {
       sync: false,
       ephemeral: true
     });
-    console.pp(root.serialize());
   });
 
   it('should create a server node', function() {
@@ -33,12 +32,23 @@ describe('Basic Spec', function() {
       sync: false,
       address: '127.0.0.1'
     });
-    console.pp(server.serialize());
   });
 
   it('should add server as a child of root', function() {
     root.addChild(server);
-    console.pp(root.serialize());
+  });
+
+  it('should enable the root and server nodes', function() {
+    root.actions.enable();
+    server.actions.enable();
+  });
+
+  it('should manually trigger the server node', function() {
+    server.actions.trigger();
+  });
+
+  it('should verify the server is now healthy', function() {
+    server.status.health.should.equal(athena.constants.health.healthy);
   });
 
   it('should stop the athena instance', function(done) {

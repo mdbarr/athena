@@ -10,6 +10,7 @@ const defaults = {
   },
   log: {
     enabled: true,
+    console: true,
     file: 'athena.log'
   }
 };
@@ -21,6 +22,10 @@ function Athena(config = {}) {
 
   self.project = require('../package');
   self.version = self.project.version;
+  self.constants = require('./constants');
+
+  //////////
+
   self.config = Object.merge(defaults, config);
 
   //////////

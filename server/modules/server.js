@@ -26,6 +26,8 @@ module.exports = {
           metadata
         });
 
+        const node = this;
+
         this.config.type = 'server';
 
         this.config.address = address;
@@ -41,15 +43,23 @@ module.exports = {
         this.session = ping.createSession();
 
         this.on('trigger', function() {
-          this.session.pingHost(this.address, function (error, target, sent, rcvd) {
+          node.session.pingHost(node.config.address, function (error, target, sent, rcvd) {
+            let health = athena.constants.health.healthy;
+            let metric = 0;
+
             if (error) {
-              // hard fail
+              health = athena.constants.health.error;
             } else {
               const time = rcvd.getTime() - sent.getTime();
-              if (this.latency > 0 && time > this.latency) {
-                // soft fail
+              metric = time;
+              if (node.latency > 0 && time > node.latency) {
+                health = athena.constants.health.failedl;
               }
             }
+            node.actions.update({
+              health,
+              metric
+            });
           });
         });
       }

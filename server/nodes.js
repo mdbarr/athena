@@ -11,8 +11,10 @@ function Nodes(athena) {
     return new Proxy(object, {
       set: function(obj, prop, value) {
         obj[prop] = value;
-        emitter.emit(eventName, object);
-        athena.events.emit(eventName, object);
+        if (emitter.status.enabled) {
+          emitter.emit(eventName, object);
+          athena.events.emit(eventName, object);
+        }
         return true;
       }
     });
@@ -59,20 +61,22 @@ function Nodes(athena) {
 
       node.id = node.config.id;
 
-      node.status = eventProxy(node, {
+      node.status = {
         enabled: false,
-        uptime: 0, // seconds
-        health: 'healthy', // health, offline, unhealthy??
-        graph: new Array(50).fill(0), //
-        lastUpdate: null,
-        lastChecked: null,
+        uptime: 0,
+        health: athena.constants.health.unknown,
+        graph: new Array(50).fill(0),
+        updatedAt: null,
+        triggeredAt: null,
         aggregate: []
-      }, 'status');
+      };
 
       node.actions = {
-        serialize: node.serialize,
-        enable: node.enable,
-        disable: node.disable,
+        serialize: node.serialize.bind(node),
+        enable: node.enable.bind(node),
+        disable: node.disable.bind(node),
+        trigger: node.trigger.bind(node),
+        update: node.update.bind(node),
         save: () => {}
       };
 
@@ -112,21 +116,41 @@ function Nodes(athena) {
 
       node.on('config', function() {
         node.id = node.config.id;
-        if (node.enabled && !node.ephemeral) {
+        if (node.status.enabled && !node.config.ephemeral) {
           node.actions.save();
         }
       });
     }
 
     enable() {
-      if (!this.enabled) {
-        this.enabled = true;
+      if (!this.status.enabled) {
+        this.status.enabled = true;
       }
     }
 
     disable() {
-      if (this.enabled) {
-        this.enabled = true;
+      if (this.status.enabled) {
+        this.status.enabled = true;
+      }
+    }
+
+    update({
+      health, description, metric
+    }) {
+      if (health !== undefined) {
+        this.status.health = health;
+      }
+      if (description !== undefined) {
+        this.status.description = description;
+      }
+      if (metric !== undefined) {
+        this.status.graph.pop();
+        this.status.graph.unshift(metric);
+      }
+      if (this.status.enabled) {
+        this.status.updatedAt = Date.now();
+        this.emit('status', this.status);
+        athena.events.emit('status', this, this.status);
       }
     }
 
@@ -136,7 +160,9 @@ function Nodes(athena) {
 
       child.on('status', function() {
         if (child.enabled) {
-          node.status.aggregate.splice(childId, 1, child.status.health);
+          node.status.aggregate[childId] = child.status.health;
+          node.emit('status', child, child.status);
+          athena.events.emit('status', node, node.status);
         }
       });
 
@@ -168,7 +194,11 @@ function Nodes(athena) {
     }
 
     trigger(...args) {
-      this.emit('trigger', ...args);
+      if (this.status.enabled) {
+        this.status.triggeredAt = Date.now();
+        this.emit('trigger', ...args);
+        athena.events.emit('trigger', ...args);
+      }
     }
   }
 

@@ -8,9 +8,19 @@ function Logger(athena) {
   self.log = function(event, callback) {
     callback = athena.util.callback(callback);
     if (athena.config.log.enabled) {
-      fs.appendFile(athena.config.log.file,
-        JSON.stringify(event, null, 2) + '\n',
-        callback);
+
+      if (athena.config.log.file) {
+        fs.appendFile(athena.config.log.file,
+          JSON.stringify(event, null, 2) + '\n',
+          callback);
+      }
+
+      if (athena.config.log.console) {
+        console.pp({
+          id: event.id,
+          event: event.event
+        });
+      }
     }
   };
 

@@ -62,10 +62,9 @@ module.exports = function(athena) {
   const index = require('requireindex')(__dirname);
 
   // Contrib modules
-  const project = require('../../package');
   for (const field of fields) {
-    if (project[field]) {
-      for (const key in project[field]) {
+    if (athena.project[field]) {
+      for (const key in athena.project[field]) {
         if (moduleRegExp.test(key)) {
           index[key] = require(key);
         }

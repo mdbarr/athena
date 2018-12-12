@@ -3,9 +3,10 @@
 require('barrkeep');
 
 const defaults = {
-  database: {
+  datastore: 'mongo',
+  mongo: {
     url: 'mongodb://localhost:27017',
-    name: 'athena'
+    db: 'athena'
   },
   log: {
     enabled: true,
@@ -18,7 +19,8 @@ function Athena(config = {}) {
 
   //////////
 
-  self.version = require('../package').version;
+  self.project = require('../package');
+  self.version = self.project.version;
   self.config = Object.merge(defaults, config);
 
   //////////

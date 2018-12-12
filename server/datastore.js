@@ -21,14 +21,14 @@ function DataStore(athena) {
       store[node.id] = node;
     });
 
-    self.client = new MongoClient(athena.config.database.url, {
+    self.client = new MongoClient(athena.config.mongo.url, {
       useNewUrlParser: true
     });
 
     self.client.connect(function(error) {
       assert.equal(null, error);
 
-      self.db = self.client.db(athena.config.database.name);
+      self.db = self.client.db(athena.config.mongo.db);
 
       // Create ephemeral root node
 

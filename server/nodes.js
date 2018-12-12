@@ -182,7 +182,7 @@ function Nodes(athena) {
     const Constructor = nodes[type] || nodes.node;
     const node = new Constructor(object);
 
-    athena.events.emit('create', object, node);
+    athena.events.emit('created', node, object);
 
     return node;
   };

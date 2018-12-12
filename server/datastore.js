@@ -3,7 +3,7 @@
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 
-function Store(athena) {
+function DataStore(athena) {
   const self = this;
 
   const store = {};
@@ -16,6 +16,10 @@ function Store(athena) {
 
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
+
+    athena.events.on('created', function(node) {
+      store[node.id] = node;
+    });
 
     self.client = new MongoClient(athena.config.database.url, {
       useNewUrlParser: true
@@ -42,6 +46,14 @@ function Store(athena) {
     callback = athena.util.callback(callback);
 
     self.client.close();
+
+    for (const id in store) {
+      const node = store[id];
+      if (node && node.close && typeof node.close === 'function') {
+        node.close();
+      }
+    }
+
     callback();
   };
 
@@ -49,5 +61,5 @@ function Store(athena) {
 }
 
 module.exports = function(athena) {
-  return new Store(athena);
+  return new DataStore(athena);
 };

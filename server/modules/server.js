@@ -13,7 +13,7 @@ module.exports = {
         icon = 'server-network', triggers, metadata
       }) {
         if (!net.isIP(address)) {
-          throw new Error('Not an IP address');
+          throw new Error('Address is not an IP address');
         }
 
         super({
@@ -38,10 +38,10 @@ module.exports = {
         this.status.freeMem = 0;
         this.status.processes = [];
 
-        const session = ping.createSession();
+        this.session = ping.createSession();
 
         this.on('trigger', function() {
-          session.pingHost(this.address, function (error, target, sent, rcvd) {
+          this.session.pingHost(this.address, function (error, target, sent, rcvd) {
             if (error) {
               // hard fail
             } else {
@@ -52,6 +52,10 @@ module.exports = {
             }
           });
         });
+      }
+
+      close() {
+        this.session.close();
       }
     }
 

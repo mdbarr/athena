@@ -18,7 +18,7 @@ function Events(athena) {
       args: args
     });
 
-    emitter.emit(eventName, ...args);
+    emitter.emit.apply(this, [ eventName, ...args ]);
   };
 
   return self;

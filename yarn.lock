@@ -6371,6 +6371,11 @@ readable-stream@1.0:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
+readable-stream@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.2.tgz#213ce36864fc1f0d4e98e03b9eb92c64042299d4"
+  integrity sha1-ITzjaGT8Hw1OmOA7nrksZAQimdQ=
+
 readdirp@^2.0.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-2.2.1.tgz#0e87622a3325aa33e892285caf8b4e846529a525"
@@ -7865,6 +7870,11 @@ vue-loader@^15.4.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-native-websocket@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/vue-native-websocket/-/vue-native-websocket-2.0.12.tgz#a60d424d28b277a47702a6f874785407f6a884ef"
+  integrity sha512-6f5B2O/0H6XrUIOJwChiZk4t0XpFvjmHlWFUJrk9O0kU31E3MFPlWkC8VpsiFWQMPz7oB8XSwUhDmBbLxuvWDw==
+
 vue-router@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.2.tgz#dedc67afe6c4e2bc25682c8b1c2a8c0d7c7e56be"
@@ -7909,6 +7919,14 @@ watchpack@^1.5.0:
     chokidar "^2.0.2"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+
+watershed@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/watershed/-/watershed-0.4.0.tgz#e4124b877129b47652247767eb722029f8095531"
+  integrity sha1-5BJLh3EptHZSJHdn63IgKfgJVTE=
+  dependencies:
+    dtrace-provider "~0.8"
+    readable-stream "1.0.2"
 
 wbuf@^1.1.0, wbuf@^1.7.2:
   version "1.7.3"

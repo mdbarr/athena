@@ -3,6 +3,10 @@
 require('barrkeep');
 
 const defaults = {
+  api: {
+    host: '0.0.0.0',
+    port: 6250
+  },
   datastore: 'mongo',
   mongo: {
     url: 'mongodb://localhost:27017',
@@ -37,6 +41,7 @@ function Athena(config = {}) {
   self.triggers = require('./triggers')(self);
   self.nodes = require('./nodes')(self);
   self.models = require('./models')(self);
+  self.server = require('./server')(self);
   self.modules = require('./modules')(self);
 
   //////////
@@ -45,15 +50,16 @@ function Athena(config = {}) {
     callback = self.util.callback(callback);
 
     // Load all models from database
-    self.store.boot(function(error) {
-
-      // Start check on each node (setInterval, queue/setInterval, setTimeout -> setTimeout)
-      callback(error);
+    self.store.boot(function() {
+      self.server.boot(function() {
+        callback();
+      });
     });
   };
 
   self.stop = function(callback) {
     callback = self.util.callback(callback);
+    self.server.stop();
     self.store.stop();
     callback();
   };

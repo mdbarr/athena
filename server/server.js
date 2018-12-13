@@ -3,6 +3,8 @@
 const restify = require('restify');
 const Watershed = require('watershed').Watershed;
 
+const PING_INTERVAL = 5000;
+
 function Server(athena) {
   const self = this;
 
@@ -50,6 +52,16 @@ function Server(athena) {
 
   /////////
 
+  self.pingInterval = setInterval(function() {
+    for (const client in self.clients) {
+      try {
+        self.clients[client].message('PING');
+      } catch (error) {
+        delete self.clients[client];
+      }
+    }
+  }, PING_INTERVAL);
+
   athena.api.get('/ws/attach', function(req, res, next) {
     if (!res.claimUpgrade) {
       next(new Error('Connection Must Upgrade For WebSockets'));
@@ -70,13 +82,38 @@ function Server(athena) {
       delete self.clients[clientId];
     });
 
+    shed.on('text', function(msg) {
+      if (msg === 'PONG') {
+        console.log('Received PONG from websocket client', clientId);
+        return;
+      }
+      try {
+        const message = JSON.parse(msg);
+        console.pp(message);
+      } catch (error) {
+        console.log('ERROR: parsing client message', msg, error);
+      }
+    });
+
     shed.on('end', function() {
       console.log('CLIENT DISCONNECT', clientId);
       delete self.clients[clientId];
     });
 
-    shed.send('{ "message": "connected" }');
+    shed.message = function(message) {
+      if (typeof message === 'string') {
+        shed.send(message);
+      } else {
+        message.version = athena.version;
+        message = JSON.stringify(message);
+        shed.send(message);
+      }
+    };
 
+    shed.message({
+      type: 'connected',
+      clientId
+    });
   });
 
   //////////

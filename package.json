@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js",
     "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js",
-    "api:server": "./server/athena.js"
+    "api:serve": "./index.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",

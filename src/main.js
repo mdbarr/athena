@@ -22,6 +22,8 @@ Vue.filter('uppercase', function (value) {
   return (value || '').toUpperCase()
 })
 
+Vue.prototype.$events = new Vue()
+
 new Vue({
   data: {
     state: store.state

@@ -2,7 +2,7 @@
 <v-footer app fixed class="pa-3" height="28">
   <span>&copy; 2018</span>
   <v-spacer></v-spacer>
-  <div v-if="state.connected"><span class="green--text">&#9679;</span> Connected</div>
+  <div v-if="state.isConnected"><span class="green--text">&#9679;</span> Connected</div>
   <div v-else><span class="red--text">&#9679;</span> Offline</div>
 </v-footer>
 </template>

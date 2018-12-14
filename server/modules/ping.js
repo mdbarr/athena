@@ -4,10 +4,10 @@ const net = require('net');
 const ping = require ('net-ping');
 
 module.exports = {
-  name: 'server',
+  name: 'ping',
   dependencies: 'node',
   load: function(athena) {
-    class Server extends athena.nodes.Node {
+    class Ping extends athena.nodes.Node {
       constructor({
         id, name, parent, children, address, latency = -1,
         icon = 'server-network', triggers, metadata
@@ -28,21 +28,15 @@ module.exports = {
 
         const node = this;
 
-        this.config.type = 'server';
+        this.config.type = 'ping';
 
         this.config.address = address;
         this.config.latency = latency;
 
-        // Agent
-        this.status.loadavg = [ 0, 0, 0 ];
-        this.status.cpu = 0;
-        this.status.mem = 0;
-        this.status.freeMem = 0;
-        this.status.processes = [];
-
         this.session = ping.createSession();
 
         this.on('trigger', function() {
+          console.pp('TRIGGERED');
           node.session.pingHost(node.config.address, function (error, target, sent, rcvd) {
             let health = athena.constants.health.healthy;
             let metric = 0;
@@ -69,6 +63,6 @@ module.exports = {
       }
     }
 
-    athena.nodes.register('server', Server);
+    athena.nodes.register('ping', Ping);
   }
 };

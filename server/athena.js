@@ -59,9 +59,11 @@ function Athena(config = {}) {
 
   self.stop = function(callback) {
     callback = self.util.callback(callback);
-    self.server.stop();
-    self.store.stop();
-    callback();
+    self.store.stop(function() {
+      self.server.stop(function() {
+        callback();
+      });
+    });
   };
 
   //////////

@@ -5,6 +5,8 @@ function Triggers(athena) {
 
   const triggers = require('requireindex')(__dirname);
 
+  console.pp(triggers);
+
   self.activate = function(node) {
     node.triggers = node.triggers || {};
 
@@ -14,15 +16,15 @@ function Triggers(athena) {
           continue;
         }
 
-        const [ type, options ] = trigger.match(/^(.*?):(.*)$/);
+        const [ , type, options ] = trigger.match(/^(.*?):(.*)$/);
 
         if (triggers[type]) {
           const id = athena.util.id();
           const Trigger = triggers[type];
 
-          node.triggers[id] = new Trigger(athena, node, options);
+          node.triggers[id] = new Trigger(athena, node, options, id);
 
-          athena.events.emit('activate', node, type, options, id);
+          athena.events.emit('activate', type, options, id);
         } else {
           console.log('Unknown Trigger Type', type, options);
         }

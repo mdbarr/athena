@@ -32,7 +32,7 @@ describe('Basic Spec', function() {
       sync: false,
       address: '127.0.0.1',
       triggers: [
-        'cron: * * * * *'
+        //'cron: * * * * *'
       ]
     });
   });

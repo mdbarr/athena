@@ -131,6 +131,10 @@ function Server(athena) {
   };
 
   self.stop = function(callback) {
+    callback = athena.util.callback(callback);
+
+    clearInterval(self.pingInterval);
+
     athena.api.close(callback);
   };
 

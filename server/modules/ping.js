@@ -58,7 +58,7 @@ module.exports = {
         });
       }
 
-      close() {
+      stop() {
         this.session.close();
       }
     }

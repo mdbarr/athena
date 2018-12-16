@@ -18,7 +18,7 @@ function DataStore(athena) {
     callback = athena.util.callback(callback);
 
     athena.events.on('created', function(node) {
-      store[node.id] = node;
+      store[node.config.id] = node;
     });
 
     self.client = new MongoClient(athena.config.mongo.url, {
@@ -45,16 +45,16 @@ function DataStore(athena) {
   self.stop = function(callback) {
     callback = athena.util.callback(callback);
 
-    self.client.close();
-
-    for (const id in store) {
-      const node = store[id];
-      if (node && node.close && typeof node.close === 'function') {
-        node.close();
+    self.client.close(function() {
+      for (const id in store) {
+        const node = store[id];
+        if (node && node.stop && typeof node.stop === 'function') {
+          node.stop();
+        }
       }
-    }
 
-    callback();
+      callback();
+    });
   };
 
   return self;

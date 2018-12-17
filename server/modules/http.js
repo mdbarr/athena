@@ -1,5 +1,7 @@
 'use strict';
 
+const request = require('request');
+
 module.exports = {
   name: 'http',
   dependencies: 'node',
@@ -22,18 +24,49 @@ module.exports = {
           metadata
         });
 
-        this.config.address = address;
-        this.config.port = port;
-        this.config.method = method;
-        this.config.url = url;
-        this.config.statusCode = statusCode;
-        this.config.payload = payload;
-        this.config.headers = headers;
-        this.config.contentType = contentType;
-        this.config.contentLength = contentLength;
+        const node = this;
 
-        this.status.elapsed = 0;
-        this.status.response = null;
+        node.config.address = address;
+        node.config.port = port;
+        node.config.method = method;
+        node.config.url = url;
+        node.config.statusCode = statusCode;
+        node.config.payload = payload;
+        node.config.headers = headers;
+        node.config.contentType = contentType;
+        node.config.contentLength = contentLength;
+
+        node.status.elapsed = 0;
+        node.status.response = null;
+
+        const options = {
+          method: node.config.method,
+          url: node.config.url,
+          headers: node.config.headers,
+          time: true
+        };
+
+        node.on('trigger', function() {
+          request(options, function(error, response) {
+            let health = athena.constants.health.healthy;
+            let metric = 0;
+
+            if (error || !response) {
+              health = athena.constants.health.error;
+            } else {
+              if (response.statusCode !== node.config.statusCode) {
+                health = athena.constants.health.failed;
+              }
+
+              metric = response.elapsedTime;
+            }
+
+            node.actions.update({
+              health,
+              metric
+            });
+          });
+        });
       }
     }
 

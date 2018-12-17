@@ -5,8 +5,6 @@ function Triggers(athena) {
 
   const triggers = require('requireindex')(__dirname);
 
-  console.pp(triggers);
-
   self.activate = function(node) {
     node.triggers = node.triggers || {};
 

@@ -47,7 +47,7 @@ module.exports = {
               const time = rcvd.getTime() - sent.getTime();
               metric = time;
               if (node.latency > 0 && time > node.latency) {
-                health = athena.constants.health.failedl;
+                health = athena.constants.health.failed;
               }
             }
             node.actions.update({

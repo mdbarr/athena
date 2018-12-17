@@ -4,13 +4,16 @@ require('barrkeep');
 
 const defaults = {
   api: {
+    enabled: true,
     host: '0.0.0.0',
     port: 6250
   },
   datastore: 'mongo',
   mongo: {
-    url: 'mongodb://localhost:27017',
-    db: 'athena'
+    url: process.env.ATHENA_MONGO_URL ||
+      'mongodb://localhost:27017',
+    db: process.env.ATHENA_MONGO_DB ||
+      'athena'
   },
   log: {
     enabled: true,

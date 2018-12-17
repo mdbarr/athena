@@ -120,6 +120,11 @@ function Server(athena) {
 
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
+
+    if (!athena.config.api.enabled) {
+      return callback();
+    }
+
     athena.api.listen(athena.config.api.port, athena.config.api.host, function(error) {
       if (error) {
         return callback(error);

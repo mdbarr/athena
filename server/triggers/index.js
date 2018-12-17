@@ -14,7 +14,7 @@ function Triggers(athena) {
           continue;
         }
 
-        const [ , type, options ] = trigger.match(/^(.*?):(.*)$/);
+        const [ , type, options ] = trigger.match(/^(.*?):?(.*)$/);
 
         if (triggers[type]) {
           const id = athena.util.id();

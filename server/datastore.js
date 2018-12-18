@@ -14,6 +14,36 @@ function DataStore(athena) {
     }
   };
 
+  self.syncConfig = function(callback) {
+    callback = athena.util.callback(callback);
+
+    if (athena.config.mongo.sync) {
+      self.collections.config.findOne({}, function(error, config) {
+        if (config) {
+          athena.config = Object.merge(athena.config, config);
+          self.collections.config.updateOne({
+            _id: athena.config._id
+          },
+          {
+            $set: athena.config
+          },
+          {
+            upsert: true
+          },
+          callback);
+        } else {
+          self.collections.config.insert(athena.config, function(error, result) {
+            athena.config._id = result.insertedIds[0].toString();
+            console.pp(athena.config);
+            callback(null, athena.config);
+          });
+        }
+      });
+    } else {
+      callback();
+    }
+  };
+
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
 
@@ -29,16 +59,23 @@ function DataStore(athena) {
       assert.equal(null, error);
 
       self.db = self.client.db(athena.config.mongo.db);
+      self.collections = {
+        config: self.db.collection('config'),
+        nodes: self.db.collection('nodes')
+      };
 
-      // Create ephemeral root node
+      // Sync config
+      self.syncConfig(function() {
+        // Create ephemeral root node
 
-      // Load nodes
+        // Load nodes
 
-      // Set linkages
+        // Set linkages
 
-      // Activate triggers
+        // Activate triggers
 
-      callback(null, self.db);
+        callback(null, self.db);
+      });
     });
   };
 

@@ -15,7 +15,8 @@ const defaults = {
     url: process.env.ATHENA_MONGO_URL ||
       'mongodb://localhost:27017',
     db: process.env.ATHENA_MONGO_DB ||
-      'athena'
+      'athena',
+    sync: true
   },
   log: {
     enabled: true,

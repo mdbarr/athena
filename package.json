@@ -7,14 +7,19 @@
     "build": "vue-cli-service build",
     "test": "mocha --opts ./test/.mocha.opts ./test/**/*Spec.js",
     "lint": "vue-cli-service lint",
-    "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js",
-    "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js",
-    "api:serve": "./index.js"
+    "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js bin/*.js",
+    "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js bin/*.js",
+    "api:serve": "./bin/cli.js --watch"
+  },
+  "bin" : {
+    "athena" : "./bin/cli.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "barrkeep": "^1.3.1",
     "cron": "^1.6.0",
+    "find-free-port": "^2.0.0",
+    "minimist": "^1.2.0",
     "mongodb": "^3.1.8",
     "net-ping": "^1.2.3",
     "request": "^2.88.0",

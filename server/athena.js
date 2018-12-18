@@ -3,10 +3,12 @@
 require('barrkeep');
 
 const defaults = {
+  object: 'config',
   api: {
     enabled: true,
     host: '0.0.0.0',
-    port: 6250
+    port: 6250,
+    available: true
   },
   datastore: 'mongo',
   mongo: {

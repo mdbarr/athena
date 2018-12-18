@@ -1,6 +1,7 @@
 'use strict';
 
 const restify = require('restify');
+const findFreePort = require('find-free-port');
 const Watershed = require('watershed').Watershed;
 
 const PING_INTERVAL = 5000;
@@ -84,7 +85,7 @@ function Server(athena) {
 
     shed.on('text', function(msg) {
       if (msg === 'PONG') {
-        console.log('Received PONG from websocket client', clientId);
+        // console.log('Received PONG from websocket client', clientId);
         return;
       }
       try {
@@ -118,6 +119,14 @@ function Server(athena) {
 
   //////////
 
+  self.findPort = function(callback) {
+    if (athena.config.api.available) {
+      findFreePort(athena.config.api.port, callback);
+    } else {
+      callback(null, athena.config.api.port);
+    }
+  };
+
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
 
@@ -125,13 +134,20 @@ function Server(athena) {
       return callback();
     }
 
-    athena.api.listen(athena.config.api.port, athena.config.api.host, function(error) {
+    self.findPort(function(error, port) {
       if (error) {
+        console.log('Error finding free port');
         return callback(error);
-      } else {
-        console.log(`Athena Server running on http://${ athena.config.api.host}:${ athena.config.api.port }`);
-        callback();
       }
+
+      athena.api.listen(port, athena.config.api.host, function(error) {
+        if (error) {
+          return callback(error);
+        } else {
+          console.log(`Athena Server running on http://${ athena.config.api.host}:${ port }`);
+          callback();
+        }
+      });
     });
   };
 

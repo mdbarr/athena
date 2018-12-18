@@ -9,17 +9,31 @@ const child_process = require('child_process');
 
 const options = minimist(process.argv.slice(2));
 
-const athenaCommand = path.resolve(__dirname + '/index.js');
+const project = require(path.resolve(__dirname + '/../package.json'));
+
+const athenaCommand = path.resolve(__dirname + '/cli.js');
 let athenaProcess;
-function spawnAthena () {
-  const args = options._;
-  if (options.config) {
-    args.push(`--config=${options.config}`);
+
+function spawnAthena() {
+  try {
+    if (options.lint) {
+      console.log('Linting...');
+      const output = child_process.execSync(project.scripts['api:lint'] + ' --fix');
+      console.log(output.toString());
+    }
+
+    const args = options._;
+    if (options.config) {
+      args.push(`--config=${options.config}`);
+    }
+
+    athenaProcess = child_process.spawn(athenaCommand, args, {
+      detached: false,
+      stdio: 'inherit'
+    });
+  } catch (error) {
+    console.log('Error spawning Athena', error);
   }
-  athenaProcess = child_process.spawn(athenaCommand, args, {
-    detached: false,
-    stdio: 'inherit'
-  });
 }
 
 if (options.help) {

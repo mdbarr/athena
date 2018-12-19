@@ -16,7 +16,8 @@ const defaults = {
       'mongodb://localhost:27017',
     db: process.env.ATHENA_MONGO_DB ||
       'athena',
-    sync: true
+    sync: true,
+    autoload: true
   },
   log: {
     enabled: true,
@@ -54,6 +55,10 @@ function Athena(config = {}) {
 
   self.boot = function(callback) {
     callback = self.util.callback(callback);
+
+    console.log((self.constants.assets.banner +
+                 self.constants.assets.athena).
+      style(self.constants.style.blue));
 
     // Load all models from database
     self.store.boot(function() {

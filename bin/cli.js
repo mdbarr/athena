@@ -49,6 +49,7 @@ function launchAthena() {
   } catch (error) {
     console.log('Error launching Athena:\n  ', error.message);
     paused = false;
+    athenaProcess = null;
   }
 }
 
@@ -87,6 +88,8 @@ if (options.help) {
     }
   });
 } else {
+  process.title = 'athena';
+
   let config = {};
   if (options.config) {
     config = JSON.parse(fs.readFileSync(options.config));
@@ -96,6 +99,8 @@ if (options.help) {
   const athena = new Athena(config);
 
   athena.boot(function() {
-    process.send('ready');
+    if (process.send) {
+      process.send('ready');
+    }
   });
 }

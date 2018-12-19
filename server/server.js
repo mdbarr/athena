@@ -144,7 +144,8 @@ function Server(athena) {
         if (error) {
           return callback(error);
         } else {
-          console.log(`Athena Server running on http://${ athena.config.api.host}:${ port }`);
+          console.log(athena.constants.assets.owlPrompt,
+            `Athena Server running on http://${ athena.config.api.host}:${ port }`);
           callback();
         }
       });

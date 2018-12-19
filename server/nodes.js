@@ -41,6 +41,10 @@ function Nodes(athena) {
 
       const node = this;
 
+      if (id && parent === id) {
+        parent = null;
+      }
+
       athena.util.addPrivate(node, '_athena', athena);
 
       node.config = eventProxy(node, {
@@ -63,6 +67,7 @@ function Nodes(athena) {
 
       node.status = {
         enabled: false,
+        active: false,
         uptime: 0,
         health: athena.constants.health.unknown,
         graph: new Array(50).fill(0),
@@ -134,6 +139,20 @@ function Nodes(athena) {
       }
     }
 
+    activate() {
+      if (!this.status.active) {
+        athena.triggers.activate(this);
+        this.status.active = true;
+      }
+    }
+
+    deactivate() {
+      if (this.status.active) {
+        athena.triggers.deactivate(this);
+        this.status.active = false;
+      }
+    }
+
     update({
       health, description, metric
     }) {
@@ -167,6 +186,15 @@ function Nodes(athena) {
       });
 
       node.config.children.push(child.id);
+    }
+
+    link() {
+      if (this.config.parent) {
+        const parent = athena.store.resolve(this.config.parent);
+        parent.addChild(this);
+        athena.util.addPrivate(this, '_parent', parent);
+        athena.events.emit('linked', this, parent);
+      }
     }
 
     describe() {
@@ -207,12 +235,16 @@ function Nodes(athena) {
     nodes[type] = Constructor;
   };
 
-  self.create = function(object) {
+  self.create = function(object, options = {}) {
     const type = object.type || 'node';
     const Constructor = nodes[type] || nodes.node;
     const node = new Constructor(object);
 
     athena.events.emit('created', node, object);
+
+    if (options.link !== false && node.config.parent) {
+      node.link();
+    }
 
     return node;
   };

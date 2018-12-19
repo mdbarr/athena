@@ -58,5 +58,21 @@ module.exports = {
     error: 'error',
     failed: 'failed',
     unknown: 'unknown'
+  },
+  nodes: {
+    root: {
+      name: 'root',
+      id: 'root',
+      parent: null,
+      sync: false,
+      ephemeral: true
+    },
+    athena: {
+      name: 'athena',
+      id: 'athena',
+      parent: 'root',
+      sync: false,
+      ephemeral: true
+    }
   }
 };

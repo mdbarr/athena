@@ -14,7 +14,7 @@ function Triggers(athena) {
           continue;
         }
 
-        const [ , type, options ] = trigger.match(/^(.*?):?(.*)$/);
+        const [ , type, options ] = trigger.match(/^(.*?):+(.*)$/);
 
         if (triggers[type]) {
           const id = athena.util.id();
@@ -26,6 +26,14 @@ function Triggers(athena) {
         } else {
           console.log('Unknown Trigger Type', type, options);
         }
+      }
+    }
+  };
+
+  self.deactivate = function(node) {
+    if (node.triggers) {
+      for (const id in node.triggers) {
+        node.triggers[id].stop();
       }
     }
   };

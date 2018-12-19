@@ -34,7 +34,6 @@ function DataStore(athena) {
         } else {
           self.collections.config.insert(athena.config, function(error, result) {
             athena.config._id = result.insertedIds[0].toString();
-            console.pp(athena.config);
             callback(null, athena.config);
           });
         }
@@ -66,15 +65,26 @@ function DataStore(athena) {
 
       // Sync config
       self.syncConfig(function() {
+        if (athena.config.mongo.autoload === false) {
+          return callback();
+        }
+
         // Create ephemeral root node
+        athena.nodes.create(athena.constants.nodes.root);
+
+        // Create ephemeral Athena node
+        athena.nodes.create(athena.constants.nodes.athena);
 
         // Load nodes
 
         // Set linkages
 
         // Activate triggers
+        for (const id in store) {
+          store[id].activate();
+        }
 
-        callback(null, self.db);
+        callback();
       });
     });
   };
@@ -85,6 +95,9 @@ function DataStore(athena) {
     self.client.close(function() {
       for (const id in store) {
         const node = store[id];
+
+        node.deactivate();
+
         if (node && node.stop && typeof node.stop === 'function') {
           node.stop();
         }

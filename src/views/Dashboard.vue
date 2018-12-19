@@ -59,26 +59,14 @@ export default {
         href: 'breadcrumbs_root',
         icon: 'pillar'
       } ],
-      nodes: [ {
-        id: 1,
-        title: 'Service A',
-        icon: 'server-network',
-        status: {
-          health: 'healthy',
-          aggregate: 'healthy'
-        },
-        children: []
-      }, {
-        id: 2,
-        title: 'Service B',
-        icon: 'web',
-        status: {
-          health: 'healthy',
-          aggregate: 'failed'
-        },
-        children: [ 1 ]
-      } ]
+      nodes: [ ],
+      path: 'root'
     }
+  },
+  mounted () {
+    this.$events.$emit('request', this.path)
+  },
+  destroyed () {
   }
 }
 </script>

@@ -68,6 +68,13 @@ export default {
       console.log('Connected!')
       console.log(object)
     })
+
+    vm.$events.$on('request', function (path) {
+      vm.socket.sendObj({
+        type: 'request',
+        request: path
+      })
+    })
   }
 }
 // #347597

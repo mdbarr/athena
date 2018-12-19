@@ -59,6 +59,19 @@ module.exports = {
     failed: 'failed',
     unknown: 'unknown'
   },
+  message: {
+    connectionReset: 'connectionReset',
+    end: 'end',
+    textL: 'text',
+    authenticate: 'authenticate',
+    connected: 'connected',
+    error: 'error',
+    focus: 'focus',
+    path: 'path',
+    redraw: 'redraw',
+    render: 'render',
+    update: 'update'
+  },
   nodes: {
     root: {
       name: 'root',

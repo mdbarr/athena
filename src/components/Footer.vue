@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import store from '../store'
+import store from '../store';
 
 export default {
   name: 'athena-footer',
@@ -17,9 +17,9 @@ export default {
   data () {
     return {
       state: store.state
-    }
+    };
   }
-}
+};
 </script>
 
 <style>

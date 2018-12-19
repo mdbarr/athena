@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import store from './store'
+import store from './store';
 
-const CLIENT_VERSION = require('../package.json').version
+const CLIENT_VERSION = require('../package.json').version;
 
 export default {
   name: 'App',
@@ -18,65 +18,60 @@ export default {
     return {
       state: store.state,
       version: CLIENT_VERSION
-    }
+    };
   },
   destroyed () {
     if (this.socket) {
-      this.socket.close()
+      this.socket.close();
     }
   },
   created () {
-    const vm = this
+    const vm = this;
 
     vm.$options.sockets.onopen = function (message) {
-      vm.socket = message.target
-      vm.state.isConnected = true
-    }
+      vm.socket = message.target;
+      vm.state.isConnected = true;
+    };
 
     vm.$options.sockets.onclose = function () {
-      vm.socket = null
-      vm.state.isConnected = false
-    }
+      vm.socket = null;
+      vm.state.isConnected = false;
+    };
 
     vm.$options.sockets.onmessage = function (message) {
       try {
-        vm.socket = message.target
+        vm.socket = message.target;
 
-        console.log('MESSAGE', message)
-
-        if (message.data === 'PING') {
-          vm.socket.send('PONG')
-          return
+        if (message.data === vm.$constants.ping) {
+          vm.socket.send(vm.$constants.pong);
+          return;
         }
 
-        message = JSON.parse(message.data)
+        message = JSON.parse(message.data);
         if (vm.version !== message.version) {
-          console.log('VERSION', vm.version, message.version)
-          window.location.reload(true)
-          return
+          console.log('VERSION MISMATCH', vm.version, message.version);
+          window.location.reload(true);
+          return;
         }
 
         if (message && message.type) {
-          vm.$events.$emit(message.type, message)
+          vm.$events.$emit(message.type, message);
         }
       } catch (error) {
-        console.log('Error in websocket message', error)
+        console.log('Error in websocket message', error);
       }
-    }
+    };
 
-    vm.$events.$on('connected', function (object) {
-      console.log('Connected!')
-      console.log(object)
-    })
+    vm.$events.$on(vm.$constants.message.connected, function (object) {
+      console.log('Connected!');
+      console.log(object);
+    });
 
-    vm.$events.$on('request', function (path) {
-      vm.socket.sendObj({
-        type: 'request',
-        request: path
-      })
-    })
+    vm.$events.$on(vm.$constants.message.send, function (object) {
+      vm.socket.sendObj(object);
+    });
   }
-}
+};
 // #347597
 </script>
 

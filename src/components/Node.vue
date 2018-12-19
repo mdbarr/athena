@@ -41,23 +41,23 @@ export default {
   },
   data () {
     return {
-    }
+    };
   },
   computed: {
     icon () {
-      return 'mdi mdi-' + this.node.icon + ' node-title-icon'
+      return 'mdi mdi-' + this.node.icon + ' node-title-icon';
     },
     statusIcon () {
       if (this.node.status.health === 'healthy') {
-        return 'mdi mdi-check-circle-outline'
+        return 'mdi mdi-check-circle-outline';
       } else if (this.node.status.health === 'failed') {
-        return 'mdi mdi-alert-outline'
+        return 'mdi mdi-alert-outline';
       } else {
-        return 'mdi mdi-help-rhombus-outline'
+        return 'mdi mdi-help-rhombus-outline';
       }
     }
   }
-}
+};
 </script>
 
 <style>

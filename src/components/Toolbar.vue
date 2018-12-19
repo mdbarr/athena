@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import store from '../store'
+import store from '../store';
 
 export default {
   name: 'athena-toolbar',
@@ -68,18 +68,18 @@ export default {
     return {
       state: store.state,
       drawer: false
-    }
+    };
   },
   methods: {
     navigate (where) {
-      this.$router.push({ name: where })
+      this.$router.push({ name: where });
     },
     logout () {
-      this.state.loggedIn = false
-      this.$router.push({ name: 'login' })
+      this.state.loggedIn = false;
+      this.$router.push({ name: 'login' });
     }
   }
-}
+};
 </script>
 
 <style>

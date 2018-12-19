@@ -60,16 +60,19 @@ module.exports = {
     unknown: 'unknown'
   },
   message: {
-    connectionReset: 'connectionReset',
-    end: 'end',
-    textL: 'text',
     authenticate: 'authenticate',
     connected: 'connected',
+    connectionReset: 'connectionReset',
+    end: 'end',
     error: 'error',
     focus: 'focus',
     path: 'path',
+    ping: 'PING',
+    pong: 'PONG',
     redraw: 'redraw',
     render: 'render',
+    send: 'send',
+    text: 'text',
     update: 'update'
   },
   nodes: {

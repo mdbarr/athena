@@ -1,13 +1,13 @@
 function Store () {
-  const self = this
+  const self = this;
 
   self.state = {
     isConnected: false,
     loggedIn: false,
     name: 'Mark'
-  }
+  };
 
-  return self
+  return self;
 }
 
-export default new Store()
+export default new Store();

@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import store from '../store'
-import Node from '../components/Node.vue'
-import Footer from '../components/Footer.vue'
-import Toolbar from '../components/Toolbar.vue'
+import store from '../store';
+import Node from '../components/Node.vue';
+import Footer from '../components/Footer.vue';
+import Toolbar from '../components/Toolbar.vue';
 
 export default {
   name: 'dashboard',
@@ -61,14 +61,17 @@ export default {
       } ],
       nodes: [ ],
       path: 'root'
-    }
+    };
   },
   mounted () {
-    this.$events.$emit('request', this.path)
+    this.$events.$send({
+      type: this.$constants.message.focus,
+      path: this.path
+    });
   },
   destroyed () {
   }
-}
+};
 </script>
 
 <style>

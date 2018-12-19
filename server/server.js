@@ -56,7 +56,7 @@ function Server(athena) {
   self.pingInterval = setInterval(function() {
     for (const client in self.clients) {
       try {
-        self.clients[client].message('PING');
+        self.clients[client].message(athena.message.constants.ping);
       } catch (error) {
         delete self.clients[client];
       }
@@ -74,6 +74,8 @@ function Server(athena) {
 
     const clientId = athena.util.id();
 
+    const metadata = {};
+
     self.clients[clientId] = shed;
 
     console.log('CLIENT CONNECT', clientId);
@@ -84,7 +86,7 @@ function Server(athena) {
     });
 
     shed.on('text', function(msg) {
-      if (msg === 'PONG') {
+      if (msg === athena.constants.message.pong) {
         // console.log('Received PONG from websocket client', clientId);
         return;
       }
@@ -101,6 +103,13 @@ function Server(athena) {
       console.log('CLIENT DISCONNECT', clientId);
       delete self.clients[clientId];
     });
+
+    shed.on(athena.constants.message.focus, function(message) {
+      console.log('Focusing %s on %s', clientId, message.path);
+      metadata.focus = message.path;
+    });
+
+    //////////
 
     shed.message = function(message) {
       if (typeof message === 'string') {

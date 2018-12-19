@@ -33,7 +33,7 @@ function Athena(config = {}) {
 
   self.project = require('../package');
   self.version = self.project.version;
-  self.constants = require('./constants');
+  self.constants = require('../common/constants');
 
   //////////
 

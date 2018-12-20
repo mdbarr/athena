@@ -42,8 +42,8 @@ export default {
       try {
         vm.socket = message.target;
 
-        if (message.data === vm.$constants.ping) {
-          vm.socket.send(vm.$constants.pong);
+        if (message.data === vm.$constants.message.ping) {
+          vm.socket.send(vm.$constants.message.pong);
           return;
         }
 

@@ -56,7 +56,7 @@ function Server(athena) {
   self.pingInterval = setInterval(function() {
     for (const client in self.clients) {
       try {
-        self.clients[client].message(athena.message.constants.ping);
+        self.clients[client].message(athena.constants.message.ping);
       } catch (error) {
         delete self.clients[client];
       }

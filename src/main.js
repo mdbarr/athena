@@ -7,6 +7,7 @@ import store from './store';
 import constants from '../common/constants';
 
 import VueNativeSock from 'vue-native-websocket';
+import '@mdi/font/css/materialdesignicons.css';
 
 Vue.config.productionTip = false;
 

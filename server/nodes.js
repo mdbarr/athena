@@ -30,7 +30,7 @@ function Nodes(athena) {
       name,
       parent = 'root',
       children = [],
-      icon = 'network',
+      icon = 'network-outline',
       triggers = [],
       delegate = null,
       metadata = {},

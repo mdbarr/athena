@@ -18,13 +18,15 @@
     </div>
     <div :class="'node-status ' + node.status.health">
       <i :class="statusIcon"></i> {{ node.status.health | uppercase }}
-      <div class="node-folder" v-if="node.children && node.children.length">
-        <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
-      </div>
-      <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
-        <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
-      </div>
-      <div :class="'node-child-divider ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
+      <span v-if="node.children && node.children.length">
+        <div class="node-folder">
+          <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
+        </div>
+        <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
+          <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
+        </div>
+        <div :class="'node-child-divider ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
+      </span>
     </div>
     <div :class="'node-info ' + node.status.health">
       {{ node.description }}

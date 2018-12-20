@@ -14,6 +14,28 @@ function DataStore(athena) {
     }
   };
 
+  self.find = function(object) {
+    const results = [];
+
+    for (const id in store) {
+      const item = store[id];
+
+      let match = true;
+      for (const key in object) {
+        if (item.config[key] !== object[key]) {
+          match = false;
+          break;
+        }
+      }
+
+      if (match) {
+        results.push(item);
+      }
+    }
+
+    return results;
+  };
+
   self.syncConfig = function(callback) {
     callback = athena.util.callback(callback);
 
@@ -78,6 +100,11 @@ function DataStore(athena) {
         // Load nodes
 
         // Set linkages
+
+        // Enable nodes
+        for (const id in store) {
+          store[id].enable();
+        }
 
         // Activate triggers
         for (const id in store) {

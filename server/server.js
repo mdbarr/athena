@@ -74,7 +74,11 @@ function Server(athena) {
 
     const clientId = athena.util.id();
 
-    const metadata = {};
+    const session = {
+      clientId,
+      sessionId: null,
+      focus: null
+    };
 
     self.clients[clientId] = shed;
 
@@ -106,7 +110,21 @@ function Server(athena) {
 
     shed.on(athena.constants.message.focus, function(message) {
       console.log('Focusing %s on %s', clientId, message.path);
-      metadata.focus = message.path;
+      session.focus = message.path;
+
+      session.render = athena.store.find({
+        parent: session.focus
+      }).
+        map(item => item.render());
+
+      const response = {
+        type: athena.constants.message.render,
+        nodes: session.render
+      };
+
+      console.pp(response);
+
+      shed.message(response);
     });
 
     //////////

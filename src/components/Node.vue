@@ -3,7 +3,7 @@
   <v-card width="400">
     <div :class="'node-title ' + node.status.health">
       <i :class="icon"></i>
-      <span>{{ node.title }}</span>
+      <span>{{ node.name }}</span>
       <v-menu offset-y left light nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
         <v-list dense>
@@ -22,12 +22,12 @@
         <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
       </div>
       <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
-        <i class="mdi mdi-alert-circle"></i>
+        <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
       </div>
       <div :class="'node-child-divider ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
     </div>
     <div :class="'node-info ' + node.status.health">
-      information
+      {{ node.description }}
     </div>
   </v-card>
 </v-flex>
@@ -39,15 +39,15 @@ export default {
   props: {
     node: Object
   },
-  data () {
+  data() {
     return {
     };
   },
   computed: {
-    icon () {
+    icon() {
       return 'mdi mdi-' + this.node.icon + ' node-title-icon';
     },
-    statusIcon () {
+    statusIcon() {
       if (this.node.status.health === 'healthy') {
         return 'mdi mdi-check-circle-outline';
       } else if (this.node.status.health === 'failed') {

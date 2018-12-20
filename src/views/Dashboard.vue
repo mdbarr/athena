@@ -44,7 +44,7 @@ export default {
     'athena-footer': Footer,
     'athena-toolbar': Toolbar
   },
-  data () {
+  data() {
     return {
       state: store.state,
       filter: '',
@@ -63,13 +63,22 @@ export default {
       path: 'root'
     };
   },
-  mounted () {
-    this.$events.$send({
-      type: this.$constants.message.focus,
-      path: this.path
+  mounted() {
+    const vm = this;
+    vm.$events.$send({
+      type: vm.$constants.message.focus,
+      path: vm.path
+    });
+
+    vm.$events.$on(vm.$constants.message.render, function(message) {
+      vm.nodes.splice(0, vm.nodes.length);
+      for (const item of message.nodes) {
+        vm.nodes.push(item);
+      }
+      console.log('New nodes:', vm.nodes);
     });
   },
-  destroyed () {
+  destroyed() {
   }
 };
 </script>

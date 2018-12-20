@@ -208,6 +208,30 @@ function Nodes(athena) {
       };
     }
 
+    render() {
+      const object = {};
+      for (const item in this.config) {
+        if (item.startsWith('_') ||
+            this.config.propertyIsEnumerable(item) === false ||
+            item === 'domain') {
+          continue;
+        }
+        object[item] = this.config[item];
+      }
+
+      object.status = {};
+      for (const item in this.status) {
+        if (item.startsWith('_') ||
+            this.status.propertyIsEnumerable(item) === false ||
+            item === 'domain') {
+          continue;
+        }
+        object.status[item] = this.status[item];
+      }
+
+      return object;
+    }
+
     serialize() {
       const object = {};
       for (const item in this.config) {

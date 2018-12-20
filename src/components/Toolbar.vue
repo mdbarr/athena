@@ -64,17 +64,17 @@ export default {
   name: 'athena-toolbar',
   props: {
   },
-  data () {
+  data() {
     return {
       state: store.state,
       drawer: false
     };
   },
   methods: {
-    navigate (where) {
+    navigate(where) {
       this.$router.push({ name: where });
     },
-    logout () {
+    logout() {
       this.state.loggedIn = false;
       this.$router.push({ name: 'login' });
     }

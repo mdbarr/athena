@@ -14,7 +14,7 @@ export default {
   name: 'athena-footer',
   props: {
   },
-  data () {
+  data() {
     return {
       state: store.state
     };

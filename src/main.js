@@ -19,7 +19,7 @@ Vue.use(VueNativeSock, websocketUrl, {
   reconnection: true
 });
 
-Vue.filter('uppercase', function (value) {
+Vue.filter('uppercase', function(value) {
   return (value || '').toUpperCase();
 });
 
@@ -27,7 +27,7 @@ Vue.prototype.$constants = constants;
 
 Vue.prototype.$events = new Vue({
   methods: {
-    $send (object) {
+    $send(object) {
       this.$emit(constants.message.send, object);
     }
   }

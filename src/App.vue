@@ -14,31 +14,31 @@ const CLIENT_VERSION = require('../package.json').version;
 
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
       state: store.state,
       version: CLIENT_VERSION
     };
   },
-  destroyed () {
+  destroyed() {
     if (this.socket) {
       this.socket.close();
     }
   },
-  created () {
+  created() {
     const vm = this;
 
-    vm.$options.sockets.onopen = function (message) {
+    vm.$options.sockets.onopen = function(message) {
       vm.socket = message.target;
       vm.state.isConnected = true;
     };
 
-    vm.$options.sockets.onclose = function () {
+    vm.$options.sockets.onclose = function() {
       vm.socket = null;
       vm.state.isConnected = false;
     };
 
-    vm.$options.sockets.onmessage = function (message) {
+    vm.$options.sockets.onmessage = function(message) {
       try {
         vm.socket = message.target;
 
@@ -62,12 +62,12 @@ export default {
       }
     };
 
-    vm.$events.$on(vm.$constants.message.connected, function (object) {
+    vm.$events.$on(vm.$constants.message.connected, function(object) {
       console.log('Connected!');
       console.log(object);
     });
 
-    vm.$events.$on(vm.$constants.message.send, function (object) {
+    vm.$events.$on(vm.$constants.message.send, function(object) {
       vm.socket.sendObj(object);
     });
   }

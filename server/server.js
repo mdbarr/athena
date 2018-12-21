@@ -54,14 +54,31 @@ function Server(athena) {
   /////////
 
   self.pingInterval = setInterval(function() {
-    for (const client in self.clients) {
+    for (const clientId in self.clients) {
       try {
-        self.clients[client].message(athena.constants.message.ping);
+        self.clients[clientId].message(athena.constants.message.ping);
       } catch (error) {
-        delete self.clients[client];
+        delete self.clients[clientId];
       }
     }
   }, PING_INTERVAL);
+
+  self.clientUpdate = function(node) {
+    for (const clientId in self.clients) {
+      const client = self.clients[clientId];
+
+      if (client.session.focus === node.config.parent) {
+        const render = node.render();
+
+        const update = {
+          type: athena.constants.message.update,
+          node: render
+        };
+
+        client.message(update);
+      }
+    }
+  };
 
   athena.api.get('/ws/attach', function(req, res, next) {
     if (!res.claimUpgrade) {
@@ -74,7 +91,7 @@ function Server(athena) {
 
     const clientId = athena.util.id();
 
-    const session = {
+    shed.session = {
       clientId,
       sessionId: null,
       focus: null
@@ -110,19 +127,17 @@ function Server(athena) {
 
     shed.on(athena.constants.message.focus, function(message) {
       console.log('Focusing %s on %s', clientId, message.path);
-      session.focus = message.path;
+      shed.session.focus = message.path;
 
-      session.render = athena.store.find({
-        parent: session.focus
+      shed.session.render = athena.store.find({
+        parent: shed.session.focus
       }).
         map(item => item.render());
 
       const response = {
         type: athena.constants.message.render,
-        nodes: session.render
+        nodes: shed.session.render
       };
-
-      console.pp(response);
 
       shed.message(response);
     });
@@ -167,6 +182,8 @@ function Server(athena) {
         console.log('Error finding free port');
         return callback(error);
       }
+
+      athena.events.on('status', self.clientUpdate);
 
       athena.api.listen(port, athena.config.api.host, function(error) {
         if (error) {

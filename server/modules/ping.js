@@ -36,7 +36,6 @@ module.exports = {
         this.session = ping.createSession();
 
         this.on('trigger', function() {
-          console.pp('TRIGGERED');
           node.session.pingHost(node.config.address, function (error, target, sent, rcvd) {
             let health = athena.constants.health.healthy;
             let metric = 0;

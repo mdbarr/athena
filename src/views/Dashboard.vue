@@ -77,6 +77,17 @@ export default {
       }
       console.log('New nodes:', vm.nodes);
     });
+
+    vm.$events.$on(vm.$constants.message.update, function(message) {
+      const node = message.node;
+
+      for (let i = 0; i < vm.nodes.length; i++) {
+        if (vm.nodes[i].id === node.id) {
+          vm.nodes.splice(i, 1, node);
+        }
+      }
+      console.log('Updated nodes:', vm.nodes);
+    });
   },
   destroyed() {
   }

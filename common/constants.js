@@ -92,10 +92,13 @@ module.exports = {
     athena: {
       name: 'athena',
       id: 'athena',
+      type: 'athena',
       parent: 'root',
-      icon: 'athena',
       sync: false,
-      ephemeral: true
+      ephemeral: true,
+      triggers: [
+        'interval: 5000'
+      ]
     }
   }
 };

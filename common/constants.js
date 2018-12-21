@@ -1,5 +1,7 @@
 'use strict';
 
+const version = require('../package').version;
+
 const banner = `
    ....                                                                ':c:,.
   cOdc;..,,.                                                           ..;OXK;
@@ -43,9 +45,10 @@ const athena = `                    _   _   _
                    / \\ | |_| |__   ___ _ __   __ _
                   / _ \\| __| '_ \\ / _ \\ '_ \\ / _\` |
                  / ___ \\ |_| | | |  __/ | | | (_| |
-                /_/   \\_\\__|_| |_|\\___|_| |_|\\__,_|
+                /_/   \\_\\__|_| |_|\\___|_| |_|\\__,_| v${ version }
 `;
 module.exports = {
+  version,
   assets: {
     athena,
     banner,

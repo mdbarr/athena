@@ -58,15 +58,13 @@ if (options.help) {
   console.log(`Usage: ${ name } [--help] [--watch] [--config=FILE]`);
   process.exit(0);
 } else if (options.watch) {
-  const watchDirectory = path.resolve(__dirname + '/../server/');
+  const serverDirectory = path.resolve(__dirname + '/../server/');
+  const commonDirectory = path.resolve(__dirname + '/../common/');
   let debounce = 0;
 
   launchAthena();
 
-  fs.watch(watchDirectory, {
-    persistent: true,
-    recursive: true
-  }, function (eventType, filename) {
+  const watcher = function (eventType, filename) {
     if (!paused && !filename.startsWith('.') && filename.endsWith('.js')) {
       if (debounce) {
         clearTimeout(debounce);
@@ -86,7 +84,17 @@ if (options.help) {
         }
       }, debounceTimeout);
     }
-  });
+  };
+
+  fs.watch(serverDirectory, {
+    persistent: true,
+    recursive: true
+  }, watcher);
+
+  fs.watch(commonDirectory, {
+    persistent: true,
+    recursive: true
+  }, watcher);
 } else {
   process.title = 'athena';
 

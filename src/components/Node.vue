@@ -63,7 +63,16 @@ export default {
 </script>
 
 <style>
-
+.mdi-athena::before {
+    display: block;
+    content: '';
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../assets/coin.svg);
+    background-size: 24px 24px !important;
+    width: 24px !important;
+    height: 33px !important;
+}
 .node-title {
     border-left: 12px solid #222;
     font-family: monospace;

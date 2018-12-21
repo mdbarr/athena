@@ -93,7 +93,7 @@ module.exports = {
       name: 'athena',
       id: 'athena',
       parent: 'root',
-      icon: 'brain',
+      icon: 'athena',
       sync: false,
       ephemeral: true
     }

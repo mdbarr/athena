@@ -30,19 +30,39 @@
     </div>
     <div :class="'node-info ' + node.status.health">
       {{ node.description }}
+      <sparkline class="node-sparkline" width="380" height="30">
+        <sparklineBar
+          :data="node.status.graph"
+          :margin="margin"
+          :styles="barStyles"
+          :limit="node.status.graph.length"
+          />
+      </sparkline>
     </div>
   </v-card>
 </v-flex>
 </template>
 
 <script>
+import Sparkline from 'vue-sparklines';
+
 export default {
   name: 'athena-node',
   props: {
     node: Object
   },
+  components: {
+    sparkline: Sparkline
+  },
   data() {
     return {
+      margin: 2,
+      barStyles: {
+        fill: '#54a5ff'
+      },
+      lineStyles: {
+        stroke: '#54a5ff'
+      }
     };
   },
   computed: {
@@ -156,5 +176,9 @@ export default {
 }
 .node-info.healthy {
     border-left: 12px solid #3f647f;
+}
+.node-sparkline {
+    position: absolute;
+    bottom: -6px;
 }
 </style>

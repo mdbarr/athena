@@ -12,8 +12,8 @@ import '@mdi/font/css/materialdesignicons.css';
 Vue.config.productionTip = false;
 
 const websocketUrl = (process.env.NODE_ENV === 'production')
-  ? 'wss://athena.blue/ws/attach'
-  : 'ws://localhost:6250/ws/attach';
+  ? 'wss://' + window.location.hostname + '/ws/attach'
+  : 'ws://' + window.location.hostname + ':6250/ws/attach';
 
 Vue.use(VueNativeSock, websocketUrl, {
   format: 'json',

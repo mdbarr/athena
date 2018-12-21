@@ -90,6 +90,7 @@ module.exports = {
       name: 'athena',
       id: 'athena',
       parent: 'root',
+      icon: 'brain',
       sync: false,
       ephemeral: true
     }

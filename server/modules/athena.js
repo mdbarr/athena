@@ -10,18 +10,19 @@ module.exports = {
         super(options);
         const node = this;
 
+        node.config.name = os.hostname();
         node.config.type = 'athena';
         node.config.icon = 'athena';
 
         node.status.health = athena.constants.health.healthy;
 
         node.on('trigger', function() {
-          console.log('triggered');
           const loadavg = os.loadavg();
-          const metric = loadavg[0];
+          const metric = Number(loadavg[0].toFixed(2));
 
           node.actions.update({
             health: athena.constants.health.healthy,
+            description: 'Online',
             metric
           });
         });

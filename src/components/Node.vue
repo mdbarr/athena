@@ -29,7 +29,7 @@
       </span>
     </div>
     <div :class="'node-info ' + node.status.health">
-      {{ node.description }}
+      {{ node.status.description }}
       <sparkline class="node-sparkline" width="380" height="30">
         <sparklineBar
           :data="node.status.graph"

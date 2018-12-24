@@ -97,7 +97,7 @@ module.exports = {
       sync: false,
       ephemeral: true,
       triggers: [
-        'interval: 2500'
+        'interval: 30000'
       ]
     }
   }

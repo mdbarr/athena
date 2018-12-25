@@ -5,14 +5,16 @@ require('barrkeep');
 const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
+const watch = require('glob-watcher');
 const child_process = require('child_process');
 
 const options = minimist(process.argv.slice(2));
 
 const debounceTimeout = parseInt(options.debounce || 250);
 
-const project = require(path.resolve(__dirname + '/../package.json'));
+const baseDirectory = path.resolve(__dirname + '/../');
 const athenaCommand = path.resolve(__dirname + '/cli.js');
+const project = require(path.resolve(__dirname + '/../package.json'));
 
 let paused = false;
 let athenaProcess;
@@ -58,13 +60,13 @@ if (options.help) {
   console.log(`Usage: ${ name } [--help] [--watch] [--config=FILE]`);
   process.exit(0);
 } else if (options.watch) {
-  const serverDirectory = path.resolve(__dirname + '/../server/');
-  const commonDirectory = path.resolve(__dirname + '/../common/');
   let debounce = 0;
 
   launchAthena();
 
-  const watcher = function (eventType, filename) {
+  const handler = function (filepath) {
+    const filename = path.basename(filepath);
+
     if (!paused && !filename.startsWith('.') && filename.endsWith('.js')) {
       if (debounce) {
         clearTimeout(debounce);
@@ -86,15 +88,12 @@ if (options.help) {
     }
   };
 
-  fs.watch(serverDirectory, {
-    persistent: true,
-    recursive: true
-  }, watcher);
+  const watcher = watch([ baseDirectory + '/server/**/*.js',
+    baseDirectory + '/common/**/*.js',
+    baseDirectory + '/bin/**/*.js' ]);
 
-  fs.watch(commonDirectory, {
-    persistent: true,
-    recursive: true
-  }, watcher);
+  watcher.on('add', handler);
+  watcher.on('change', handler);
 } else {
   process.title = 'athena';
 

@@ -66,6 +66,7 @@ module.exports = {
     unknown: 'unknown'
   },
   message: {
+    action: 'action',
     authenticate: 'authenticate',
     connected: 'connected',
     connectionReset: 'connectionReset',

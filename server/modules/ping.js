@@ -49,7 +49,7 @@ module.exports = {
                 health = athena.constants.health.failed;
               }
             }
-            node.actions.update({
+            node.update({
               health,
               metric
             });

@@ -61,7 +61,7 @@ module.exports = {
               metric = response.elapsedTime;
             }
 
-            node.actions.update({
+            node.update({
               health,
               metric
             });

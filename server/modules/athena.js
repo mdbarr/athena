@@ -1,6 +1,7 @@
 'use strict';
 
 const os = require('os');
+const barrkeep = require('barrkeep');
 
 module.exports = {
   name: 'athena',
@@ -20,12 +21,22 @@ module.exports = {
           const loadavg = os.loadavg();
           const metric = Number(loadavg[0].toFixed(2));
 
-          node.actions.update({
+          let freeMemory = os.freemem();
+          const percentMemory = Math.floor((freeMemory / os.totalmem()) * 100);
+          freeMemory = barrkeep.formatBytes(freeMemory);
+
+          const clients = Object.keys(athena.server.clients).length;
+
+          const description = `${ os.hostname() } - ${ os.type() } ${ os.arch() }<br>Free Memory: ${ freeMemory } (${ percentMemory }%)<br>${ clients } connected clients`;
+
+          node.update({
             health: athena.constants.health.healthy,
-            description: 'Online',
+            description,
             metric
           });
         });
+
+        node.emit('trigger');
       }
     }
 

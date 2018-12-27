@@ -77,12 +77,24 @@ function Nodes(athena) {
       };
 
       node.actions = {
-        serialize: node.serialize.bind(node),
-        enable: node.enable.bind(node),
-        disable: node.disable.bind(node),
-        trigger: node.trigger.bind(node),
-        update: node.update.bind(node),
-        save: () => {}
+        enable: {
+          tooltip: 'Enable node',
+          icon: 'play',
+          call: node.enable.bind(node),
+          available: () => !node.status.enabled
+        },
+        disable: {
+          tooltip: 'Disable node',
+          icon: 'stop',
+          call: node.disable.bind(node),
+          available: () => node.status.enabled
+        },
+        trigger: {
+          tooltip: 'Trigger node',
+          icon: 'update',
+          call: node.trigger.bind(node),
+          available: () => node.status.enabled
+        }
       };
 
       athena.util.addPrivate(node, '_cache', {
@@ -122,7 +134,7 @@ function Nodes(athena) {
       node.on('config', function() {
         node.id = node.config.id;
         if (node.status.enabled && !node.config.ephemeral) {
-          node.actions.save();
+          node.save();
         }
       });
     }
@@ -171,6 +183,10 @@ function Nodes(athena) {
         this.emit('status', this.status);
         athena.events.emit('status', this, this.status);
       }
+    }
+
+    save() {
+      this.emit('save', this.serialize());
     }
 
     addChild(child) {
@@ -227,6 +243,21 @@ function Nodes(athena) {
           continue;
         }
         object.status[item] = this.status[item];
+      }
+
+      object.actions = [];
+      for (const name of Object.keys(this.actions).sort()) {
+        if (typeof this.actions[name].available === 'function' &&
+            !this.actions[name].available()) {
+          continue;
+        }
+        const action = {
+          name,
+          tooltip: this.actions[name].tooltip || '',
+          icon: this.actions[name].icon || 'cursor-default-click-outline'
+        };
+
+        object.actions.push(action);
       }
 
       return object;

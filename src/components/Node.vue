@@ -7,11 +7,11 @@
       <v-menu offset-y left light nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
         <v-list dense>
-          <v-list-tile @click="() => {}">
+          <v-list-tile v-for="action in node.actions" :key="action.name" @click="invoke(action.name)">
             <v-list-tile-content>
-              <v-list-tile-title>Update</v-list-tile-title>
+              <v-list-tile-title>{{ action.name | capitalize }}</v-list-tile-title>
             </v-list-tile-content>
-            <v-list-tile-avatar><v-icon small>mdi-update</v-icon></v-list-tile-avatar>
+            <v-list-tile-avatar><v-icon small>{{ 'mdi-' + action.icon }}</v-icon></v-list-tile-avatar>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -29,7 +29,7 @@
       </span>
     </div>
     <div :class="'node-info ' + node.status.health">
-      {{ node.status.description }}
+      <span v-html="node.status.description"></span>
       <sparkline class="node-sparkline" width="380" height="30">
         <sparklineBar
           :data="node.status.graph"
@@ -77,6 +77,15 @@ export default {
       } else {
         return 'mdi mdi-help-rhombus-outline';
       }
+    }
+  },
+  methods: {
+    invoke: function(action) {
+      this.$events.$send({
+        type: this.$constants.message.action,
+        action,
+        node: this.node.id
+      });
     }
   }
 };

@@ -113,6 +113,8 @@ function Server(athena) {
       }
       try {
         const message = JSON.parse(msg);
+        message.clientId = clientId;
+        message.session = shed.session.sessionId;
         console.pp(message);
         shed.emit(message.type, message);
       } catch (error) {

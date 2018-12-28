@@ -30,7 +30,7 @@
     </div>
     <div :class="'node-info ' + node.status.health">
       <span v-html="node.status.description"></span>
-      <sparkline class="node-sparkline" width="380" height="30">
+      <sparkline class="node-sparkline" width="386" height="30">
         <sparklineBar
           :data="node.status.graph"
           :margin="margin"
@@ -180,6 +180,7 @@ export default {
 .node-info {
     border-left: 12px solid #222;
     font-family: monospace;
+    font-size: 10px;
     min-height: 100px;
     padding: 4px;
 }
@@ -188,6 +189,7 @@ export default {
 }
 .node-sparkline {
     position: absolute;
-    bottom: -6px;
+    left: 12px;
+    bottom: -4px;
 }
 </style>

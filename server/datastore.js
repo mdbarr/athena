@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 function DataStore(athena) {
   const self = this;
 
+  const users = {};
   const store = {};
 
   self.resolve = function(id) {
@@ -65,6 +66,30 @@ function DataStore(athena) {
     }
   };
 
+  self.loadUsers = function(callback) {
+    self.collections.users.find({}).toArray(function (error, results) {
+      if (error || !results) {
+        return callback(error);
+      } else if (results.length === 0) {
+        const admin = {
+          username: 'athena',
+          password: athena.util.generateLocalPassword()
+        };
+        users.athena = admin;
+
+        console.log('-'.repeat(80));
+        console.log('\nLocal administrator account configured as:');
+        console.log('  username: %s\n  password: %s\n', admin.username, admin.password);
+        console.log('-'.repeat(80));
+      } else {
+        for (const user of results) {
+          users[user.username] = user;
+        }
+      }
+      callback();
+    });
+  };
+
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
 
@@ -82,36 +107,39 @@ function DataStore(athena) {
       self.db = self.client.db(athena.config.mongo.db);
       self.collections = {
         config: self.db.collection('config'),
-        nodes: self.db.collection('nodes')
+        nodes: self.db.collection('nodes'),
+        users: self.db.collection('users')
       };
 
       // Sync config
       self.syncConfig(function() {
-        if (athena.config.mongo.autoload === false) {
-          return callback();
-        }
+        self.loadUsers(function() {
+          if (athena.config.mongo.autoload === false) {
+            return callback();
+          }
 
-        // Create ephemeral root node
-        athena.nodes.create(athena.constants.nodes.root);
+          // Create ephemeral root node
+          athena.nodes.create(athena.constants.nodes.root);
 
-        // Create ephemeral Athena node
-        athena.nodes.create(athena.constants.nodes.athena);
+          // Create ephemeral Athena node
+          athena.nodes.create(athena.constants.nodes.athena);
 
-        // Load nodes
+          // Load nodes
 
-        // Set linkages
+          // Set linkages
 
-        // Enable nodes
-        for (const id in store) {
-          store[id].enable();
-        }
+          // Enable nodes
+          for (const id in store) {
+            store[id].enable();
+          }
 
-        // Activate triggers
-        for (const id in store) {
-          store[id].activate();
-        }
+          // Activate triggers
+          for (const id in store) {
+            store[id].activate();
+          }
 
-        callback();
+          callback();
+        });
       });
     });
   };

@@ -70,6 +70,13 @@ export default {
       path: vm.path
     });
 
+    vm.$events.$on(vm.$constants.message.connected, function(object) {
+      vm.$events.$send({
+        type: vm.$constants.message.focus,
+        path: vm.path
+      });
+    });
+
     vm.$events.$on(vm.$constants.message.render, function(message) {
       vm.nodes.splice(0, vm.nodes.length);
       for (const item of message.nodes) {

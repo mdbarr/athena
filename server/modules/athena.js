@@ -1,7 +1,6 @@
 'use strict';
 
 const os = require('os');
-const barrkeep = require('barrkeep');
 
 module.exports = {
   name: 'athena',
@@ -23,7 +22,7 @@ module.exports = {
 
           let freeMemory = os.freemem();
           const percentMemory = Math.floor((freeMemory / os.totalmem()) * 100);
-          freeMemory = barrkeep.formatBytes(freeMemory);
+          freeMemory = athena.util.formatBytes(freeMemory);
 
           const clients = Object.keys(athena.server.clients).length;
 

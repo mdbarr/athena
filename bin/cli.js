@@ -17,9 +17,14 @@ const athenaCommand = path.resolve(__dirname + '/cli.js');
 const project = require(path.resolve(__dirname + '/../package.json'));
 
 let paused = false;
+const ready = 0;
 let athenaProcess;
 
 function launchAthena() {
+  setTimeout(function() {
+    paused = false;
+  }, 5000);
+
   try {
     if (options.lint) {
       console.log('Linting...');
@@ -45,6 +50,7 @@ function launchAthena() {
     });
 
     athenaProcess.on('message', function() {
+      clearTimeout(ready);
       paused = false;
     });
 

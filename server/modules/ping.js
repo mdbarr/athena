@@ -8,23 +8,16 @@ module.exports = {
   dependencies: 'node',
   load: function(athena) {
     class Ping extends athena.nodes.Node {
-      constructor({
-        id, name, parent, children, address, latency = -1,
-        icon = 'server-network', triggers, metadata
-      }) {
+      constructor(options) {
+        const {
+          address, latency
+        } = options;
+
         if (!net.isIP(address)) {
           throw new Error('Address is not an IP address');
         }
 
-        super({
-          id,
-          name,
-          parent,
-          children,
-          icon,
-          triggers,
-          metadata
-        });
+        super(options);
 
         const node = this;
 

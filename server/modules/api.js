@@ -5,29 +5,8 @@ module.exports = {
   dependencies: 'http',
   load: function(athena) {
     class API extends athena.nodes.HTTP {
-      constructor({
-        id, name, parent, children, address, port = 443, icon = 'cloud-braces',
-        triggers, metadata, method = 'GET', url, statusCode = 200, payload = null,
-        headers = {}, contentType = 'application/json', contentLength = -1
-      }) {
-        super({
-          id,
-          name,
-          parent,
-          children,
-          address,
-          port,
-          icon,
-          triggers,
-          metadata,
-          method,
-          url,
-          statusCode,
-          payload,
-          headers,
-          contentType,
-          contentLength
-        });
+      constructor(options) {
+        super(options);
 
         this.config.type = 'api';
       }

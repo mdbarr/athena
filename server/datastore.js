@@ -125,20 +125,30 @@ function DataStore(athena) {
           athena.nodes.create(athena.constants.nodes.athena);
 
           // Load nodes
+          self.collections.nodes.find({}).forEach(function(node) {
+            athena.nodes.create(node, {
+              link: false
+            });
+          }, function(findError) {
+            assert.equal(null, findError);
 
-          // Set linkages
+            // Set linkages
+            for (const id in store) {
+              store[id].link();
+            }
 
-          // Enable nodes
-          for (const id in store) {
-            store[id].enable();
-          }
+            // Enable nodes
+            for (const id in store) {
+              store[id].enable();
+            }
 
-          // Activate triggers
-          for (const id in store) {
-            store[id].activate();
-          }
+            // Activate triggers
+            for (const id in store) {
+              store[id].activate();
+            }
 
-          callback();
+            callback();
+          });
         });
       });
     });

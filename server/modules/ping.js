@@ -35,6 +35,9 @@ module.exports = {
 
             if (error) {
               health = athena.constants.health.error;
+            } else if (!rcvd) {
+              metric = -30;
+              health = athena.constants.health.failed;
             } else {
               const time = rcvd.getTime() - sent.getTime();
               metric = time;

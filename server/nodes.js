@@ -205,11 +205,12 @@ function Nodes(athena) {
     }
 
     link() {
-      if (this.config.parent) {
+      if (this.config.parent && !this._linked) {
         const parent = athena.store.resolve(this.config.parent);
         parent.addChild(this);
         athena.util.addPrivate(this, '_parent', parent);
         athena.events.emit('linked', this, parent);
+        this._linked = true;
       }
     }
 

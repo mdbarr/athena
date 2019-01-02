@@ -35,7 +35,7 @@ module.exports = {
 
             if (error) {
               health = athena.constants.health.error;
-            } else if (!rcvd) {
+            } else if (!sent || !rcvd) {
               metric = -30;
               health = athena.constants.health.failed;
             } else {

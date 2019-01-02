@@ -164,6 +164,33 @@ function Server(athena) {
 
   //////////
 
+  athena.api.get('/*', restify.plugins.serveStatic({
+    directory: './dist',
+    default: 'index.html'
+  }));
+
+  athena.api.get('/css/*', restify.plugins.serveStatic({
+    directory: './dist/css',
+    appendRequestPath: false
+  }));
+
+  athena.api.get('/fonts/*', restify.plugins.serveStatic({
+    directory: './dist/fonts',
+    appendRequestPath: false
+  }));
+
+  athena.api.get('/img/*', restify.plugins.serveStatic({
+    directory: './dist/img',
+    appendRequestPath: false
+  }));
+
+  athena.api.get('/js/*', restify.plugins.serveStatic({
+    directory: './dist/js',
+    appendRequestPath: false
+  }));
+
+  //////////
+
   self.findPort = function(callback) {
     if (athena.config.api.available) {
       findFreePort(athena.config.api.port, callback);

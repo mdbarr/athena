@@ -35,7 +35,8 @@ function Nodes(athena) {
       delegate = null,
       metadata = {},
       ephemeral = false,
-      sync = true
+      sync = true,
+      container = false
     } = {}) {
       super();
 
@@ -60,7 +61,8 @@ function Nodes(athena) {
         delegate,
         metadata,
         sync,
-        ephemeral
+        ephemeral,
+        container
       }, 'config');
 
       node.id = node.config.id;

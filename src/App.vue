@@ -64,7 +64,6 @@ export default {
 
     vm.$events.$on(vm.$constants.message.connected, function(object) {
       console.log('Connected!');
-      console.log(object);
     });
 
     vm.$events.$on(vm.$constants.message.send, function(object) {

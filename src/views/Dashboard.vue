@@ -4,12 +4,12 @@
     <v-container fluid class="top-container">
       <v-layout>
         <v-flex xs6>
-          <v-breadcrumbs :items="crumbs" dark class="athena-breadcrumbs">
+          <v-breadcrumbs :items="path" dark class="athena-breadcrumbs">
             <v-icon slot="divider">mdi-arrow-right-bold</v-icon>
             <template slot="item" slot-scope="props">
-              <router-link class="athena-breadcrumb-link" :to="props.item.href">
-                <v-icon v-if="props.item.icon" small>{{ 'mdi-' + props.item.icon }}</v-icon>
-                <span v-else>{{ props.item.text.toUpperCase() }}</span>
+              <router-link class="athena-breadcrumb-link" :to="props.item.id">
+                <v-icon small>{{ 'mdi-' + props.item.icon }}</v-icon>
+                <span v-if="props.item.name !== 'root'"> {{ props.item.name.toUpperCase() }}</span>
               </router-link>
             </template>
           </v-breadcrumbs>
@@ -48,41 +48,35 @@ export default {
     return {
       state: store.state,
       filter: '',
-      crumbs: [ {
-        text: 'dashboard',
-        disabled: false,
-        href: 'breadcrumbs_dashboard',
-        icon: 'bank'
-      }, {
-        text: 'Root',
-        disabled: false,
-        href: 'breadcrumbs_root',
-        icon: 'pillar'
-      } ],
+      path: [ ],
       nodes: [ ],
-      path: 'root'
+      focus: 'root'
     };
   },
   mounted() {
     const vm = this;
     vm.$events.$send({
       type: vm.$constants.message.focus,
-      path: vm.path
+      focus: vm.focus
     });
 
     vm.$events.$on(vm.$constants.message.connected, function(object) {
       vm.$events.$send({
         type: vm.$constants.message.focus,
-        path: vm.path
+        focus: vm.focus
       });
     });
 
     vm.$events.$on(vm.$constants.message.render, function(message) {
+      vm.path.splice(0, vm.path.length);
+      for (const item of message.path) {
+        vm.path.push(item);
+      }
+
       vm.nodes.splice(0, vm.nodes.length);
       for (const item of message.nodes) {
         vm.nodes.push(item);
       }
-      console.log('New nodes:', vm.nodes);
     });
 
     vm.$events.$on(vm.$constants.message.update, function(message) {
@@ -93,7 +87,6 @@ export default {
           vm.nodes.splice(i, 1, node);
         }
       }
-      console.log('Updated nodes:', vm.nodes);
     });
   },
   destroyed() {

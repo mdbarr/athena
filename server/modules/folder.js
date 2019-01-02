@@ -4,15 +4,16 @@ module.exports = {
   name: 'folder',
   dependencies: 'http',
   load: function(athena) {
-    class FOLDER extends athena.nodes.Node {
+    class Folder extends athena.nodes.Node {
       constructor(options) {
         super(options);
 
         this.config.type = 'folder';
         this.config.icon = 'folder-open';
+        this.config.status = 'children';
       }
     }
 
-    athena.nodes.register('folder', FOLDER);
+    athena.nodes.register('folder', Folder);
   }
 };

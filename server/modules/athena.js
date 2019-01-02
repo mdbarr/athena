@@ -10,7 +10,7 @@ module.exports = {
         super(options);
         const node = this;
 
-        node.config.name = os.hostname();
+        node.config.name = os.hostname().replace(/\..*$/, '');
         node.config.type = 'athena';
         node.config.icon = 'athena';
 

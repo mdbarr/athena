@@ -20,6 +20,16 @@ function Nodes(athena) {
     });
   };
 
+  const aggregate = function(items) {
+    const healths = Object.keys(athena.constants.health).reverse();
+    for (const health of healths) {
+      if (items.includes(health)) {
+        return health;
+      }
+    }
+    return athena.constants.health.healthy;
+  };
+
   //////////
 
   const nodes = {};
@@ -36,7 +46,7 @@ function Nodes(athena) {
       metadata = {},
       ephemeral = false,
       sync = true,
-      container = false
+      status = 'own' // own, aggregate, children
     } = {}) {
       super();
 
@@ -62,7 +72,7 @@ function Nodes(athena) {
         metadata,
         sync,
         ephemeral,
-        container
+        status
       }, 'config');
 
       node.id = node.config.id;
@@ -75,8 +85,30 @@ function Nodes(athena) {
         graph: new Array(50).fill(0),
         updatedAt: null,
         triggeredAt: null,
-        aggregate: []
+        children: []
       };
+
+      athena.util.addPrivate(node, '_computed', {
+        aggregate,
+        [Symbol.iterator]: function() {
+          return {
+            next: function() {
+              if (this._index < this._keys.length) {
+                return {
+                  value: this._keys[this._index++],
+                  done: false
+                };
+              } else {
+                return {
+                  done: true
+                };
+              }
+            },
+            _index: 0,
+            _keys: Object.keys(node.status).concat(Object.keys(node._computed))
+          };
+        }
+      });
 
       node.actions = {
         enable: {
@@ -99,36 +131,53 @@ function Nodes(athena) {
         }
       };
 
-      athena.util.addPrivate(node, '_cache', {
-        computeTable: {}
-      });
-
       node.computed = new Proxy({}, {
+        enumerate: function() {
+          return Object.keys(node.status).concat(Object.keys(node._computed));
+        },
+        ownKeys: function() {
+          return Object.keys(node.status).concat(Object.keys(node._computed));
+        },
+        getOwnPropertyDescriptor: function(object, property) {
+          let value;
+          if (node._computed[property]) {
+            value = node.computed[property];
+          } else if (node.status[property]) {
+            value = node.status[property];
+          } else {
+            return undefined;
+          }
+
+          return {
+            value,
+            writable: true,
+            enumerable: true,
+            configurable: true
+          };
+        },
         get: function(object, property) {
           if (property === 'health') {
-            const health = {
-              self: node.status.health,
-              aggregate: node.status.aggregate
-            };
-            return health;
-          } else if (property === 'parent') {
-            if (!node._cache.parent) {
-              node._cache.parent = athena.store.resolve(node.parent);
+            if (node.config.status === 'own') {
+              return node.status.health;
+            } else if (node.config.status === 'aggregate') {
+              return aggregate([ node.status.health, ...node.status.children ]);
+            } else if (node.config.status === 'children') {
+              return aggregate(node.status.children);
+            } else {
+              return athena.constants.health.unknown;
             }
-            return node._cache.parent;
-          } else if (property === 'children') {
-            if (!node._cache.children) {
-              node._cache.children = node.children.map((x) => athena.store.resolve(x));
-            }
-            return node._cache.children;
-          } else if (node._cache.computeTable[property] &&
-                     typeof node._cache.computeTable[property] === 'function') {
-            return node._cache.computeTable[property](object, property);
+          } else if (property === 'aggregate') {
+            return aggregate(node.status.children);
+          } else if (node._computed[property] &&
+                     typeof node._computed[property] === 'function') {
+            return node._computed[property](object, property);
+          } else {
+            return node.status[property];
           }
         },
         set: function(object, property, value) {
           if (typeof value === 'function') {
-            node._cache.computeTable[property] = value;
+            node._computed[property] = value;
           }
         }
       });
@@ -197,7 +246,7 @@ function Nodes(athena) {
 
       child.on('status', function() {
         if (child.enabled) {
-          node.status.aggregate[childId] = child.status.health;
+          node.status.children[childId] = child.status.health;
           node.emit('status', child, child.status);
           athena.events.emit('status', node, node.status);
         }
@@ -214,6 +263,24 @@ function Nodes(athena) {
         athena.events.emit('linked', this, parent);
         this._linked = true;
       }
+    }
+
+    path() {
+      const path = [];
+      let current = this;
+
+      while (current) {
+        path.unshift({
+          id: current.config.id,
+          name: current.config.name,
+          type: current.config.type,
+          icon: current.config.icon
+        });
+
+        current = current.parent ? athena.store.resolve(current.parent) : null;
+      }
+
+      return path;
     }
 
     describe() {
@@ -239,13 +306,13 @@ function Nodes(athena) {
       }
 
       object.status = {};
-      for (const item in this.status) {
+      for (const item in this.computed) {
         if (item.startsWith('_') ||
             this.status.propertyIsEnumerable(item) === false ||
             item === 'domain') {
           continue;
         }
-        object.status[item] = this.status[item];
+        object.status[item] = this.computed[item];
       }
 
       object.actions = [];

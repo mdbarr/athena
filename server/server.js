@@ -128,16 +128,20 @@ function Server(athena) {
     });
 
     shed.on(athena.constants.message.focus, function(message) {
-      console.log('Focusing %s on %s', clientId, message.path);
-      shed.session.focus = message.path;
+      console.log('Focusing %s on %s', clientId, message.focus);
+      shed.session.focus = message.focus;
 
-      shed.session.render = athena.store.find({
+      const focus = athena.store.resolve(shed.session.focus);
+
+      const nodes = athena.store.find({
         parent: shed.session.focus
-      }).
-        map(item => item.render());
+      });
+
+      shed.session.render = nodes.map(item => item.render());
 
       const response = {
         type: athena.constants.message.render,
+        path: focus.path(),
         nodes: shed.session.render
       };
 

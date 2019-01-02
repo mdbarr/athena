@@ -58,12 +58,12 @@ module.exports = {
   style: {
     blue: 'DodgerBlue1'
   },
-  health: {
+  health: { // Implicit ordering
     healthy: 'healthy',
+    unknown: 'unknown',
     unstable: 'unstable',
     error: 'error',
-    failed: 'failed',
-    unknown: 'unknown'
+    failed: 'failed'
   },
   message: {
     action: 'action',
@@ -86,6 +86,7 @@ module.exports = {
     root: {
       name: 'root',
       id: 'root',
+      icon: 'bank',
       parent: null,
       sync: false,
       ephemeral: true

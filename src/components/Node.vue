@@ -19,9 +19,9 @@
     <div :class="'node-status ' + node.status.health">
       <i :class="statusIcon"></i> {{ node.status.health | uppercase }}
       <span v-if="node.children && node.children.length">
-        <div class="node-folder">
+        <router-link :to="'/view/' + node.id" class="node-folder">
           <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
-        </div>
+        </router-link>
         <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
           <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
         </div>
@@ -173,6 +173,7 @@ export default {
     height: 28px;
     text-align: right;
     width: 46px;
+    color: #fff;
 }
 .node-folder:hover {
     background-color: #666;

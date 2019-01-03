@@ -277,7 +277,9 @@ function Nodes(athena) {
           icon: current.config.icon
         });
 
-        current = current.parent ? athena.store.resolve(current.parent) : null;
+        current = current.config.parent ?
+          athena.store.resolve(current.config.parent) :
+          null;
       }
 
       return path;

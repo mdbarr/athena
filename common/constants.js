@@ -86,7 +86,7 @@ module.exports = {
     root: {
       name: 'root',
       id: 'root',
-      icon: 'bank',
+      icon: 'pillar',
       parent: null,
       sync: false,
       ephemeral: true

@@ -21,6 +21,11 @@ const router = new Router({
       name: 'login',
       component: Login
     },
+    {
+      path: '/view/:id',
+      name: 'view',
+      component: Dashboard
+    },
 
     { path: '*', redirect: '/' }
   ]

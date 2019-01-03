@@ -7,9 +7,9 @@
           <v-breadcrumbs :items="path" dark class="athena-breadcrumbs">
             <v-icon slot="divider">mdi-arrow-right-bold</v-icon>
             <template slot="item" slot-scope="props">
-              <router-link class="athena-breadcrumb-link" :to="props.item.id">
+              <router-link class="athena-breadcrumb-link" :to="'/view/' + props.item.id">
                 <v-icon small>{{ 'mdi-' + props.item.icon }}</v-icon>
-                <span v-if="props.item.name !== 'root'"> {{ props.item.name.toUpperCase() }}</span>
+                <span v-if="path.length === 1 || props.item.name !== 'root'" class="pl-2">{{ props.item.name === 'root' ? 'ATHENA' : props.item.name.toUpperCase() }}</span>
               </router-link>
             </template>
           </v-breadcrumbs>
@@ -39,6 +39,13 @@ import Toolbar from '../components/Toolbar.vue';
 
 export default {
   name: 'dashboard',
+  props: {
+    id: {
+      type: String,
+      required: false,
+      default: 'root'
+    }
+  },
   components: {
     'athena-node': Node,
     'athena-footer': Footer,
@@ -50,21 +57,27 @@ export default {
       filter: '',
       path: [ ],
       nodes: [ ],
-      focus: 'root'
+      focus: this.id
     };
+  },
+  methods: {
+    refocus: function(id) {
+      if (id) {
+        this.focus = id;
+      }
+      this.$events.$send({
+        type: this.$constants.message.focus,
+        focus: this.focus
+      });
+    }
   },
   mounted() {
     const vm = this;
-    vm.$events.$send({
-      type: vm.$constants.message.focus,
-      focus: vm.focus
-    });
+
+    this.refocus();
 
     vm.$events.$on(vm.$constants.message.connected, function(object) {
-      vm.$events.$send({
-        type: vm.$constants.message.focus,
-        focus: vm.focus
-      });
+      vm.refocus();
     });
 
     vm.$events.$on(vm.$constants.message.render, function(message) {
@@ -90,6 +103,15 @@ export default {
     });
   },
   destroyed() {
+  },
+  watch: {
+    $route: function(route) {
+      if (route.params && route.params.id) {
+        this.refocus(route.params.id);
+      } else {
+        this.refocus('root');
+      }
+    }
   }
 };
 </script>

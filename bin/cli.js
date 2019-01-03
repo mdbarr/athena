@@ -7,12 +7,12 @@ const path = require('path');
 const minimist = require('minimist');
 const watch = require('glob-watcher');
 const child_process = require('child_process');
-const database = require('./database');
+const bootstrap = require('./bootstrap');
 
 const options = minimist(process.argv.slice(2));
 
 if (options.bootstrap) {
-  database.bootstrap(options);
+  bootstrap(options);
 } else {
 
   const debounceTimeout = parseInt(options.debounce || 250);

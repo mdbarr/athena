@@ -57,6 +57,10 @@ function Util() {
     return crypto.createHash(hash).update(input).digest('hex');
   };
 
+  self.sha256 = function(input) {
+    return self.computeHash(input, 'sha256');
+  };
+
   self.timestamp = function(date) {
     if (date) {
       return new Date(date).getTime();
@@ -67,7 +71,7 @@ function Util() {
 
   self.generateLocalPassword = function() {
     let localPassword = `${os.type() }/${ os.arch() }/${ os.platform() }/${ os.release() }-${ os.cpus().map((item) => item.model) }:${ os.totalmem() }-${ os.hostname() }:${ os.homedir() }>${ JSON.stringify(os.userInfo()) }`.replace(/\s+/g, ' ').replace(/["']/g, '');
-    localPassword = self.computeHash(localPassword, 'sha256');
+    localPassword = self.sha256(localPassword).substring(0, 24);
     return localPassword;
   };
 

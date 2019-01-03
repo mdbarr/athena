@@ -72,8 +72,11 @@ function DataStore(athena) {
         return callback(error);
       } else if (results.length === 0) {
         const admin = {
+          name: 'Athena',
           username: 'athena',
-          password: athena.util.generateLocalPassword()
+          password: athena.util.generateLocalPassword(),
+          admin: true,
+          secure: false
         };
         users.athena = admin;
 

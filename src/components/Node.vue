@@ -20,7 +20,7 @@
       <i :class="statusIcon"></i> {{ node.status.health | uppercase }}
       <span v-if="node.children && node.children.length">
         <router-link :to="'/view/' + node.id" class="node-folder">
-          <i class="mdi mdi-folder"></i><i class="mdi mdi-chevron-right"></i>
+          <i :class="folderIcon"></i><i class="mdi mdi-chevron-right"></i>
         </router-link>
         <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
           <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
@@ -30,8 +30,8 @@
     </div>
     <div :class="'node-info ' + node.status.health">
       <span v-html="node.status.description"></span>
-      <sparkline class="node-sparkline" width="386" height="30">
-        <sparklineBar
+      <sparkline class="node-sparkline" width="388" height="30">
+        <sparklineLine
           :data="node.status.graph"
           :margin="margin"
           :styles="barStyles"
@@ -76,6 +76,13 @@ export default {
         return 'mdi mdi-alert-outline';
       } else {
         return 'mdi mdi-help-rhombus-outline';
+      }
+    },
+    folderIcon() {
+      if (this.node.folderIcon) {
+        return 'mdi mdi-' + this.node.folderIcon;
+      } else {
+        return 'mdi mdi-folder';
       }
     }
   },

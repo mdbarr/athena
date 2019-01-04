@@ -7,7 +7,7 @@ module.exports = {
   dependencies: 'node',
   load: function(athena) {
     class DNS extends athena.nodes.Node {
-      constructor(options) {
+      constructor(options = {}) {
         super(options);
 
         const node = this;

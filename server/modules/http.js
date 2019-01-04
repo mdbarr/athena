@@ -7,7 +7,7 @@ module.exports = {
   dependencies: 'node',
   load: function(athena) {
     class HTTP extends athena.nodes.Node {
-      constructor(options) {
+      constructor(options = {}) {
         super(options);
 
         const {

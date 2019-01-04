@@ -6,7 +6,7 @@ module.exports = {
   name: 'athena',
   load: function(athena) {
     class Athena extends athena.nodes.Node {
-      constructor(options) {
+      constructor(options = {}) {
         super(options);
         const node = this;
 

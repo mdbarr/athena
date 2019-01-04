@@ -46,7 +46,8 @@ function Nodes(athena) {
       metadata = {},
       ephemeral = false,
       sync = true,
-      status = 'own' // own, aggregate, children
+      status = 'own', // own, aggregate, children
+      trigger = 'self' // self, children
     } = {}) {
       super();
 
@@ -72,7 +73,8 @@ function Nodes(athena) {
         metadata,
         sync,
         ephemeral,
-        status
+        status,
+        trigger
       }, 'config');
 
       node.id = node.config.id;
@@ -351,8 +353,22 @@ function Nodes(athena) {
     trigger(...args) {
       if (this.status.enabled) {
         this.status.triggeredAt = Date.now();
-        this.emit('trigger', ...args);
-        athena.events.emit('trigger', ...args);
+
+        if (this.config.trigger === 'self') {
+          this.emit('trigger', ...args);
+          athena.events.emit('trigger', ...args);
+        } else if (this.config.trigger === 'children') {
+          for (const child of this.children) {
+            child.emit('trigger', ...args);
+          }
+          athena.events.emit('trigger', ...args);
+        } else if (this.config.trigger === 'all') {
+          this.emit('trigger', ...args);
+          for (const child of this.children) {
+            child.emit('trigger', ...args);
+          }
+          athena.events.emit('trigger', ...args);
+        }
       }
     }
   }

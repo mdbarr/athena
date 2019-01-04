@@ -8,7 +8,7 @@ module.exports = {
   dependencies: 'node',
   load: function(athena) {
     class Ping extends athena.nodes.Node {
-      constructor(options) {
+      constructor(options = {}) {
         const {
           address, latency
         } = options;

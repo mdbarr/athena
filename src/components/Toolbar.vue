@@ -4,7 +4,7 @@
     <v-list dense>
       <v-list-tile @click="true">
         <v-list-tile-action>
-          <v-icon>mdi-bank</v-icon>
+          <v-icon>mdi-pillar</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Dashboard</v-list-tile-title>
@@ -12,7 +12,65 @@
       </v-list-tile>
       <v-list-tile @click="true">
         <v-list-tile-action>
-          <v-icon>mdi-settings</v-icon>
+          <v-icon>mdi-grid</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Grid View</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-sync-alert</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Alerts</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-divider></v-divider>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-brain</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Knowledgebase</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-note-outline</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Notes</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-folder-key-network-outline</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Vault</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-divider></v-divider>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-account-multiple-outline</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Users</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-puzzle-outline</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Plugins</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="true">
+        <v-list-tile-action>
+          <v-icon>mdi-settings-outline</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Settings</v-list-tile-title>

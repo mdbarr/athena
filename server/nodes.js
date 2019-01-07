@@ -284,6 +284,10 @@ function Nodes(athena) {
           null;
       }
 
+      for (let i = 0; i < path.length; i++) {
+        path[i].depth = i;
+      }
+
       return path;
     }
 

@@ -4,15 +4,7 @@
     <v-container fluid class="top-container">
       <v-layout>
         <v-flex xs6>
-          <v-breadcrumbs :items="path" dark class="athena-breadcrumbs">
-            <v-icon slot="divider">mdi-arrow-right-bold</v-icon>
-            <template slot="item" slot-scope="props">
-              <router-link class="athena-breadcrumb-link" :to="'/view/' + props.item.id">
-                <v-icon small>{{ 'mdi-' + props.item.icon }}</v-icon>
-                <span v-if="path.length === 1 || props.item.name !== 'root'" class="pl-2">{{ props.item.name === 'root' ? 'ATHENA' : props.item.name.toUpperCase() }}</span>
-              </router-link>
-            </template>
-          </v-breadcrumbs>
+          <athena-breadcrumbs :path="path"></athena-breadcrumbs>
         </v-flex>
         <v-flex sm6>
           <div class="athena-filter">
@@ -36,6 +28,7 @@ import store from '../store';
 import Node from '../components/Node.vue';
 import Footer from '../components/Footer.vue';
 import Toolbar from '../components/Toolbar.vue';
+import Breadcrumbs from '../components/Breadcrumbs.vue';
 
 export default {
   name: 'dashboard',
@@ -49,7 +42,8 @@ export default {
   components: {
     'athena-node': Node,
     'athena-footer': Footer,
-    'athena-toolbar': Toolbar
+    'athena-toolbar': Toolbar,
+    'athena-breadcrumbs': Breadcrumbs
   },
   data() {
     return {
@@ -136,7 +130,7 @@ export default {
 }
 .athena-filter-input:focus {
     animation: athena-input 300ms forwards;
-    border-bottom: 2px solid #4c7999;
+    border-bottom: 2px solid #4082b2;
 }
 
 @keyframes athena-input {
@@ -144,7 +138,7 @@ export default {
         border-bottom: 1px solid #ddd;
     }
     to {
-        border-bottom: 2px solid #4c7999;
+        border-bottom: 2px solid #4082b2;
     }
 }
 </style>

@@ -10,7 +10,9 @@ module.exports = {
         super(options);
         const node = this;
 
-        node.config.name = os.hostname().replace(/\..*$/, '');
+        const hostname = os.hostname().replace(/\..*$/, '');
+
+        node.config.name = options.name ? `${ options.name } (${ hostname })` : hostname;
         node.config.type = 'athena';
         node.config.icon = 'athena';
 
@@ -26,7 +28,9 @@ module.exports = {
 
           const clients = Object.keys(athena.server.clients).length;
 
-          const description = `${ os.hostname() } - ${ os.type() } ${ os.arch() }<br>Free Memory: ${ freeMemory } (${ percentMemory }%)<br>${ clients } connected clients`;
+          const description = `${ hostname } - ${ os.type() } ${ os.arch() }<br>
+<i class="mdi mdi-memory"></i> ${ freeMemory } (${ percentMemory }%)<br>
+${ clients } connected clients`;
 
           node.update({
             health: athena.constants.health.healthy,

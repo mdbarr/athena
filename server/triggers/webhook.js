@@ -26,10 +26,15 @@ function Webhook(athena, node, options, id) {
     next();
   };
 
+  if (!Array.isArray(node.metadata.webhooks)) {
+    node.metadata.webhooks = [];
+  }
+
   for (let method in options) {
     method = method.trim();
     if (methods.includes(method)) {
       athena.api[method](url, trigger);
+      node.metadata.webhooks.push(`${ method } ${ url }`);
     } else {
       console.log('Unknown HTTP method for webhook trigger', method);
     }

@@ -72,6 +72,21 @@ module.exports = function(athena) {
     }
   }
 
+  // Handle multiple modules in one file
+  for (const key in index) {
+    const module = index[key];
+
+    if (Array.isArray(module)) {
+      delete index[key];
+
+      for (const item of module) {
+        if (item.name) {
+          index[item.name] = item;
+        }
+      }
+    }
+  }
+
   // Dependency resolver
   modules.node = new Module('node', [], () => {}, []);
 

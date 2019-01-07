@@ -1,6 +1,6 @@
 <template>
 <v-flex>
-  <v-card width="400">
+  <v-card width="400" class="mb-5">
     <div :class="'node-title ' + node.status.health">
       <i :class="icon"></i>
       <span>{{ node.name }}</span>

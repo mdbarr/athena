@@ -362,14 +362,20 @@ function Nodes(athena) {
           this.emit('trigger', ...args);
           athena.events.emit('trigger', ...args);
         } else if (this.config.trigger === 'children') {
-          for (const child of this.children) {
-            child.emit('trigger', ...args);
+          for (let child of this.config.children) {
+            child = athena.store.resolve(child);
+            if (child) {
+              child.emit('trigger', ...args);
+            }
           }
           athena.events.emit('trigger', ...args);
         } else if (this.config.trigger === 'all') {
           this.emit('trigger', ...args);
-          for (const child of this.children) {
-            child.emit('trigger', ...args);
+          for (let child of this.config.children) {
+            child = athena.store.resolve(child);
+            if (child) {
+              child.emit('trigger', ...args);
+            }
           }
           athena.events.emit('trigger', ...args);
         }

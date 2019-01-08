@@ -109,16 +109,6 @@ export default {
     width: 24px !important;
     height: 33px !important;
 }
-.mdi-container::before {
-    display: block;
-    content: '';
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: url(../assets/container.svg);
-    background-size: 24px 24px !important;
-    width: 24px !important;
-    height: 33px !important;
-}
 .node-title {
     border-left: 12px solid #222;
     font-family: monospace;

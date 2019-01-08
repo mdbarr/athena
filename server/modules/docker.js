@@ -3,6 +3,29 @@
 const Dockerode = require('dockerode');
 
 module.exports = [ {
+  name: 'container',
+  dependencies: 'docker',
+  load: function(athena) {
+    class Container extends athena.nodes.Node {
+      constructor(options = {}) {
+        super(options);
+
+        const node = this;
+
+        node.config.type = 'container';
+        node.config.icon = 'package';
+
+        node.docker = options.docker;
+
+        node.on('trigger', function() {
+          // trigger
+        });
+      }
+    };
+
+    athena.nodes.register('container', Container);
+  }
+}, {
   name: 'docker',
   dependencies: 'node',
   load: function(athena) {
@@ -31,11 +54,12 @@ module.exports = [ {
 
         node.on('trigger', function() {
           node.docker.info(function(error, info) {
-            const description = `<i class="mdi mdi-container"></i> Running containers ${ info.ContainersRunning }`;
+            const description = `<i class="mdi mdi-package"></i> Running containers: ${ info.ContainersRunning }`;
 
             node.update({
               health: athena.constants.health.healthy,
-              description
+              description,
+              metric: info.ContainersRunning
             });
           });
         });

@@ -51,15 +51,42 @@ module.exports = [ {
         node.status.health = athena.constants.health.healthy;
 
         node.docker = new Dockerode(dockerOptions);
+        node.containers = {};
 
         node.on('trigger', function() {
           node.docker.info(function(error, info) {
-            const description = `<i class="mdi mdi-package"></i> Running containers: ${ info.ContainersRunning }`;
+            node.docker.listContainers({
+              all: true
+            }, function(error, containers) {
+              for (const item of containers) {
+                const object = {
+                  id: item.Id,
+                  name: item.Names[0].replace(/^\//, ''),
+                  type: 'container',
+                  parent: node.id,
+                  docker: node.docker,
+                  sync: false,
+                  ephemeral: true,
+                  metadata: {
+                    image: item.Image,
+                    created: item.Created,
+                    state: item.State,
+                    status: item.Status,
+                    ports: item.Ports
+                  }
+                };
+                const container = athena.nodes.create(object);
+                container.link();
+                container.enable();
+                container.activate();
+              }
 
-            node.update({
-              health: athena.constants.health.healthy,
-              description,
-              metric: info.ContainersRunning
+              const description = `<i class="mdi mdi-package"></i> Running containers: ${ info.ContainersRunning }`;
+              node.update({
+                health: athena.constants.health.healthy,
+                description,
+                metric: info.ContainersRunning
+              });
             });
           });
         });

@@ -4,9 +4,9 @@
     <div :class="'node-title ' + node.status.health">
       <i :class="icon"></i>
       <span>{{ node.name }}</span>
-      <v-menu offset-y left light nudge-top="2" class="node-menu">
+      <v-menu offset-y left dark nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
-        <v-list dense>
+        <v-list dense class="elevation-3">
           <v-list-tile disabled class="node-type-title">
             <v-list-tile-avatar><v-icon small class="mdi-dark">{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
             <v-list-tile-content class="node-type-title">

@@ -12,10 +12,10 @@
       </v-list-tile>
       <v-list-tile @click="true">
         <v-list-tile-action>
-          <v-icon>mdi-grid</v-icon>
+          <v-icon>mdi-table-of-contents</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Grid View</v-list-tile-title>
+          <v-list-tile-title>List View</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="true">

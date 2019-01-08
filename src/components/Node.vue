@@ -37,7 +37,7 @@
     </div>
     <div :class="'node-info ' + node.status.health">
       <span v-html="node.status.description"></span>
-      <sparkline class="node-sparkline" width="388" height="30">
+      <sparkline class="node-sparkline" width="392" height="30">
         <sparklineLine
           :data="node.status.graph"
           :margin="margin"
@@ -204,8 +204,8 @@ export default {
 }
 .node-sparkline {
     position: absolute;
-    left: 12px;
-    bottom: -4px;
+    left: 10px;
+    bottom: -6px;
 }
 .node-type-title {
     height: 24px !important;

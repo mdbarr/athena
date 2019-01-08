@@ -11,6 +11,14 @@
             <v-icon small>mdi-filter-outline</v-icon>
             <input type="text" id="filter" class="athena-filter-input" placeholder="Filter" v-model="filter">
           </div>
+          <div class="athena-sort">
+            <v-icon small>mdi-sort</v-icon>
+            <select id="sort" class="athena-sort-input" v-model="sort">
+              <option value="default" selected>Default</option>
+              <option value="a-z">Alphabetical A-Z</option>
+              <option value="z-a">Alphabetical Z-A</option>
+            </select>
+          </div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -49,6 +57,7 @@ export default {
     return {
       state: store.state,
       filter: '',
+      sort: '',
       path: [ ],
       nodes: [ ],
       focus: this.id
@@ -117,7 +126,7 @@ export default {
 .athena-filter {
     position: absolute;
     top: 8px;
-    right: 8px;
+    right: 248px;
     height: 24px;
 }
 .athena-filter-input {
@@ -131,6 +140,32 @@ export default {
 .athena-filter-input:focus {
     animation: athena-input 300ms forwards;
     border-bottom: 2px solid #4082b2;
+}
+
+.athena-sort {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    height: 24px;
+}
+.athena-sort-input {
+    appearance: none;
+    color: white;
+    outline: none;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 200px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0px;
+}
+.athena-sort::after {
+    position: absolute;
+    right: 6px;
+    font-family: "Material Design Icons";
+    content: '\f140';
+    font-size: 16px;
+    color: white;
+    pointer-events: none;
 }
 
 @keyframes athena-input {

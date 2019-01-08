@@ -13,7 +13,7 @@ module.exports = [ {
         const node = this;
 
         node.config.type = 'container';
-        node.config.icon = 'package';
+        node.config.icon = 'container';
 
         node.status.health = athena.constants.health.healthy;
 

@@ -8,7 +8,7 @@
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
         <v-list dense>
           <v-list-tile disabled class="node-type-title">
-            <v-list-tile-avatar><v-icon small>{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
+            <v-list-tile-avatar><v-icon small class="mdi-dark">{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
             <v-list-tile-content class="node-type-title">
               <v-list-tile-title class="caption pr-1 node-type-title">{{ node.type.toUpperCase() }}</v-list-tile-title>
             </v-list-tile-content>
@@ -107,7 +107,6 @@ export default {
 
 <style>
 .mdi-athena::before {
-    display: block;
     content: '';
     background-position: center;
     background-repeat: no-repeat;
@@ -115,6 +114,18 @@ export default {
     background-size: 24px 24px !important;
     width: 24px !important;
     height: 33px !important;
+}
+.mdi-container::before {
+    content: '';
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../assets/container.svg);
+    background-size: 24px 24px !important;
+    width: 24px !important;
+    height: 33px !important;
+}
+.mdi-dark.mdi-container::before {
+    filter: invert(0.35);
 }
 .node-title {
     border-left: 12px solid #222;

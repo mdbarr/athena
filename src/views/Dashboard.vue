@@ -57,7 +57,7 @@ export default {
     return {
       state: store.state,
       filter: '',
-      sort: '',
+      sort: 'default',
       path: [ ],
       nodes: [ ],
       focus: this.id

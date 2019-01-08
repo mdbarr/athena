@@ -7,6 +7,13 @@
       <v-menu offset-y left light nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
         <v-list dense>
+          <v-list-tile disabled class="node-type-title">
+            <v-list-tile-avatar><v-icon small>{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
+            <v-list-tile-content class="node-type-title">
+              <v-list-tile-title class="caption pr-1 node-type-title">{{ node.type.toUpperCase() }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
           <v-list-tile v-for="action in node.actions" :key="action.name" @click="invoke(action.name)">
             <v-list-tile-content>
               <v-list-tile-title>{{ action.name | capitalize }}</v-list-tile-title>
@@ -199,5 +206,12 @@ export default {
     position: absolute;
     left: 12px;
     bottom: -4px;
+}
+.node-type-title {
+    height: 24px !important;
+}
+.node-type-title > div {
+    height: 20px !important;
+    padding: 0 4px;
 }
 </style>

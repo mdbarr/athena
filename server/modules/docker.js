@@ -15,6 +15,8 @@ module.exports = [ {
         node.config.type = 'container';
         node.config.icon = 'package';
 
+        node.status.health = athena.constants.health.healthy;
+
         node.docker = options.docker;
 
         node.on('trigger', function() {
@@ -59,6 +61,10 @@ module.exports = [ {
               all: true
             }, function(error, containers) {
               for (const item of containers) {
+                if (node.containers[item.Id]) {
+                  continue;
+                }
+
                 const object = {
                   id: item.Id,
                   name: item.Names[0].replace(/^\//, ''),
@@ -76,6 +82,8 @@ module.exports = [ {
                   }
                 };
                 const container = athena.nodes.create(object);
+                node.containers[item.Id] = container;
+
                 container.link();
                 container.enable();
                 container.activate();

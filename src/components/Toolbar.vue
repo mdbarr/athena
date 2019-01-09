@@ -12,7 +12,7 @@
       </v-list-tile>
       <v-list-tile @click="true">
         <v-list-tile-action>
-          <v-icon>mdi-table-of-contents</v-icon>
+          <v-icon>mdi-view-list</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>List View</v-list-tile-title>
@@ -20,13 +20,13 @@
       </v-list-tile>
       <v-list-tile @click="true">
         <v-list-tile-action>
-          <v-icon>mdi-sync-alert</v-icon>
+          <v-icon>mdi-bell-outline</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Alerts</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-divider></v-divider>
+      <v-divider class="ma-2"></v-divider>
       <v-list-tile @click="true">
         <v-list-tile-action>
           <v-icon>mdi-brain</v-icon>
@@ -48,10 +48,10 @@
           <v-icon>mdi-folder-key-network-outline</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Vault</v-list-tile-title>
+          <v-list-tile-title>Credentials</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-divider></v-divider>
+      <v-divider class="ma-2"></v-divider>
       <v-list-tile @click="true">
         <v-list-tile-action>
           <v-icon>mdi-account-multiple-outline</v-icon>
@@ -79,9 +79,10 @@
     </v-list>
   </v-navigation-drawer>
   <v-toolbar app fixed clipped-left dense class="athena-toolbar">
-    <v-btn icon @click.stop="drawer = !drawer">
-      <img src="../assets/athena.svg" width="32">
+    <v-btn icon @click.stop="drawer = !drawer" class="mr-3">
+      <v-icon>mdi-menu</v-icon>
     </v-btn>
+    <img src="../assets/athena.svg" width="32" class="mr-2">
     <img src="../assets/athena-text.svg" class="athena-title">
     <v-spacer></v-spacer>
     <v-menu offset-y left>

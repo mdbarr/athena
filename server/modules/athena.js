@@ -15,6 +15,7 @@ module.exports = {
         node.config.name = options.name ? `${ options.name } (${ hostname })` : hostname;
         node.config.type = 'athena';
         node.config.icon = 'athena';
+        node.config.typeIcon = 'athena';
 
         node.status.health = athena.constants.health.healthy;
 

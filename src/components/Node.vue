@@ -15,7 +15,7 @@
           </v-list-tile>
           <v-divider class="pb-1"></v-divider>
           <v-list-tile disabled class="node-type-title">
-            <v-list-tile-avatar><v-icon small disabled class="small">{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
+            <v-list-tile-avatar><v-icon small disabled class="small">{{ 'mdi-' + node.typeIcon }}</v-icon></v-list-tile-avatar>
             <v-list-tile-content class="node-type-title">
               <v-list-tile-title class="caption pr-1 node-type-title">{{ node.type.toUpperCase() }}</v-list-tile-title>
             </v-list-tile-content>

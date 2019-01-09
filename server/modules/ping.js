@@ -22,6 +22,7 @@ module.exports = {
         const node = this;
 
         this.config.type = 'ping';
+        this.config.typeIcon = 'check-network-outline';
 
         this.config.address = address;
         this.config.latency = latency;

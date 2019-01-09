@@ -9,6 +9,7 @@ module.exports = {
         super(options);
 
         this.config.type = 'api';
+        this.config.typeIcon = 'web';
       }
     }
 

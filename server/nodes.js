@@ -47,7 +47,7 @@ function Nodes(athena) {
       ephemeral = false,
       sync = true,
       status = 'own', // own, aggregate, children
-      trigger = 'self' // self, children
+      trigger = 'self' // self, children, all
     } = {}) {
       super();
 
@@ -68,6 +68,7 @@ function Nodes(athena) {
         parent,
         children,
         icon,
+        typeIcon: 'network-outline',
         triggers,
         delegate,
         metadata,

@@ -13,14 +13,24 @@ module.exports = [ {
         const node = this;
 
         node.config.type = 'container';
-        node.config.icon = 'container';
+        node.config.icon = options.icon || 'container';
+        node.config.typeIcon = 'container';
 
         node.status.health = athena.constants.health.healthy;
 
         node.docker = options.docker;
 
         node.on('trigger', function() {
-          // trigger
+          node.docker.getContainer(node.id).stats({
+            stream: false
+          }, function(error, stats) {
+
+            node.update({
+              health: athena.constants.health.healthy,
+              description: 'Memory Usage: ',
+              metric: stats.memory_stats.usage
+            });
+          });
         });
       }
     };
@@ -48,7 +58,11 @@ module.exports = [ {
         }
 
         node.config.type = 'docker';
-        node.config.icon = 'docker';
+        node.config.icon = options.icon || 'docker';
+        node.config.typeIcon = 'docker';
+
+        node.config.status = 'own';
+        node.config.trigger = 'self';
 
         node.status.health = athena.constants.health.healthy;
 
@@ -87,6 +101,13 @@ module.exports = [ {
                 container.link();
                 container.enable();
                 container.activate();
+              }
+
+              // Remove stale containers
+
+              // Trigger remaining containers
+              for (const container in node.containers) {
+                node.containers[container].trigger();
               }
 
               const description = `<i class="mdi mdi-package"></i> Running containers: ${ info.ContainersRunning }`;

@@ -9,8 +9,11 @@ module.exports = {
         super(options);
 
         this.config.type = 'folder';
+
         this.config.icon = options.icon || 'folder-open';
+        this.config.typeIcon = 'folder-open';
         this.config.folderIcon = options.folderIcon || 'folder';
+
         this.config.status = 'children';
       }
     }

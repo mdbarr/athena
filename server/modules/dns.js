@@ -18,6 +18,8 @@ module.exports = {
 
         node.config.type = 'dns';
         node.config.icon = 'dns';
+        node.config.typeIcon = 'dns';
+
         node.config.hostname = hostname;
         node.config.address = address;
         node.config.family = family;

@@ -20,6 +20,7 @@ module.exports = {
 
         node.config.type = 'http';
         node.config.icon = icon;
+        node.config.typeIcon = 'web';
 
         node.config.url = url;
         node.config.method = method;

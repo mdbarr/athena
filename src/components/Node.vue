@@ -6,7 +6,7 @@
       <span>{{ node.name }}</span>
       <v-menu offset-y left dark nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
-        <v-list dense class="elevation-3">
+        <v-list dense class="elevation-3 node-menu-list">
           <v-list-tile v-for="action in node.actions" :key="action.name" @click="invoke(action.name)">
             <v-list-tile-content>
               <v-list-tile-title>{{ action.name | capitalize }}</v-list-tile-title>
@@ -152,6 +152,9 @@ export default {
 }
 .v-menu__activator--active, .node-menu-icon:hover {
     color: #5F97BF;
+}
+.node-menu-list {
+    overflow: hidden !important;
 }
 .node-title-shift {
     left: -12px;

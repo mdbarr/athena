@@ -115,7 +115,6 @@ function Server(athena) {
         const message = JSON.parse(msg);
         message.clientId = clientId;
         message.session = shed.session.sessionId;
-        console.pp(message);
         shed.emit(message.type, message);
       } catch (error) {
         console.log('ERROR: parsing client message', msg, error);

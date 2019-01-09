@@ -56,7 +56,7 @@ function DataStore(athena) {
           callback);
         } else {
           self.collections.config.insertOne(athena.config, function(error, result) {
-            athena.config._id = result.insertedIds[0].toString();
+            athena.config._id = result.insertedId.toString();
             callback(null, athena.config);
           });
         }

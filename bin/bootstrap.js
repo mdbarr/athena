@@ -25,6 +25,7 @@ function bootstrap(options) {
     const db = client.db(athena.config.mongo.db);
     const nodes = db.collection('nodes');
     const users = db.collection('users');
+    const conf = db.collection('config');
 
     const counts = {
       users: 0,
@@ -37,10 +38,12 @@ function bootstrap(options) {
       callback = athena.util.callback(callback);
 
       if (options.drop) {
-        nodes.drop(function() {
-          users.drop(function() {
-            console.log('Dropped users and nodes collections.');
-            callback();
+        conf.drop(function() {
+          nodes.drop(function() {
+            users.drop(function() {
+              console.log('Dropped users and nodes collections.');
+              callback();
+            });
           });
         });
       } else {

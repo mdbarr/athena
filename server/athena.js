@@ -20,8 +20,8 @@ const defaults = {
     autoload: true
   },
   log: {
-    enabled: true,
-    console: true,
+    enabled: false,
+    console: false,
     file: 'athena.log'
   }
 };

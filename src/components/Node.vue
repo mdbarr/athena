@@ -7,18 +7,18 @@
       <v-menu offset-y left dark nudge-top="2" class="node-menu">
         <i slot="activator" class="mdi mdi-dots-vertical node-menu-icon"></i>
         <v-list dense class="elevation-3">
-          <v-list-tile disabled class="node-type-title">
-            <v-list-tile-avatar><v-icon small class="mdi-dark">{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
-            <v-list-tile-content class="node-type-title">
-              <v-list-tile-title class="caption pr-1 node-type-title">{{ node.type.toUpperCase() }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider></v-divider>
           <v-list-tile v-for="action in node.actions" :key="action.name" @click="invoke(action.name)">
             <v-list-tile-content>
               <v-list-tile-title>{{ action.name | capitalize }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-avatar><v-icon small>{{ 'mdi-' + action.icon }}</v-icon></v-list-tile-avatar>
+          </v-list-tile>
+          <v-divider class="pb-1"></v-divider>
+          <v-list-tile disabled class="node-type-title">
+            <v-list-tile-avatar><v-icon small disabled class="small">{{ 'mdi-' + node.icon }}</v-icon></v-list-tile-avatar>
+            <v-list-tile-content class="node-type-title">
+              <v-list-tile-title class="caption pr-1 node-type-title">{{ node.type.toUpperCase() }}</v-list-tile-title>
+            </v-list-tile-content>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -124,8 +124,8 @@ export default {
     width: 24px !important;
     height: 33px !important;
 }
-.mdi-dark.mdi-container::before {
-    filter: invert(0.35);
+.small.mdi-athena::before, .small.mdi-container::before {
+    background-size: 20px 20px !important;
 }
 .node-title {
     border-left: 12px solid #222;
@@ -150,7 +150,7 @@ export default {
     position: absolute;
     right: 8px;
 }
-.node-menu-icon:hover {
+.v-menu__activator--active, .node-menu-icon:hover {
     color: #5F97BF;
 }
 .node-title-shift {

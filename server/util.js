@@ -75,6 +75,11 @@ function Util() {
     return localPassword;
   };
 
+  self.precisionRound = function(number, precision = 2) {
+    const factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+  };
+
   return self;
 }
 

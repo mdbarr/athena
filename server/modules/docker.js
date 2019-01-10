@@ -19,16 +19,20 @@ module.exports = [ {
         node.status.health = athena.constants.health.healthy;
 
         node.docker = options.docker;
+        node.container = options.container;
 
         node.on('trigger', function() {
           node.docker.getContainer(node.id).stats({
             stream: false
           }, function(error, stats) {
 
+            const metric = athena.util.precisionRound(stats.memory_stats.usage / stats.memory_stats.max_usage, 2);
+            const description = `<i class="mdi mdi-image-area"></i> ${ node.container.Image }<br><i class="mdi mdi-chart-line"></i> ${ Math.floor(metric * 100) }%`;
+
             node.update({
               health: athena.constants.health.healthy,
-              description: 'Memory Usage: ',
-              metric: stats.memory_stats.usage
+              description,
+              metric
             });
           });
         });
@@ -85,6 +89,7 @@ module.exports = [ {
                   type: 'container',
                   parent: node.id,
                   docker: node.docker,
+                  container: item,
                   sync: false,
                   ephemeral: true,
                   metadata: {

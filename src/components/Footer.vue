@@ -1,9 +1,9 @@
 <template>
-<v-footer app fixed class="pa-3" height="28">
+<v-footer app fixed class="athena-footer" height="24">
   <span>&copy; 2018</span>
   <v-spacer></v-spacer>
-  <div v-if="state.isConnected"><span class="green--text">&#9679;</span> Connected</div>
-  <div v-else><span class="red--text">&#9679;</span> Offline</div>
+  <div v-if="state.isConnected"><span class="green--text">&#9679;</span> online</div>
+  <div v-else><span class="red--text">&#9679;</span> offline</div>
 </v-footer>
 </template>
 
@@ -23,4 +23,9 @@ export default {
 </script>
 
 <style>
+.athena-footer {
+    padding: 0px 10px;
+    min-height: 20px;
+    font-size: 11px;
+}
 </style>

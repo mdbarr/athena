@@ -79,10 +79,11 @@
     </v-list>
   </v-navigation-drawer>
   <v-toolbar app fixed clipped-left dense class="athena-toolbar">
-    <v-btn icon @click.stop="drawer = !drawer" class="mr-3">
+    <v-btn icon @click.stop="drawer = !drawer">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
-    <img src="../assets/athena.svg" width="32" class="mr-2">
+    <v-spacer></v-spacer>
+    <img src="../assets/athena.svg" width="32" class="mr-5">
     <img src="../assets/athena-text.svg" class="athena-title">
     <v-spacer></v-spacer>
     <v-menu offset-y left>

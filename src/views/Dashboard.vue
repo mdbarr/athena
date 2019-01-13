@@ -10,6 +10,9 @@
           <div class="athena-filter">
             <v-icon small>mdi-filter-outline</v-icon>
             <input type="text" id="filter" class="athena-filter-input" placeholder="Filter" v-model="filter">
+            <div v-if="filter && filter.length" class="athena-filter-clear" @click.stop="filter = ''">
+              <v-icon small>mdi-close</v-icon>
+            </div>
           </div>
           <div class="athena-sort">
             <v-icon small>mdi-sort</v-icon>
@@ -24,7 +27,7 @@
     </v-container>
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
-        <athena-node v-for="node in nodes" :node="node" :key="node.id"></athena-node>
+        <athena-node v-for="node in filterSort()" :node="node" :key="node.id"></athena-node>
       </v-layout>
     </v-container>
     <athena-footer></athena-footer>
@@ -64,6 +67,34 @@ export default {
     };
   },
   methods: {
+    strcmp: function(a, b, inverted) {
+      if (a < b) {
+        return (inverted) ? 1 : -1;
+      } else if (b < a) {
+        return (inverted) ? -1 : 1;
+      } else {
+        return 0;
+      }
+    },
+    filterNodes: function() {
+      if (!this.filter.length) {
+        return this.nodes;
+      }
+
+      return this.nodes.filter(item =>
+        item.name.includes(this.filter));
+    },
+    filterSort: function() {
+      const filtered = this.filterNodes().slice();
+
+      if (this.sort === 'a-z') {
+        return filtered.sort((a, b) => this.strcmp(a.name, b.name));
+      } else if (this.sort === 'z-a') {
+        return filtered.sort((a, b) => this.strcmp(a.name, b.name, true));
+      } else {
+        return filtered;
+      }
+    },
     refocus: function(id) {
       if (id) {
         this.focus = id;
@@ -141,7 +172,12 @@ export default {
     animation: athena-input 300ms forwards;
     border-bottom: 2px solid #4082b2;
 }
-
+.athena-filter-clear {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    cursor: pointer;
+}
 .athena-sort {
     position: absolute;
     top: 8px;
@@ -157,6 +193,10 @@ export default {
     width: 200px;
     border-bottom: 1px solid #ddd;
     border-radius: 0px;
+}
+.athena-sort-input:focus {
+    animation: athena-input 300ms forwards;
+    border-bottom: 2px solid #4082b2;
 }
 .athena-sort::after {
     position: absolute;

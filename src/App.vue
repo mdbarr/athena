@@ -71,7 +71,6 @@ export default {
     });
   }
 };
-// #347597
 </script>
 
 <style>

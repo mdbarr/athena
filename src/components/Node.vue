@@ -1,7 +1,7 @@
 <template>
 <v-flex>
   <v-card width="400" class="mb-5">
-    <div :class="'node-title ' + node.status.health">
+    <div :class="'node-title node-' + node.status.health">
       <i :class="icon"></i>
       <span>{{ node.name }}</span>
       <v-menu offset-y left dark nudge-top="2" class="node-menu">
@@ -23,19 +23,19 @@
         </v-list>
       </v-menu>
     </div>
-    <div :class="'node-status ' + node.status.health">
+    <div :class="'node-status node-' + node.status.health">
       <i :class="statusIcon"></i> {{ node.status.health | uppercase }}
       <span v-if="node.children && node.children.length">
         <router-link :to="'/view/' + node.id" class="node-folder">
           <i :class="folderIcon"></i><i class="mdi mdi-chevron-right"></i>
         </router-link>
-        <div :class="'node-child-status ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
+        <div :class="'node-child-status node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
           <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
         </div>
-        <div :class="'node-child-divider ' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
+        <div :class="'node-child-divider node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
       </span>
     </div>
-    <div :class="'node-info ' + node.status.health">
+    <div :class="'node-info node-' + node.status.health">
       <span v-html="node.status.description"></span>
       <sparkline class="node-sparkline" width="392" height="30">
         <sparklineLine
@@ -77,10 +77,16 @@ export default {
       return 'mdi mdi-' + this.node.icon + ' node-title-icon';
     },
     statusIcon() {
-      if (this.node.status.health === 'healthy') {
+      if (this.node.status.health === this.$constants.health.healthy) {
         return 'mdi mdi-check-circle-outline';
-      } else if (this.node.status.health === 'failed') {
+      } else if (this.node.status.health === this.$constants.health.unknown) {
+        return 'mdi mdi-help-circle-outline';
+      } else if (this.node.status.health === this.$constants.health.unstable) {
+        return 'mdi mdi-alert-circle-outline';
+      } else if (this.node.status.health === this.$constants.health.error) {
         return 'mdi mdi-alert-outline';
+      } else if (this.node.status.health === this.$constants.health.failed) {
+        return 'mdi mdi-alert-circle';
       } else {
         return 'mdi mdi-help-rhombus-outline';
       }
@@ -103,6 +109,13 @@ export default {
     }
   }
 };
+//////////
+// Colors:
+//   healthy: #3f647f
+//   unknown: #222
+//   unstable: #e5b90b
+//   error: #ff7e00
+//   failed: #e4181d
 </script>
 
 <style>
@@ -138,8 +151,20 @@ export default {
     text-align: center;
     width: 100%;
 }
-.node-title.healthy {
+.node-title.node-healthy {
     border-left: 12px solid #3f647f;
+}
+.node-title.node-unknown {
+    border-left: 12px solid #222;
+}
+.node-title.node-unstable {
+    border-left: 12px solid #e5b90b;
+}
+.node-title.node-error {
+    border-left: 12px solid #ff7e00;
+}
+.node-title.node-failed {
+    border-left: 12px solid #e4181d;
 }
 
 .node-title-icon {
@@ -169,8 +194,20 @@ export default {
     line-height: 26px !important;
     padding-left: 6px;
 }
-.node-status.healthy {
+.node-status.node-healthy {
     background-color: #3f647f;
+}
+.node-status.node-unknown {
+    background-color: #222;
+}
+.node-status.node-unstable {
+    background-color: #e5b90b;
+}
+.node-status.node-error {
+    background-color: #ff7e00;
+}
+.node-status.node-failed {
+    background-color: #e4181d;
 }
 
 .node-child-divider {
@@ -213,9 +250,22 @@ export default {
     min-height: 100px;
     padding: 4px;
 }
-.node-info.healthy {
+.node-info.node-healthy {
     border-left: 12px solid #3f647f;
 }
+.node-info.node-unknown {
+    border-left: 12px solid #222;
+}
+.node-info.node-unstable {
+    border-left: 12px solid #e5b90b;
+}
+.node-info.node-error {
+    border-left: 12px solid #ff7e00;
+}
+.node-info.node-failed {
+    border-left: 12px solid #e4181d;
+}
+
 .node-sparkline {
     position: absolute;
     left: 10px;

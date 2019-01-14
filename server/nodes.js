@@ -153,7 +153,7 @@ function Nodes(athena) {
         },
         get: function(object, property) {
           if (property === 'health') {
-            if (node.config.behavior.status === 'own') {
+            if (node.config.behavior.status === 'own' || !node.status.children.length) {
               return node.status.health;
             } else if (node.config.behavior.status === 'aggregate') {
               return aggregate([ node.status.health, ...node.status.children ]);
@@ -251,7 +251,7 @@ function Nodes(athena) {
 
       child.on('status', function() {
         if (child.status.enabled) {
-          node.status.children[childId] = child.status.health;
+          node.status.children[childId] = child.computed.health;
           node.emit('status', child, child.status);
           athena.events.emit('status', node, node.status);
         }

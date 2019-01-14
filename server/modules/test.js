@@ -14,7 +14,8 @@ module.exports = {
         node.config.icon = options.icon || 'progress-wrench';
         node.config.typeIcon = 'progress-wrench';
         node.config.folderIcon = options.folderIcon || 'fire';
-        node.config.behavior.status = 'own';
+        node.config.behavior.status = (options.behavior && options.behavior.status) ?
+          options.behavior.status : 'own';
 
         let healths = [];
 
@@ -24,7 +25,13 @@ module.exports = {
           }
 
           const health = healths.pop();
-          const description = `Test health: ${ health }`;
+
+          let description = `Test health: ${ health }`;
+          if (this.status.children.length) {
+            for (let i = 0; i < this.status.children.length; i++) {
+              description += `<br> Child #${ i + 1 }: ${ this.status.children[i] }`;
+            }
+          }
 
           node.update({
             health,

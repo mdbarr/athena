@@ -30,7 +30,7 @@
           <i :class="folderIcon"></i><i class="mdi mdi-chevron-right"></i>
         </router-link>
         <div :class="'node-child-status node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
-          <i class="mdi mdi-alert-circle" v-if="node.status.aggregate !== 'healthy'"></i>
+          <i :class="aggregateIcon" v-if="node.status.aggregate !== 'healthy'"></i>
         </div>
         <div :class="'node-child-divider node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
       </span>
@@ -86,6 +86,19 @@ export default {
       } else if (this.node.status.health === this.$constants.health.error) {
         return 'mdi mdi-alert-outline';
       } else if (this.node.status.health === this.$constants.health.failed) {
+        return 'mdi mdi-alert-circle';
+      } else {
+        return 'mdi mdi-help-rhombus-outline';
+      }
+    },
+    aggregateIcon() {
+      if (this.node.status.aggregate === this.$constants.health.unknown) {
+        return 'mdi mdi-help-circle-outline';
+      } else if (this.node.status.aggregate === this.$constants.health.unstable) {
+        return 'mdi mdi-alert-circle-outline';
+      } else if (this.node.status.aggregate === this.$constants.health.error) {
+        return 'mdi mdi-alert-outline';
+      } else if (this.node.status.aggregate === this.$constants.health.failed) {
         return 'mdi mdi-alert-circle';
       } else {
         return 'mdi mdi-help-rhombus-outline';
@@ -217,8 +230,20 @@ export default {
     padding: 0px;
     width: 30px;
 }
-.node-child-divider.failed {
-    border-bottom: 28px solid #CA392D;
+.node-child-divider.node-healthy {
+    border-bottom: 28px solid #3f647f;
+}
+.node-child-divider.node-unknown {
+    border-bottom: 28px solid #222;
+}
+.node-child-divider.node-unstable {
+    border-bottom: 28px solid #e5b90b;
+}
+.node-child-divider.node-error {
+    border-bottom: 28px solid #ff7e00;
+}
+.node-child-divider.node-failed {
+    border-bottom: 28px solid #e4181d;
 }
 .node-child-status {
     background-color: #222;
@@ -229,8 +254,20 @@ export default {
     padding: 0px;
     width: 30%;
 }
-.node-child-status.failed {
-    background-color: #CA392D;
+.node-child-status.node-healthy {
+    background-color: #3f647f;
+}
+.node-child-status.node-unknown {
+    background-color: #222;
+}
+.node-child-status.node-unstable {
+    background-color: #e5b90b;
+}
+.node-child-status.node-error {
+    background-color: #ff7e00;
+}
+.node-child-status.node-failed {
+    background-color: #e4181d;
 }
 .node-folder {
     background-color: #262626;

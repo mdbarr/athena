@@ -248,7 +248,7 @@ function Nodes(athena) {
       const childId = node.config.children.length;
 
       child.on('status', function() {
-        if (child.enabled) {
+        if (child.status.enabled) {
           node.status.children[childId] = child.status.health;
           node.emit('status', child, child.status);
           athena.events.emit('status', node, node.status);

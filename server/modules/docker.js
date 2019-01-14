@@ -65,8 +65,8 @@ module.exports = [ {
         node.config.icon = options.icon || 'docker';
         node.config.typeIcon = 'docker';
 
-        node.config.status = 'own';
-        node.config.trigger = 'self';
+        node.config.behavior.status = 'own';
+        node.config.behavior.trigger = 'self';
 
         node.status.health = athena.constants.health.healthy;
 
@@ -90,8 +90,12 @@ module.exports = [ {
                   parent: node.id,
                   docker: node.docker,
                   container: item,
-                  sync: false,
                   ephemeral: true,
+                  behavior: {
+                    status: 'own',
+                    trigger: 'self',
+                    sync: false
+                  },
                   metadata: {
                     image: item.Image,
                     created: item.Created,

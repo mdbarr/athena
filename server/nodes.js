@@ -7,19 +7,6 @@ function Nodes(athena) {
 
   //////////
 
-  const eventProxy = function(emitter, object, eventName) {
-    return new Proxy(object, {
-      set: function(obj, prop, value) {
-        obj[prop] = value;
-        if (emitter.status.enabled) {
-          emitter.emit(eventName, object);
-          athena.events.emit(eventName, object);
-        }
-        return true;
-      }
-    });
-  };
-
   const aggregate = function(items) {
     const healths = Object.keys(athena.constants.health).reverse();
     for (const health of healths) {
@@ -45,9 +32,7 @@ function Nodes(athena) {
       delegate = null,
       metadata = {},
       ephemeral = false,
-      sync = true,
-      status = 'own', // own, aggregate, children
-      trigger = 'self' // self, children, all
+      behavior
     } = {}) {
       super();
 
@@ -59,7 +44,7 @@ function Nodes(athena) {
 
       athena.util.addPrivate(node, '_athena', athena);
 
-      node.config = eventProxy(node, {
+      node.config = {
         id: id || athena.util.id(),
         object: 'node',
         name: name || 'Unnamed',
@@ -72,11 +57,19 @@ function Nodes(athena) {
         triggers,
         delegate,
         metadata,
-        sync,
-        ephemeral,
-        status,
-        trigger
-      }, 'config');
+        ephemeral
+      };
+
+      node.config.behavior = (behavior && typeof behavior === 'object') ?
+        behavior : {};
+
+      // status behavior: own, aggregate, children
+      node.config.behavior.status = node.config.behavior.status || 'own';
+      // trigger behavior: self, children, all
+      node.config.behavior.trigger = node.config.behavior.trigger || 'self';
+      // sync behavior: true, false
+      node.config.behavior.sync = (node.config.behavior.sync !== undefined) ?
+        node.config.behavior.sync : true;
 
       node.id = node.config.id;
 
@@ -160,11 +153,11 @@ function Nodes(athena) {
         },
         get: function(object, property) {
           if (property === 'health') {
-            if (node.config.status === 'own') {
+            if (node.config.behavior.status === 'own') {
               return node.status.health;
-            } else if (node.config.status === 'aggregate') {
+            } else if (node.config.behavior.status === 'aggregate') {
               return aggregate([ node.status.health, ...node.status.children ]);
-            } else if (node.config.status === 'children') {
+            } else if (node.config.behavior.status === 'children') {
               return aggregate(node.status.children);
             } else {
               return athena.constants.health.unknown;
@@ -216,6 +209,15 @@ function Nodes(athena) {
       if (this.status.active) {
         athena.triggers.deactivate(this);
         this.status.active = false;
+      }
+    }
+
+    reconfigure(config) {
+      Object.merge(this.config, config);
+
+      if (this.status.enabled) {
+        this.emit('config', this.config);
+        athena.events.emit('config', this, this.config);
       }
     }
 
@@ -357,10 +359,10 @@ function Nodes(athena) {
       if (this.status.enabled) {
         this.status.triggeredAt = Date.now();
 
-        if (this.config.trigger === 'self') {
+        if (this.config.behavior.trigger === 'self') {
           this.emit('trigger', ...args);
           athena.events.emit('trigger', ...args);
-        } else if (this.config.trigger === 'children') {
+        } else if (this.config.behavior.trigger === 'children') {
           for (let child of this.config.children) {
             child = athena.store.resolve(child);
             if (child) {
@@ -368,7 +370,7 @@ function Nodes(athena) {
             }
           }
           athena.events.emit('trigger', ...args);
-        } else if (this.config.trigger === 'all') {
+        } else if (this.config.behavior.trigger === 'all') {
           this.emit('trigger', ...args);
           for (let child of this.config.children) {
             child = athena.store.resolve(child);

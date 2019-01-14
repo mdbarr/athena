@@ -14,7 +14,7 @@ module.exports = {
         node.config.icon = options.icon || 'progress-wrench';
         node.config.typeIcon = 'progress-wrench';
         node.config.folderIcon = options.folderIcon || 'fire';
-        node.config.status = 'own';
+        node.config.behavior.status = 'own';
 
         let healths = [];
 

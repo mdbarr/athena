@@ -14,7 +14,8 @@ module.exports = {
         this.config.typeIcon = 'folder-open';
         this.config.folderIcon = options.folderIcon || 'folder';
 
-        this.config.status = options.status || 'children';
+        this.config.behavior.status = (options.behavior && options.behavior.status) ?
+          options.behavior.status : 'children';
 
         this.status.health = athena.constants.health.healthy;
       }

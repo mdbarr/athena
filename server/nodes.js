@@ -92,7 +92,7 @@ function Nodes(athena) {
       };
 
       athena.util.addPrivate(node, '_computed', {
-        aggregate,
+        aggregate: true, // include this computation
         [Symbol.iterator]: function() {
           return {
             next: function() {
@@ -143,9 +143,9 @@ function Nodes(athena) {
         },
         getOwnPropertyDescriptor: function(object, property) {
           let value;
-          if (node._computed[property]) {
+          if (node._computed.hasOwnProperty(property)) {
             value = node.computed[property];
-          } else if (node.status[property]) {
+          } else if (node.status.hasOwnProperty(property)) {
             value = node.status[property];
           } else {
             return undefined;
@@ -316,9 +316,7 @@ function Nodes(athena) {
 
       object.status = {};
       for (const item in this.computed) {
-        if (item.startsWith('_') ||
-            this.status.propertyIsEnumerable(item) === false ||
-            item === 'domain') {
+        if (item.startsWith('_')) {
           continue;
         }
         object.status[item] = this.computed[item];

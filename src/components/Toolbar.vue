@@ -156,7 +156,7 @@ export default {
     padding-left: 8px;
 }
 .athena-toolbar {
-    background-image: linear-gradient(to right, #3f647f 0%, #3f637f 100%);
+    background-image: radial-gradient(#3f647f, #335772);
 }
 .athena-progress {
     margin: 0px;

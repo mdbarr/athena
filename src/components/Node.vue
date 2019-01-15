@@ -65,10 +65,10 @@ export default {
     return {
       margin: 2,
       barStyles: {
-        fill: '#54a5ff'
+        fill: '#377eb8'
       },
       lineStyles: {
-        stroke: '#54a5ff'
+        stroke: '#377eb8'
       }
     };
   },
@@ -124,7 +124,7 @@ export default {
 };
 //////////
 // Colors:
-//   healthy: #3f647f
+//   healthy: #335772
 //   unknown: #222
 //   unstable: #6a3e9a
 //   error: #ff7e00
@@ -165,7 +165,7 @@ export default {
     width: 100%;
 }
 .node-title.node-healthy {
-    border-left: 12px solid #3f647f;
+    border-left: 12px solid #335772;
 }
 .node-title.node-unknown {
     border-left: 12px solid #222;
@@ -208,7 +208,7 @@ export default {
     padding-left: 6px;
 }
 .node-status.node-healthy {
-    background-color: #3f647f;
+    background-color: #335772;
 }
 .node-status.node-unknown {
     background-color: #222;
@@ -231,7 +231,7 @@ export default {
     width: 30px;
 }
 .node-child-divider.node-healthy {
-    border-bottom: 28px solid #3f647f;
+    border-bottom: 28px solid #335772;
 }
 .node-child-divider.node-unknown {
     border-bottom: 28px solid #222;
@@ -255,7 +255,7 @@ export default {
     width: 30%;
 }
 .node-child-status.node-healthy {
-    background-color: #3f647f;
+    background-color: #335772;
 }
 .node-child-status.node-unknown {
     background-color: #222;
@@ -288,7 +288,7 @@ export default {
     padding: 4px;
 }
 .node-info.node-healthy {
-    border-left: 12px solid #3f647f;
+    border-left: 12px solid #335772;
 }
 .node-info.node-unknown {
     border-left: 12px solid #222;

@@ -32,6 +32,7 @@ module.exports = {
         this.on('trigger', function() {
           node.session.pingHost(node.config.address, function (error, target, sent, rcvd) {
             let health = athena.constants.health.healthy;
+            let description;
             let metric = 0;
 
             if (error) {
@@ -44,10 +45,13 @@ module.exports = {
               metric = time;
               if (node.latency > 0 && time > node.latency) {
                 health = athena.constants.health.failed;
+              } else {
+                description = `<i class="mdi mdi-check-network-outline"></i> ${ node.config.address } is online (${ metric }ms latency)`;
               }
             }
             node.update({
               health,
+              description,
               metric
             });
           });

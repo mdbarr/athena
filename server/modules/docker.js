@@ -119,7 +119,7 @@ module.exports = [ {
                 node.containers[container].trigger();
               }
 
-              const description = `<i class="mdi mdi-package"></i> Running containers: ${ info.ContainersRunning }`;
+              const description = `<i class="mdi mdi-progress-check"></i> Running containers: ${ info.ContainersRunning }<br><i class="mdi mdi-folder-image"></i> Images: ${ info.Images }`;
               node.update({
                 health: athena.constants.health.healthy,
                 description,

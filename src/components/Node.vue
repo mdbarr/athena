@@ -283,7 +283,7 @@ export default {
 .node-info {
     border-left: 12px solid #222;
     font-family: monospace;
-    font-size: 10px;
+    font-size: 12px;
     min-height: 140px;
     padding: 4px;
 }

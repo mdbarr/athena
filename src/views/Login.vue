@@ -11,8 +11,8 @@
           </v-toolbar>
           <v-card-text>
             <v-form>
-              <v-text-field id="athena-login" prepend-icon="mdi-account" name="athena-login" label="Login" type="text" autocomplete="off"></v-text-field>
-              <v-text-field id="athena-password" prepend-icon="mdi-lock" name="athena-password" label="Password" type="password" autocomplete="off"></v-text-field>
+              <v-text-field prepend-icon="mdi-account" name="athena-login" label="Login" type="text" browser-autocomplete="new-password"></v-text-field>
+              <v-text-field prepend-icon="mdi-lock" name="athena-password" label="Password" type="password" browser-autocomplete="new-password"></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>

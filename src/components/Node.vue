@@ -126,7 +126,7 @@ export default {
 // Colors:
 //   healthy: #3f647f
 //   unknown: #222
-//   unstable: #e5b90b
+//   unstable: #6a3e9a
 //   error: #ff7e00
 //   failed: #e4181d
 </script>
@@ -171,7 +171,7 @@ export default {
     border-left: 12px solid #222;
 }
 .node-title.node-unstable {
-    border-left: 12px solid #e5b90b;
+    border-left: 12px solid #6a3e9a;
 }
 .node-title.node-error {
     border-left: 12px solid #ff7e00;
@@ -214,7 +214,7 @@ export default {
     background-color: #222;
 }
 .node-status.node-unstable {
-    background-color: #e5b90b;
+    background-color: #6a3e9a;
 }
 .node-status.node-error {
     background-color: #ff7e00;
@@ -237,7 +237,7 @@ export default {
     border-bottom: 28px solid #222;
 }
 .node-child-divider.node-unstable {
-    border-bottom: 28px solid #e5b90b;
+    border-bottom: 28px solid #6a3e9a;
 }
 .node-child-divider.node-error {
     border-bottom: 28px solid #ff7e00;
@@ -261,7 +261,7 @@ export default {
     background-color: #222;
 }
 .node-child-status.node-unstable {
-    background-color: #e5b90b;
+    background-color: #6a3e9a;
 }
 .node-child-status.node-error {
     background-color: #ff7e00;
@@ -294,7 +294,7 @@ export default {
     border-left: 12px solid #222;
 }
 .node-info.node-unstable {
-    border-left: 12px solid #e5b90b;
+    border-left: 12px solid #6a3e9a;
 }
 .node-info.node-error {
     border-left: 12px solid #ff7e00;

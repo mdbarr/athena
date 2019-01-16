@@ -33,6 +33,10 @@
           <i :class="aggregateIcon" v-if="node.status.aggregate !== 'healthy'"></i>
         </div>
         <div :class="'node-child-divider node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
+        <div :class="'node-child-status node-overlap node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'">
+          <i :class="aggregateIcon" v-if="node.status.aggregate !== 'healthy'"></i>
+        </div>
+        <div :class="'node-child-divider node-' + node.status.aggregate" v-if="node.status.aggregate !== 'healthy'"></div>
       </span>
     </div>
     <div :class="'node-info node-' + node.status.health">
@@ -93,15 +97,15 @@ export default {
     },
     aggregateIcon() {
       if (this.node.status.aggregate === this.$constants.health.unknown) {
-        return 'mdi mdi-help-circle-outline';
+        return 'pl-3 mdi mdi-help-circle-outline';
       } else if (this.node.status.aggregate === this.$constants.health.unstable) {
-        return 'mdi mdi-alert-circle-outline';
+        return 'pl-3 mdi mdi-alert-circle-outline';
       } else if (this.node.status.aggregate === this.$constants.health.error) {
-        return 'mdi mdi-alert-outline';
+        return 'pl-3 mdi mdi-alert-outline';
       } else if (this.node.status.aggregate === this.$constants.health.failed) {
-        return 'mdi mdi-alert-circle';
+        return 'pl-3 mdi mdi-alert-circle';
       } else {
-        return 'mdi mdi-help-rhombus-outline';
+        return 'pl-3 mdi mdi-help-rhombus-outline';
       }
     },
     folderIcon() {
@@ -224,6 +228,7 @@ export default {
 }
 
 .node-child-divider {
+    position: relative;
     border-bottom: 28px solid #222;
     border-left: 28px solid transparent;
     float: right;
@@ -252,7 +257,7 @@ export default {
     font-weight: 700;
     height: 28px;
     padding: 0px;
-    width: 30%;
+    width: 60px;
 }
 .node-child-status.node-healthy {
     background-color: #335772;
@@ -268,6 +273,11 @@ export default {
 }
 .node-child-status.node-failed {
     background-color: #e4181d;
+}
+.node-overlap {
+    margin-right: -28px;
+    z-index: -10;
+    width: 88px;
 }
 .node-folder {
     background-color: #262626;

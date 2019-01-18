@@ -1,17 +1,12 @@
-FROM node:10-alpine
-
+FROM node:10
 WORKDIR /athena
-
 COPY package.json yarn.lock ./
+RUN yarn install
 
-RUN yarn install && \
-    yarn cache clean && \
-    npm install -g forever
-
+FROM node:10-alpine
+WORKDIR /athena
+COPY --from=0 /athena/node_modules /athena/node_modules
 COPY . .
-
 RUN yarn build
-
 EXPOSE 6250
-
-CMD [ "forever", "./server/athena.js" ]
+ENTRYPOINT [ "bin/cli.js" ]

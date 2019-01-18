@@ -10,7 +10,8 @@
     "lint": "vue-cli-service lint",
     "api:lint": "eslint --cache --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js bin/*.js",
     "api:fix": "eslint --fix --no-eslintrc -c ./server/.eslintrc.js server/*.js server/**/*.js test/**/*.js bin/*.js",
-    "api:serve": "./bin/cli.js --watch --lint"
+    "api:serve": "./bin/cli.js --watch --lint",
+    "docker:build": "docker build -t athena ."
   },
   "bin": {
     "athena": "./bin/cli.js"

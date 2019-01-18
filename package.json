@@ -23,7 +23,7 @@
     "dockerode": "^2.5.8",
     "find-free-port": "^2.0.0",
     "minimist": "^1.2.0",
-    "mongodb": "^3.1.8",
+    "mongodb": "^3.1.12",
     "net-ping": "^1.2.3",
     "request": "^2.88.0",
     "requireindex": "^1.2.0",
@@ -34,7 +34,7 @@
     "vue-native-websocket": "^2.0.12",
     "vue-router": "^3.0.1",
     "vue-sparklines": "^0.1.9",
-    "vuetify": "^1.4.1",
+    "vuetify": "^1.4.2",
     "watershed": "^0.4.0"
   },
   "devDependencies": {

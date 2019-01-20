@@ -14,9 +14,6 @@ const options = minimist(process.argv.slice(2));
 if (options.bootstrap) {
   bootstrap(options);
 } else {
-
-  const debounceTimeout = parseInt(options.debounce || 250);
-
   const baseDirectory = path.resolve(__dirname + '/../');
   const athenaCommand = path.resolve(__dirname + '/cli.js');
   const project = require(path.resolve(__dirname + '/../package.json'));
@@ -61,6 +58,8 @@ if (options.bootstrap) {
       });
 
       athenaProcess.on('exit', function(code) {
+        athenaProcess = null;
+
         if (code !== 0) {
           console.log('Athena crashed, relaunching in 10s...');
           paused = false;
@@ -82,32 +81,23 @@ if (options.bootstrap) {
     console.log(`Usage: ${ name } [--help] [--watch] [--config=FILE]`);
     process.exit(0);
   } else if (options.watch) {
-    let debounce = 0;
-
     launchAthena();
 
     const handler = function (filepath) {
       const filename = path.basename(filepath);
 
       if (!paused && !filename.startsWith('.') && filename.endsWith('.js')) {
-        if (debounce) {
-          clearTimeout(debounce);
-          debounce = 0;
-        }
+        paused = true;
 
-        debounce = setTimeout(function () {
-          paused = true;
-
-          if (athenaProcess) {
-            athenaProcess.on('exit', function() {
-              launchAthena();
-            });
-
-            athenaProcess.kill('SIGINT');
-          } else {
+        if (athenaProcess) {
+          athenaProcess.on('exit', function() {
             launchAthena();
-          }
-        }, debounceTimeout);
+          });
+
+          athenaProcess.kill('SIGINT');
+        } else {
+          launchAthena();
+        }
       }
     };
 

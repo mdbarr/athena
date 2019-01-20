@@ -28,7 +28,7 @@
     "net-ping": "^1.2.3",
     "request": "^2.88.0",
     "requireindex": "^1.2.0",
-    "restify": "^7.5.0",
+    "restify": "^7.6.0",
     "uuid": "^3.3.2",
     "vue": "^2.5.22",
     "vue-native-websocket": "^2.0.12",

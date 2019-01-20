@@ -22,10 +22,12 @@ if (options.bootstrap) {
   const project = require(path.resolve(__dirname + '/../package.json'));
 
   let paused = false;
-  const ready = 0;
   let athenaProcess;
+  let crashTimeout = 0;
 
   function launchAthena() {
+    clearTimeout(crashTimeout);
+
     setTimeout(function() {
       paused = false;
     }, 5000);
@@ -55,8 +57,17 @@ if (options.bootstrap) {
       });
 
       athenaProcess.on('message', function() {
-        clearTimeout(ready);
         paused = false;
+      });
+
+      athenaProcess.on('exit', function(code) {
+        if (code !== 0) {
+          console.log('Athena crashed, relaunching in 10s...');
+          paused = false;
+          crashTimeout = setTimeout(function() {
+            launchAthena();
+          }, 10000);
+        }
       });
 
     } catch (error) {
@@ -81,6 +92,7 @@ if (options.bootstrap) {
       if (!paused && !filename.startsWith('.') && filename.endsWith('.js')) {
         if (debounce) {
           clearTimeout(debounce);
+          debounce = 0;
         }
 
         debounce = setTimeout(function () {
@@ -91,7 +103,7 @@ if (options.bootstrap) {
               launchAthena();
             });
 
-            athenaProcess.kill();
+            athenaProcess.kill('SIGINT');
           } else {
             launchAthena();
           }
@@ -107,6 +119,7 @@ if (options.bootstrap) {
     watcher.on('change', handler);
   } else {
     process.title = 'athena';
+    process.on('SIGINT', () => process.exit(0));
 
     let config = {};
     if (options.config) {

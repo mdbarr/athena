@@ -26,11 +26,30 @@ module.exports = [ {
             stream: false
           }, function(error, stats) {
 
-            const metric = athena.util.precisionRound(stats.memory_stats.usage / stats.memory_stats.max_usage, 2);
-            const description = `<i class="mdi mdi-image-area"></i> ${ node.container.Image }<br><i class="mdi mdi-chart-line"></i> ${ Math.floor(metric * 100) }%`;
+            const state = node.container.State;
+            let health = athena.constants.health.healthy;
+
+            // created, restarting, running, paused, exited, dead
+            if (state === 'exited') {
+              health = athena.constants.health.failed;
+            } else if (state === 'paused') {
+              health = athena.constants.health.unknown;
+            }
+
+            let metric = 0;
+            let description = `<i class="mdi mdi-image-area"></i> ${ node.container.Image } (${ state })`;
+
+            if (!error && stats) {
+              const memory = athena.util.precisionRound(stats.memory_stats.usage / stats.memory_stats.limit, 2);
+              if (!Number.isNaN(memory)) {
+                description += `<br>Memory: ${ Math.floor(memory * 100) }%`;
+                metric = memory;
+              }
+            }
 
             node.update({
-              health: athena.constants.health.healthy,
+              health,
+              state,
               description,
               metric
             });
@@ -80,6 +99,7 @@ module.exports = [ {
             }, function(error, containers) {
               for (const item of containers) {
                 if (node.containers[item.Id]) {
+                  node.containers[item.Id].container = item;
                   continue;
                 }
 

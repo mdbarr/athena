@@ -294,6 +294,7 @@ export default {
     border-left: 12px solid #222;
     font-family: monospace;
     font-size: 12px;
+    word-break: break-all;
     min-height: 140px;
     padding: 4px;
 }

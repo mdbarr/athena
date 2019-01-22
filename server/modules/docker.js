@@ -1,6 +1,9 @@
 'use strict';
 
+const os = require('os');
 const Dockerode = require('dockerode');
+
+const totalMemory = os.totalmem();
 
 module.exports = [ {
   name: 'container',
@@ -40,9 +43,9 @@ module.exports = [ {
             let description = `<i class="mdi mdi-image-area"></i> ${ node.container.Image } (${ state })`;
 
             if (!error && stats) {
-              const memory = athena.util.precisionRound(stats.memory_stats.usage / stats.memory_stats.limit, 2);
+              const memory = athena.util.precisionRound(stats.memory_stats.usage / totalMemory, 4);
               if (!Number.isNaN(memory)) {
-                description += `<br>Memory: ${ Math.floor(memory * 100) }%`;
+                description += `<br>Memory: ${ Math.round(memory * 100) }%`;
                 metric = memory;
               }
             }

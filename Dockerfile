@@ -1,11 +1,11 @@
 FROM node:10
 WORKDIR /athena
 COPY package.json yarn.lock ./
-RUN yarn install --silent
+RUN yarn --silent install
 COPY . .
 RUN yarn build
 RUN rm -rf node_modules && \
-        yarn install --production --silent
+        yarn --silent install --production
 
 FROM node:10-alpine
 WORKDIR /athena

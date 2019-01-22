@@ -28,6 +28,9 @@
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
         <athena-node v-for="node in filterSort()" :node="node" :key="node.id"></athena-node>
+        <v-btn color="#335772" fab dark small fixed bottom right class="mb-4 mr-2" @click.stop="true">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-layout>
     </v-container>
     <athena-footer></athena-footer>

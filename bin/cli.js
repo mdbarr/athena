@@ -78,7 +78,7 @@ if (options.bootstrap) {
 
   if (options.help) {
     const name = path.basename(process.argv[1]);
-    console.log(`Usage: ${ name } [--help] [--watch] [--config=FILE]`);
+    console.log(`Athena CLI - Usage:\n${ name } [--help] [--watch] [--config=FILE] [--bootstap] [--file=FILE] [--drop]`);
     process.exit(0);
   } else if (options.watch) {
     launchAthena();
@@ -101,9 +101,13 @@ if (options.bootstrap) {
       }
     };
 
-    const watcher = watch([ baseDirectory + '/server/**/*.js',
+    const watcher = watch([
+      baseDirectory + '/server/**/*.js',
       baseDirectory + '/common/**/*.js',
-      baseDirectory + '/bin/**/*.js' ]);
+      baseDirectory + '/bin/**/*.js',
+      baseDirectory + '/package.json',
+      baseDirectory + '/yarn.lock'
+    ]);
 
     watcher.on('add', handler);
     watcher.on('change', handler);

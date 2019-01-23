@@ -3,6 +3,8 @@ import Router from 'vue-router';
 
 import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
+import List from './views/List.vue';
+import Tree from './views/Tree.vue';
 
 import store from './store';
 
@@ -25,6 +27,16 @@ const router = new Router({
       path: '/view/:id',
       name: 'view',
       component: Dashboard
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: List
+    },
+    {
+      path: '/tree',
+      name: 'tree',
+      component: Tree
     },
 
     { path: '*', redirect: '/' }

@@ -2,7 +2,7 @@
 <div>
   <v-navigation-drawer v-model="drawer" clipped fixed app>
     <v-list dense>
-      <v-list-tile @click="true">
+      <v-list-tile @click.stop="navigate('dashboard')">
         <v-list-tile-action>
           <v-icon>mdi-pillar</v-icon>
         </v-list-tile-action>
@@ -10,7 +10,7 @@
           <v-list-tile-title>Dashboard</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="true">
+      <v-list-tile @click.stop="navigate('tree')">
         <v-list-tile-action>
           <v-icon>mdi-file-tree</v-icon>
         </v-list-tile-action>
@@ -18,7 +18,7 @@
           <v-list-tile-title>Tree View</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="true">
+      <v-list-tile @click.stop="navigate('list')">
         <v-list-tile-action>
           <v-icon>mdi-view-list</v-icon>
         </v-list-tile-action>
@@ -99,7 +99,7 @@
         Mark &nbsp; <v-icon>mdi-account-circle</v-icon>
       </v-btn>
       <v-list>
-        <v-list-tile @click="navigate('profile')">
+        <v-list-tile @click.stop="navigate('profile')">
            <v-list-tile-content>
              <v-list-tile-title>Profile</v-list-tile-title>
            </v-list-tile-content>

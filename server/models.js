@@ -5,12 +5,44 @@ function Models(athena) {
 
   //////////
 
+  self.user = function({
+    id, name, email, username, password,
+    isAdmin = false, isSecure = false,
+    requiresPasswordChange = false
+  }) {
+
+    const model = {
+      id: id || athena.util.id(),
+      name,
+      email,
+      username: (username) ? username : name.toLowerCase(),
+      password,
+      // flags
+      isAdmin: !!isAdmin,
+      isSecure: !!isSecure,
+      requiresPasswordChange: !!requiresPasswordChange
+    };
+
+    if (!model.isSecure) {
+      model.password = athena.util.sha256(model.password);
+      model.isSecure = true;
+      // sync?
+    }
+
+    return model;
+  };
+
   self.session = function({
-    id, user
+    user = {}
   }) {
     const model = {
-      id: id || athena.util.id,
-      user
+      id: athena.util.id(),
+      timestamp: athena.util.timestamp(),
+      ttl: -1,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      isAdmin: user.isAdmin
     };
 
     return model;

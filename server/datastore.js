@@ -75,10 +75,9 @@ function DataStore(athena) {
           name: 'Athena',
           username: 'athena',
           password: athena.util.generateLocalPassword(),
-          admin: true,
-          secure: false
+          isAdmin: true
         };
-        users.athena = admin;
+        users.athena = athena.models.user(admin);
 
         console.log('-'.repeat(80));
         console.log('\nLocal administrator account configured as:');

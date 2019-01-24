@@ -73,6 +73,7 @@ module.exports = {
     end: 'end',
     error: 'error',
     focus: 'focus',
+    list: 'list',
     path: 'path',
     ping: 'PING',
     pong: 'PONG',
@@ -80,7 +81,13 @@ module.exports = {
     render: 'render',
     send: 'send',
     text: 'text',
+    tree: 'tree',
     update: 'update'
+  },
+  mode: {
+    focus: 'focus-mode',
+    list: 'list-mode',
+    tree: 'tree-mode'
   },
   nodes: {
     root: {

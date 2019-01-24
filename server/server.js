@@ -42,6 +42,14 @@ function Server(athena) {
 
   //////////
 
+  athena.api.post('/api/session', function(req, res, next) {
+
+    res.send(200);
+    next();
+  });
+
+  //////////
+
   athena.api.get('/api/version', function(req, res, next) {
     const version = {
       name: 'athena-server',
@@ -64,11 +72,19 @@ function Server(athena) {
   }, PING_INTERVAL);
 
   self.clientUpdate = function(node) {
+    const renders = {};
+
     for (const clientId in self.clients) {
       const client = self.clients[clientId];
 
-      if (client.session.focus === node.config.parent) {
-        const render = node.render();
+      if (client.session.focus === node.config.parent &&
+          client.session.mode === athena.constants.mode.focus) {
+
+        if (!renders[node.id]) {
+          renders[node.id] = node.render();
+        }
+
+        const render = renders[node.id];
 
         const update = {
           type: athena.constants.message.update,
@@ -94,6 +110,7 @@ function Server(athena) {
     shed.session = {
       clientId,
       sessionId: null,
+      mode: athena.constants.mode.focus,
       focus: null
     };
 
@@ -128,6 +145,7 @@ function Server(athena) {
 
     shed.on(athena.constants.message.focus, function(message) {
       console.log('Focusing %s on %s', clientId, message.focus);
+      shed.session.mode = athena.constants.mode.focus;
       shed.session.focus = message.focus;
 
       const focus = athena.store.resolve(shed.session.focus);

@@ -47,12 +47,22 @@ module.exports = [ {
             let metric = 0;
             let description = `<i class="mdi mdi-image-area"></i> ${ image } (${ state })`;
 
-            if (!error && stats) {
+            if (!error && stats && state === 'running') {
+              const cpuDelta = stats.cpu_stats.cpu_usage.total_usage -
+                    stats.precpu_stats.cpu_usage.total_usage;
+              const systemDelta = stats.cpu_stats.system_cpu_usage -
+                    stats.precpu_stats.system_cpu_usage;
+              const cpu = athena.util.precisionRound(cpuDelta / systemDelta, 4);
+
               const memory = athena.util.precisionRound(stats.memory_stats.usage / totalMemory, 4);
-              if (!Number.isNaN(memory)) {
-                description += `<br>Memory: ${ Math.round(memory * 100) }%`;
-                metric = memory;
-              }
+              description += ` - CPU: ${ Math.round(cpu * 100) }% Memory: ${ Math.round(memory * 100) }%`;
+              metric = cpu;
+            }
+
+            if (node.container.Ports.length) {
+              description += '<br>Ports: ' + node.container.Ports.map(function(item) {
+                return `${ item.PublicPort } <i class="mdi mdi-arrow-right"></i> ${ item.PrivatePort }/${ item.Type }`;
+              }).join(', ');
             }
 
             node.update({

@@ -4,7 +4,8 @@ function Store() {
   self.state = {
     isConnected: false,
     loggedIn: false,
-    name: 'Mark'
+    name: 'Mark',
+    terminals: []
   };
 
   return self;

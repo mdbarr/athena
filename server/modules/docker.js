@@ -32,6 +32,11 @@ module.exports = [ {
             const state = node.container.State;
             let health = athena.constants.health.healthy;
 
+            let image = node.container.Image;
+            if (image.startsWith('sha256:')) {
+              image = image.replace('sha256:', '').substring(0, 12);
+            }
+
             // created, restarting, running, paused, exited, dead
             if (state === 'exited') {
               health = athena.constants.health.failed;
@@ -40,7 +45,7 @@ module.exports = [ {
             }
 
             let metric = 0;
-            let description = `<i class="mdi mdi-image-area"></i> ${ node.container.Image } (${ state })`;
+            let description = `<i class="mdi mdi-image-area"></i> ${ image } (${ state })`;
 
             if (!error && stats) {
               const memory = athena.util.precisionRound(stats.memory_stats.usage / totalMemory, 4);

@@ -24,7 +24,7 @@
       </v-menu>
     </div>
     <div :class="'node-status node-' + node.status.health">
-      <i :class="statusIcon"></i> {{ node.status.health | uppercase }}
+      <i :class="statusIcon"></i> {{ (node.status.state || node.status.health) | uppercase }}
       <span v-if="node.children && node.children.length">
         <router-link :to="'/view/' + node.id" class="node-folder">
           <i :class="folderIcon"></i><i class="mdi mdi-chevron-right"></i>

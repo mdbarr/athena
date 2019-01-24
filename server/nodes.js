@@ -77,7 +77,11 @@ function Nodes(athena) {
         enabled: false,
         active: false,
         uptime: 0,
+
         health: athena.constants.health.unknown,
+        description: '',
+        state: null,
+
         graph: new Array(50).fill(0),
         updatedAt: null,
         triggeredAt: null,
@@ -222,10 +226,11 @@ function Nodes(athena) {
     }
 
     update({
-      health, description, metric
+      health, state = null, description, metric
     }) {
       if (health !== undefined) {
         this.status.health = health;
+        this.status.state = state;
       }
       if (description !== undefined) {
         this.status.description = description;

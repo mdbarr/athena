@@ -55,7 +55,7 @@ module.exports = [ {
               const cpu = athena.util.precisionRound(cpuDelta / systemDelta, 4);
 
               const memory = athena.util.precisionRound(stats.memory_stats.usage / totalMemory, 4);
-              description += ` - CPU: ${ Math.round(cpu * 100) }% Memory: ${ Math.round(memory * 100) }%`;
+              description += `<br>CPU: ${ Math.round(cpu * 100) }% Memory: ${ Math.round(memory * 100) }%`;
               metric = cpu;
             }
 

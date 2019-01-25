@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-navigation-drawer v-model="drawer" clipped fixed app>
+  <v-navigation-drawer v-model="state.drawer" clipped fixed app>
     <v-list dense>
       <v-list-tile @click.stop="navigate('dashboard')">
         <v-list-tile-action>
@@ -87,7 +87,7 @@
     </v-list>
   </v-navigation-drawer>
   <v-toolbar app fixed clipped-left dense class="athena-toolbar">
-    <v-btn icon @click.stop="drawer = !drawer">
+    <v-btn icon @click.stop="state.drawer = !state.drawer">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
     <v-spacer></v-spacer>
@@ -134,8 +134,7 @@ export default {
   },
   data() {
     return {
-      state: store.state,
-      drawer: false
+      state: store.state
     };
   },
   methods: {

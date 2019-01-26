@@ -21,18 +21,18 @@ module.exports = [ {
 
         node.status.health = athena.constants.health.healthy;
 
-        node.docker = options.docker;
-        node.container = options.container;
+        node._docker = options.docker;
+        node._container = options.container;
 
         node.on('trigger', function() {
-          node.docker.getContainer(node.id).stats({
+          node._docker.getContainer(node.id).stats({
             stream: false
           }, function(error, stats) {
 
-            const state = node.container.State;
+            const state = node._container.State;
             let health = athena.constants.health.healthy;
 
-            let image = node.container.Image;
+            let image = node._container.Image;
             if (image.startsWith('sha256:')) {
               image = image.replace('sha256:', '').substring(0, 12);
             }
@@ -59,8 +59,8 @@ module.exports = [ {
               metric = cpu;
             }
 
-            if (node.container.Ports.length) {
-              description += '<br>Ports: ' + node.container.Ports.map(function(item) {
+            if (node._container.Ports.length) {
+              description += '<br>Ports: ' + node._container.Ports.map(function(item) {
                 return `${ item.PublicPort } <i class="mdi mdi-arrow-right"></i> ${ item.PrivatePort }/${ item.Type }`;
               }).join(', ');
             }
@@ -107,17 +107,17 @@ module.exports = [ {
 
         node.status.health = athena.constants.health.healthy;
 
-        node.docker = new Dockerode(dockerOptions);
-        node.containers = {};
+        node._docker = new Dockerode(dockerOptions);
+        node._containers = {};
 
         node.on('trigger', function() {
-          node.docker.info(function(error, info) {
-            node.docker.listContainers({
+          node._docker.info(function(error, info) {
+            node._docker.listContainers({
               all: true
             }, function(error, containers) {
               for (const item of containers) {
-                if (node.containers[item.Id]) {
-                  node.containers[item.Id].container = item;
+                if (node._containers[item.Id]) {
+                  node._containers[item.Id].container = item;
                   continue;
                 }
 
@@ -126,7 +126,7 @@ module.exports = [ {
                   name: item.Names[0].replace(/^\//, ''),
                   type: 'container',
                   parent: node.id,
-                  docker: node.docker,
+                  docker: node._docker,
                   container: item,
                   ephemeral: true,
                   behavior: {
@@ -143,7 +143,7 @@ module.exports = [ {
                   }
                 };
                 const container = athena.nodes.create(object);
-                node.containers[item.Id] = container;
+                node._containers[item.Id] = container;
 
                 container.link();
                 container.enable();
@@ -153,8 +153,8 @@ module.exports = [ {
               // Remove stale containers
 
               // Trigger remaining containers
-              for (const container in node.containers) {
-                node.containers[container].trigger();
+              for (const container in node._containers) {
+                node._containers[container].trigger();
               }
 
               const description = `<i class="mdi mdi-progress-check"></i> Running containers: ${ info.ContainersRunning }<br><i class="mdi mdi-folder-image"></i> Images: ${ info.Images }`;

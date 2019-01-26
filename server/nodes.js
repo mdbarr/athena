@@ -349,16 +349,20 @@ function Nodes(athena) {
       return object;
     }
 
-    tree() {
+    tree(depth = 0) {
       const render = this.render();
-      render.children = this.computed.children.map(child => child.tree());
+      render.depth = depth;
+
+      render.children = this.computed.children.map(child => child.tree(depth + 1));
       return render;
     }
 
-    list(list = []) {
+    list(list = [], depth = 0) {
       const render = this.render();
+      render.depth = depth;
+
       list.push(render);
-      this.computed.children.forEach(child => child.list(list));
+      this.computed.children.forEach(child => child.list(list, depth + 1));
       return list;
     }
 

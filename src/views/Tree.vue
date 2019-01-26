@@ -53,6 +53,9 @@ export default {
 
     vm.$events.$on(vm.$constants.message.tree, function(message) {
       vm.items = message.items;
+      if (!vm.open.length) {
+        vm.open = [ 'root' ];
+      }
     });
   }
 };

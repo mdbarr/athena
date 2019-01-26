@@ -165,6 +165,24 @@ function Server(athena) {
       shed.message(response);
     });
 
+    shed.on(athena.constants.message.tree, function() {
+      console.log('Tree view %s', clientId);
+      shed.session.mode = athena.constants.mode.tree;
+
+      const root = athena.store.resolve(athena.constants.nodes.root.id);
+      const tree = root.tree();
+      tree.name = 'ATHENA';
+
+      shed.session.tree = tree;
+
+      const response = {
+        type: athena.constants.message.tree,
+        items: [ tree ]
+      };
+
+      shed.message(response);
+    });
+
     //////////
 
     shed.message = function(message) {

@@ -3,7 +3,13 @@
     <athena-toolbar></athena-toolbar>
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
-
+        <v-treeview v-model="tree" :open="open" :items="items" activatable item-key="id" open-on-click>
+          <template slot="prepend" slot-scope="{ item, open, leaf }">
+            <v-icon>
+              {{ 'mdi-' + item.icon }}
+            </v-icon>
+          </template>
+        </v-treeview>
       </v-layout>
     </v-container>
     <athena-footer></athena-footer>
@@ -23,16 +29,30 @@ export default {
   },
   data() {
     return {
-      state: store.state
+      state: store.state,
+      open: [],
+      tree: [],
+      items: []
     };
+  },
+  methods: {
+    render() {
+      this.$events.$send({
+        type: this.$constants.message.tree
+      });
+    }
   },
   mounted() {
     const vm = this;
 
-    // initial tree
+    vm.render();
 
     vm.$events.$on(vm.$constants.message.connected, function(object) {
-      // re-tree
+      vm.render();
+    });
+
+    vm.$events.$on(vm.$constants.message.tree, function(message) {
+      vm.items = message.items;
     });
   }
 };

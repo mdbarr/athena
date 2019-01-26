@@ -166,8 +166,6 @@ function Nodes(athena) {
             } else {
               return athena.constants.health.unknown;
             }
-          } else if (property === 'children') {
-            return node.config.children.map(child => athena.store.resolve(child.id));
           } else if (property === 'aggregate') {
             return aggregate(node.status.children);
           } else if (node._computed[property] &&
@@ -352,8 +350,9 @@ function Nodes(athena) {
     tree(depth = 0) {
       const render = this.render();
       render.depth = depth;
-
-      render.children = this.computed.children.map(child => child.tree(depth + 1));
+      render.children = this.config.children.
+        map(child => athena.store.resolve(child)).
+        map(child => child.tree(depth + 1));
       return render;
     }
 
@@ -362,7 +361,8 @@ function Nodes(athena) {
       render.depth = depth;
 
       list.push(render);
-      this.computed.children.forEach(child => child.list(list, depth + 1));
+      this.config.children.map(child => athena.store.resolve(child)).
+        forEach(child => child.list(list, depth + 1));
       return list;
     }
 

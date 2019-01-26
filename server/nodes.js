@@ -352,8 +352,14 @@ function Nodes(athena) {
     tree() {
       const render = this.render();
       render.children = this.computed.children.map(child => child.tree());
-
       return render;
+    }
+
+    list(list = []) {
+      const render = this.render();
+      list.push(render);
+      this.computed.children.forEach(child => child.list(list));
+      return list;
     }
 
     serialize() {

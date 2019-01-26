@@ -166,6 +166,8 @@ function Nodes(athena) {
             } else {
               return athena.constants.health.unknown;
             }
+          } else if (property === 'children') {
+            return node.config.children.map(child => athena.store.resolve(child.id));
           } else if (property === 'aggregate') {
             return aggregate(node.status.children);
           } else if (node._computed[property] &&
@@ -345,6 +347,13 @@ function Nodes(athena) {
       }
 
       return object;
+    }
+
+    tree() {
+      const render = this.render();
+      render.children = this.computed.children.map(child => child.tree());
+
+      return render;
     }
 
     serialize() {

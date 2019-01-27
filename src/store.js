@@ -2,8 +2,9 @@ function Store() {
   const self = this;
 
   self.state = {
-    drawer: false,
+    drawer: true,
     isConnected: false,
+    loading: false,
     loggedIn: false,
     name: 'Mark',
     terminals: []

@@ -102,6 +102,7 @@ export default {
       if (id) {
         this.focus = id;
       }
+      this.state.loading = true;
       this.$events.$send({
         type: this.$constants.message.focus,
         focus: this.focus
@@ -118,6 +119,7 @@ export default {
     });
 
     vm.$events.$on(vm.$constants.message.render, function(message) {
+      vm.state.loading = false;
       vm.path.splice(0, vm.path.length);
       for (const item of message.path) {
         vm.path.push(item);

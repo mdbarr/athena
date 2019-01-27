@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     render() {
+      this.state.loading = true;
       this.$events.$send({
         type: this.$constants.message.tree
       });
@@ -52,6 +53,7 @@ export default {
     });
 
     vm.$events.$on(vm.$constants.message.tree, function(message) {
+      vm.state.loading = false;
       vm.items = message.items;
       if (!vm.open.length) {
         vm.open = [ 'root' ];

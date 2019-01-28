@@ -3,10 +3,14 @@ function Store() {
 
   self.state = {
     drawer: true,
+    panel: false,
+
     isConnected: false,
-    loading: false,
     loggedIn: false,
     name: 'Mark',
+
+    loading: false,
+
     terminals: []
   };
 

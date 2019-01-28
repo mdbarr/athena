@@ -90,13 +90,12 @@
     <v-btn icon @click.stop="state.drawer = !state.drawer">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
-    <v-spacer></v-spacer>
-    <img src="../assets/athena.svg" width="32" class="mr-5">
+    <img src="../assets/athena.svg" width="32" class="mr-1 ml-1">
     <img src="../assets/athena-text.svg" class="athena-title">
     <v-spacer></v-spacer>
     <v-menu offset-y left>
       <v-btn slot="activator" flat>
-        Mark &nbsp; <v-icon>mdi-account-circle</v-icon>
+       {{ state.name | uppercase }} &nbsp; <v-icon>mdi-account-circle</v-icon>
       </v-btn>
       <v-list>
         <v-list-tile @click.stop="navigate('profile')">
@@ -119,6 +118,9 @@
         </v-list-tile>
       </v-list>
     </v-menu>
+    <v-btn icon @click="() => false" v-if="state.panel">
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
   </v-toolbar>
   <v-progress-linear v-if="state.loading" :indeterminate="true" color="white" height="2" class="athena-progress"></v-progress-linear>
   <div v-else class="athena-progress-filler"></div>

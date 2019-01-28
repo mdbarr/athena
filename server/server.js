@@ -183,6 +183,23 @@ function Server(athena) {
       shed.message(response);
     });
 
+    shed.on(athena.constants.message.list, function() {
+      console.log('List view %s', clientId);
+      shed.session.mode = athena.constants.mode.list;
+
+      const root = athena.store.resolve(athena.constants.nodes.root.id);
+      const list = root.list();
+
+      shed.session.list = list;
+
+      const response = {
+        type: athena.constants.message.list,
+        items: list
+      };
+
+      shed.message(response);
+    });
+
     shed.on(athena.constants.message.action, function(message) {
       console.log('Invoking %s on %s via %s', message.action, message.node, clientId);
 

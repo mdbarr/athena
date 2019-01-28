@@ -10,8 +10,8 @@
             <td>{{ props.item.type }}</td>
             <td class="text-xs-right">{{ props.item.status.health }}</td>
             <td class="text-xs-right">{{ props.item.status.aggregate }}</td>
-            <td class="text-xs-right">{{ props.item.status.updatedAt }}</td>
-            <td class="text-xs-right">{{ props.item.status.triggeredAt }}</td>
+            <td class="text-xs-right">{{ props.item.status.updatedAt | calendar }}</td>
+            <td class="text-xs-right">{{ props.item.status.triggeredAt | calendar }}</td>
             <td class="text-xs-left">{{ props.item.parent }}</td>
           </template>
         </v-data-table>

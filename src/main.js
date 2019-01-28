@@ -9,6 +9,8 @@ import constants from '../common/constants';
 import VueNativeSock from 'vue-native-websocket';
 import '@mdi/font/css/materialdesignicons.css';
 
+import moment from 'moment';
+
 Vue.config.productionTip = false;
 
 const websocketUrl = (process.env.NODE_ENV === 'production')
@@ -30,6 +32,14 @@ Vue.filter('capitalize', function(value) {
 
 Vue.filter('uppercase', function(value) {
   return (value || '').toUpperCase();
+});
+
+Vue.filter('calendar', function(value) {
+  return moment(value).calendar();
+});
+
+Vue.filter('timestamp', function(value) {
+  return moment(value).format('MMMM Do YYYY, h:mm a');
 });
 
 Vue.prototype.$constants = constants;

@@ -183,6 +183,18 @@ function Server(athena) {
       shed.message(response);
     });
 
+    shed.on(athena.constants.message.action, function(message) {
+      console.log('Invoking %s on %s via %s', message.action, message.node, clientId);
+
+      const node = athena.store.resolve(message.node);
+      if (node && node.actions[message.action]) {
+        const action = node.actions[message.action];
+        if (action.available()) {
+          action.call();
+        }
+      }
+    });
+
     //////////
 
     shed.message = function(message) {

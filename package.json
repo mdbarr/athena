@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
-    "@mdi/font": "^3.3.92",
+    "@mdi/font": "^3.4.93",
     "barrkeep": "^1.3.2",
     "cron": "^1.6.0",
     "dockerode": "^2.5.8",
@@ -35,7 +35,7 @@
     "vue-native-websocket": "^2.0.12",
     "vue-router": "^3.0.1",
     "vue-sparklines": "^0.1.9",
-    "vuetify": "^1.4.3",
+    "vuetify": "^1.4.4",
     "watershed": "^0.4.0"
   },
   "devDependencies": {

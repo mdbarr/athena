@@ -35,11 +35,21 @@ Vue.filter('uppercase', function(value) {
 });
 
 Vue.filter('calendar', function(value) {
+  if (!value) {
+    return '';
+  }
   return moment(value).calendar();
 });
 
 Vue.filter('timestamp', function(value) {
   return moment(value).format('MMMM Do YYYY, h:mm a');
+});
+
+Vue.filter('uuid', function(value) {
+  if (!value) {
+    return '';
+  }
+  return value.replace(/-.*$/, '').substring(0, 12);
 });
 
 Vue.prototype.$constants = constants;

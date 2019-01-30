@@ -5,7 +5,7 @@
       <v-layout row wrap>
         <v-treeview v-model="tree" :open="open" :items="items" activatable item-key="id" open-on-click>
           <template slot="prepend" slot-scope="{ item, open, leaf }">
-            <v-icon>
+            <v-icon :class="'node-icon node-' + item.status.health">
               {{ 'mdi-' + item.icon }}
             </v-icon>
           </template>
@@ -64,5 +64,19 @@ export default {
 </script>
 
 <style>
-
+.node-icon.node-healthy {
+    color: #335772;
+}
+.node-icon.node-unknown {
+    color: #222;
+}
+.node-icon.node-unstable {
+    color: #6a3e9a;
+}
+.node-icon.node-error {
+    color: #ff7e00;
+}
+.node-icon.node-failed {
+    color: #e4181d;
+}
 </style>

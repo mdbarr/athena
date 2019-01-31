@@ -41,16 +41,24 @@ export default {
       this.$events.$send({
         type: this.$constants.message.tree
       });
+    },
+    reconnect() {
+      if (this.state.mode === this.$constants.mode.tree) {
+        this.render();
+      }
     }
+  },
+  created() {
+    this.$events.$on(this.$constants.message.connected, this.reconnect);
+  },
+  destroyed() {
+    this.$events.$off(this.$constants.message.connected, this.reconnect);
   },
   mounted() {
     const vm = this;
 
+    vm.state.mode = vm.$constants.mode.tree;
     vm.render();
-
-    vm.$events.$on(vm.$constants.message.connected, function(object) {
-      vm.render();
-    });
 
     vm.$events.$on(vm.$constants.message.tree, function(message) {
       vm.state.loading = false;

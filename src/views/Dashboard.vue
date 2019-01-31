@@ -107,16 +107,24 @@ export default {
         type: this.$constants.message.focus,
         focus: this.focus
       });
+    },
+    reconnect() {
+      if (this.state.mode === this.$constants.mode.focus) {
+        this.refocus();
+      }
     }
+  },
+  created() {
+    this.$events.$on(this.$constants.message.connected, this.reconnect);
+  },
+  destroyed() {
+    this.$events.$off(this.$constants.message.connected, this.reconnect);
   },
   mounted() {
     const vm = this;
 
-    this.refocus();
-
-    vm.$events.$on(vm.$constants.message.connected, function(object) {
-      vm.refocus();
-    });
+    vm.state.mode = vm.$constants.mode.focus;
+    vm.refocus();
 
     vm.$events.$on(vm.$constants.message.render, function(message) {
       vm.state.loading = false;
@@ -140,8 +148,6 @@ export default {
         }
       }
     });
-  },
-  destroyed() {
   },
   watch: {
     $route: function(route) {

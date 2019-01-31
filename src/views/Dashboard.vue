@@ -112,42 +112,42 @@ export default {
       if (this.state.mode === this.$constants.mode.focus) {
         this.refocus();
       }
+    },
+    render(message) {
+      this.state.loading = false;
+      this.path.splice(0, this.path.length);
+      for (const item of message.path) {
+        this.path.push(item);
+      }
+
+      this.nodes.splice(0, this.nodes.length);
+      for (const item of message.nodes) {
+        this.nodes.push(item);
+      }
+    },
+    update(message) {
+      const node = message.node;
+      for (let i = 0; i < this.nodes.length; i++) {
+        if (this.nodes[i].id === node.id) {
+          this.nodes.splice(i, 1, node);
+        }
+      }
     }
   },
   created() {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
-  destroyed() {
-    this.$events.$off(this.$constants.message.connected, this.reconnect);
-  },
   mounted() {
-    const vm = this;
+    this.$events.$on(this.$constants.message.render, this.render);
+    this.$events.$on(this.$constants.message.update, this.update);
 
-    vm.state.mode = vm.$constants.mode.focus;
-    vm.refocus();
-
-    vm.$events.$on(vm.$constants.message.render, function(message) {
-      vm.state.loading = false;
-      vm.path.splice(0, vm.path.length);
-      for (const item of message.path) {
-        vm.path.push(item);
-      }
-
-      vm.nodes.splice(0, vm.nodes.length);
-      for (const item of message.nodes) {
-        vm.nodes.push(item);
-      }
-    });
-
-    vm.$events.$on(vm.$constants.message.update, function(message) {
-      const node = message.node;
-
-      for (let i = 0; i < vm.nodes.length; i++) {
-        if (vm.nodes[i].id === node.id) {
-          vm.nodes.splice(i, 1, node);
-        }
-      }
-    });
+    this.state.mode = this.$constants.mode.focus;
+    this.refocus();
+  },
+  beforeDestroy() {
+    this.$events.$off(this.$constants.message.connected, this.reconnect);
+    this.$events.$off(this.$constants.message.render, this.render);
+    this.$events.$off(this.$constants.message.update, this.update);
   },
   watch: {
     $route: function(route) {

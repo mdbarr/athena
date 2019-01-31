@@ -72,7 +72,7 @@ export default {
     };
   },
   methods: {
-    render() {
+    relist() {
       this.state.loading = true;
       this.$events.$send({
         type: this.$constants.message.list
@@ -82,24 +82,24 @@ export default {
       if (this.state.mode === this.$constants.mode.list) {
         this.render();
       }
+    },
+    render(message) {
+      this.state.loading = false;
+      this.items = message.items;
     }
   },
   created() {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
-  destroyed() {
-    this.$events.$off(this.$constants.message.connected, this.reconnect);
-  },
   mounted() {
-    const vm = this;
+    this.$events.$on(this.$constants.message.list, this.render);
 
-    vm.state.mode = vm.$constants.mode.list;
-    vm.render();
-
-    vm.$events.$on(vm.$constants.message.list, function(message) {
-      vm.state.loading = false;
-      vm.items = message.items;
-    });
+    this.state.mode = this.$constants.mode.list;
+    this.relist();
+  },
+  beforeDdestroy() {
+    this.$events.$off(this.$constants.message.connected, this.reconnect);
+    this.$events.$off(this.$constants.message.list, this.render);
   }
 };
 </script>

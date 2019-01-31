@@ -36,7 +36,7 @@ export default {
     };
   },
   methods: {
-    render() {
+    retree() {
       this.state.loading = true;
       this.$events.$send({
         type: this.$constants.message.tree
@@ -46,27 +46,27 @@ export default {
       if (this.state.mode === this.$constants.mode.tree) {
         this.render();
       }
+    },
+    render(message) {
+      this.state.loading = false;
+      this.items = message.items;
+      if (!this.open.length) {
+        this.open = [ 'root' ];
+      }
     }
   },
   created() {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
+  mounted() {
+    this.$events.$on(this.$constants.message.tree, this.render);
+
+    this.state.mode = this.$constants.mode.tree;
+    this.retree();
+  },
   destroyed() {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
-  },
-  mounted() {
-    const vm = this;
-
-    vm.state.mode = vm.$constants.mode.tree;
-    vm.render();
-
-    vm.$events.$on(vm.$constants.message.tree, function(message) {
-      vm.state.loading = false;
-      vm.items = message.items;
-      if (!vm.open.length) {
-        vm.open = [ 'root' ];
-      }
-    });
+    this.$events.$off(this.$constants.message.tree, this.render);
   }
 };
 </script>

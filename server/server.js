@@ -183,18 +183,18 @@ function Server(athena) {
       shed.message(response);
     });
 
-    shed.on(athena.constants.message.list, function() {
-      console.log('List view %s', clientId);
-      shed.session.mode = athena.constants.mode.list;
+    shed.on(athena.constants.message.table, function() {
+      console.log('Table view %s', clientId);
+      shed.session.mode = athena.constants.mode.table;
 
       const root = athena.store.resolve(athena.constants.nodes.root.id);
-      const list = root.list();
+      const table = root.table();
 
-      shed.session.list = list;
+      shed.session.table = table;
 
       const response = {
-        type: athena.constants.message.list,
-        items: list
+        type: athena.constants.message.table,
+        items: table
       };
 
       shed.message(response);

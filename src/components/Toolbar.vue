@@ -10,20 +10,20 @@
           <v-list-tile-title>Dashboard</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile @click.stop="navigate('table')">
+        <v-list-tile-action>
+          <v-icon>mdi-view-list</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Table View</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
       <v-list-tile @click.stop="navigate('tree')">
         <v-list-tile-action>
           <v-icon>mdi-file-tree</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Tree View</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click.stop="navigate('list')">
-        <v-list-tile-action>
-          <v-icon>mdi-view-list</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>List View</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="true">

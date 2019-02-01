@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import Login from './views/Login.vue';
 import Dashboard from './views/Dashboard.vue';
-import List from './views/List.vue';
+import Table from './views/Table.vue';
 import Tree from './views/Tree.vue';
 
 import store from './store';
@@ -29,9 +29,9 @@ const router = new Router({
       component: Dashboard
     },
     {
-      path: '/list',
-      name: 'list',
-      component: List
+      path: '/table',
+      name: 'table',
+      component: Table
     },
     {
       path: '/tree',

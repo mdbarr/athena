@@ -356,13 +356,13 @@ function Nodes(athena) {
       return render;
     }
 
-    list(list = [], depth = 0) {
+    table(list = [], depth = 0) {
       const render = this.render();
       render.depth = depth;
 
       list.push(render);
       this.config.children.map(child => athena.store.resolve(child)).
-        forEach(child => child.list(list, depth + 1));
+        forEach(child => child.table(list, depth + 1));
       return list;
     }
 

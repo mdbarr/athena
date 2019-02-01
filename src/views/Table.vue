@@ -3,7 +3,7 @@
     <athena-toolbar></athena-toolbar>
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
-        <v-data-table :headers="headers" :items="items" :rows-per-page-items="rows" class="elevation-1 athena-list-table" >
+        <v-data-table :headers="headers" :items="items" :rows-per-page-items="rows" class="elevation-1 athena-table" >
           <template slot="items" slot-scope="props">
             <td><v-icon>{{ 'mdi-' + props.item.icon }}</v-icon></td>
             <td>{{ props.item.name }}</td>
@@ -27,7 +27,7 @@ import Footer from '../components/Footer.vue';
 import Toolbar from '../components/Toolbar.vue';
 
 export default {
-  name: 'athena-list',
+  name: 'athena-table',
   components: {
     'athena-footer': Footer,
     'athena-toolbar': Toolbar
@@ -72,14 +72,14 @@ export default {
     };
   },
   methods: {
-    relist() {
+    retable() {
       this.state.loading = true;
       this.$events.$send({
-        type: this.$constants.message.list
+        type: this.$constants.message.table
       });
     },
     reconnect() {
-      if (this.state.mode === this.$constants.mode.list) {
+      if (this.state.mode === this.$constants.mode.table) {
         this.render();
       }
     },
@@ -92,20 +92,20 @@ export default {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
   mounted() {
-    this.$events.$on(this.$constants.message.list, this.render);
+    this.$events.$on(this.$constants.message.table, this.render);
 
-    this.state.mode = this.$constants.mode.list;
-    this.relist();
+    this.state.mode = this.$constants.mode.table;
+    this.retable();
   },
   beforeDdestroy() {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
-    this.$events.$off(this.$constants.message.list, this.render);
+    this.$events.$off(this.$constants.message.table, this.render);
   }
 };
 </script>
 
 <style>
-.athena-list-table {
+.athena-table {
     width: 100%;
     z-index: 1;
 }

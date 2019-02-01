@@ -68,7 +68,8 @@ export default {
         value: 'parent'
       } ],
       rows: [25, 50, 100, { 'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1 }],
-      items: []
+      items: [],
+      lookup: {}
     };
   },
   methods: {
@@ -86,6 +87,17 @@ export default {
     render(message) {
       this.state.loading = false;
       this.items = message.items;
+      for (let i = 0; i < this.items.length; i++) {
+        const item = this.items[i];
+        this.lookup[item.id] = i;
+      }
+    },
+    update(message) {
+      const node = message.node;
+      const index = this.lookup[node.id];
+      if (index !== undefined) {
+        this.items.splice(index, 1, node);
+      }
     }
   },
   created() {
@@ -93,13 +105,15 @@ export default {
   },
   mounted() {
     this.$events.$on(this.$constants.message.table, this.render);
+    this.$events.$on(this.$constants.message.update, this.update);
 
     this.state.mode = this.$constants.mode.table;
     this.retable();
   },
-  beforeDdestroy() {
+  beforeDestroy() {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.table, this.render);
+    this.$events.$off(this.$constants.message.update, this.update);
   }
 };
 </script>

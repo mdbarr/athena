@@ -77,8 +77,10 @@ function Server(athena) {
     for (const clientId in self.clients) {
       const client = self.clients[clientId];
 
-      if (client.session.focus === node.config.parent &&
-          client.session.mode === athena.constants.mode.focus) {
+      if ((client.session.focus === node.config.parent &&
+           client.session.mode === athena.constants.mode.focus) ||
+          client.session.mode === athena.constants.mode.table ||
+          client.session.mode === athena.constants.mode.tree) {
 
         if (!renders[node.id]) {
           renders[node.id] = node.render();

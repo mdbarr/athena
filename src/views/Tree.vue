@@ -64,7 +64,7 @@ export default {
     this.state.mode = this.$constants.mode.tree;
     this.retree();
   },
-  destroyed() {
+  beforeDestroy() {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.tree, this.render);
   }

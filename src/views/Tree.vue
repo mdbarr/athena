@@ -32,10 +32,17 @@ export default {
       state: store.state,
       open: [],
       tree: [],
-      items: []
+      items: [],
+      lookup: {}
     };
   },
   methods: {
+    detree(node) {
+      this.lookup[node.id] = node;
+      for (const child of node.children) {
+        this.detree(child);
+      }
+    },
     retree() {
       this.state.loading = true;
       this.$events.$send({
@@ -53,6 +60,21 @@ export default {
       if (!this.open.length) {
         this.open = [ 'root' ];
       }
+      this.detree(this.items[0]);
+    },
+    update(message) {
+      const node = message.node;
+      const target = this.lookup[node.id];
+      if (target) {
+        for (const item in node) {
+          if (item !== 'children') {
+            target[item] = node[item];
+          }
+        }
+        if (target.id === 'root') {
+          target.name = 'ATHENA';
+        }
+      }
     }
   },
   created() {
@@ -60,6 +82,7 @@ export default {
   },
   mounted() {
     this.$events.$on(this.$constants.message.tree, this.render);
+    this.$events.$on(this.$constants.message.update, this.update);
 
     this.state.mode = this.$constants.mode.tree;
     this.retree();
@@ -67,6 +90,7 @@ export default {
   beforeDestroy() {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.tree, this.render);
+    this.$events.$off(this.$constants.message.update, this.update);
   }
 };
 </script>

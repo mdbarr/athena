@@ -8,11 +8,11 @@
             <td><v-icon>{{ 'mdi-' + props.item.icon }}</v-icon></td>
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.type }}</td>
-            <td :class="'text-xs-center node-health node-' + props.item.status.health">{{ props.item.status.health }}</td>
-            <td class="text-xs-center">{{ props.item.status.aggregate }}</td>
-            <td class="text-xs-center">{{ props.item.status.updatedAt | calendar }}</td>
-            <td class="text-xs-center">{{ props.item.status.triggeredAt | calendar }}</td>
-            <td class="text-xs-left">{{ props.item.parent | uuid }}</td>
+            <td :class="'node-health node-' + props.item.status.health">{{ props.item.status.health }}</td>
+            <td>{{ props.item.status.aggregate }}</td>
+            <td>{{ props.item.status.updatedAt | calendar }}</td>
+            <td>{{ props.item.status.triggeredAt | calendar }}</td>
+            <td>{{ props.item.parent | uuid }}</td>
           </template>
         </v-data-table>
       </v-layout>
@@ -106,7 +106,8 @@ export default {
 
 <style>
 .athena-list-table {
-    z-index: 1
+    width: 100%;
+    z-index: 1;
 }
 .node-health {
     font-weight: 700 !important;

@@ -3,7 +3,7 @@
     <athena-toolbar></athena-toolbar>
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
-        <v-treeview v-model="tree" :open="open" :items="items" activatable item-key="id" open-on-click>
+        <v-treeview v-model="tree" :open.sync="open" :items="items" activatable open-on-click>
           <template slot="prepend" slot-scope="{ item, open, leaf }">
             <v-icon :class="'node-icon node-' + item.status.health">
               {{ 'mdi-' + item.icon }}
@@ -58,8 +58,9 @@ export default {
       this.state.loading = false;
       this.items = message.items;
       if (!this.open.length) {
-        this.open = [ 'root' ];
+        this.open = this.state.tree.open;
       }
+
       this.detree(this.items[0]);
     },
     update(message) {
@@ -91,6 +92,8 @@ export default {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.tree, this.render);
     this.$events.$off(this.$constants.message.update, this.update);
+
+    this.state.tree.open = this.open;
   }
 };
 </script>

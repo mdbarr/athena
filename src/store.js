@@ -15,6 +15,10 @@ function Store() {
 
     loading: false,
 
+    tree: {
+      open: [ 'root' ]
+    },
+
     terminals: []
   };
 

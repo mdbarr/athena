@@ -37,6 +37,15 @@ export default {
     };
   },
   methods: {
+    expandAll() {
+      this.open = [];
+      for (const item in this.lookup) {
+        this.open.push(this.lookup[item].id);
+      }
+    },
+    collapseAll() {
+      this.open = [];
+    },
     detree(node) {
       this.lookup[node.id] = node;
       for (const child of node.children) {

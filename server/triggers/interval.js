@@ -2,12 +2,9 @@
 
 function Interval(athena, node, options, id) {
   const timeout = parseInt(options);
-
   const interval = setInterval(() => node.trigger(id), timeout);
 
-  interval.stop = () => interval.clearInterval();
-
-  return interval;
+  this.stop = () => clearInterval(interval);
 }
 
 module.exports = Interval;

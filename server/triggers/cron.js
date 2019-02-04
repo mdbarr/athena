@@ -4,8 +4,9 @@ const CronJob = require('cron').CronJob;
 
 function Cron(athena, node, options, id) {
   const cronjob = new CronJob(options, () => node.trigger(id));
+  cronjob.start();
 
-  return cronjob;
+  this.stop = () => cronjob.stop();
 }
 
 module.exports = Cron;

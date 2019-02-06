@@ -1459,10 +1459,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
-barrkeep@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/barrkeep/-/barrkeep-1.3.2.tgz#dd1bac8be3920e0ebe1b9d5680cea18c2df54080"
-  integrity sha512-uCiLbDzmqomykmeZXB9c8v/s42pgkf0drdprpsVpjcaQhv5cno1grXuC6lDDivvqhqsSe6lUuMA7RnwooR1NMw==
+barrkeep@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/barrkeep/-/barrkeep-1.3.3.tgz#a1b31f2f8a8b1b15f4893cec771ae828ed4b239d"
+  integrity sha512-+9XWzlMBupkC/M6g3+gXLVy6YZNgsRhKurdonz2TiYAD3hd7raBXqK0KqiDb7OntZSMVje7X0bS+gcAAss489Q==
 
 base64-js@^1.0.2:
   version "1.3.0"

@@ -1,19 +1,13 @@
 'use strict';
 
-const fs = require('fs');
 const assert = require('assert');
 const Athena = require('../server/athena');
 const MongoClient = require('mongodb').MongoClient;
 
 function bootstrap(options) {
-  let config = {};
-  if (options.config) {
-    config = JSON.parse(fs.readFileSync(options.config));
-  }
+  const athena = new Athena();
 
-  const athena = new Athena(config);
-
-  const data = require('../' + options.file);
+  const data = require('../' + options.data);
 
   const client = new MongoClient(athena.config.mongo.url, {
     useNewUrlParser: true

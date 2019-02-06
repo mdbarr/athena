@@ -89,6 +89,14 @@ module.exports = {
     table: 'table-mode',
     tree: 'tree-mode'
   },
+  users: {
+    admin: {
+      name: 'Athena',
+      username: 'athena',
+      password: 'bad password',
+      isAdmin: true
+    }
+  },
   nodes: {
     root: {
       name: 'root',

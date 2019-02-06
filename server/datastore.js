@@ -37,33 +37,20 @@ function DataStore(athena) {
     return results;
   };
 
-  self.syncConfig = function(callback) {
+  self.loadConfig = function(callback) {
     callback = athena.util.callback(callback);
 
-    if (athena.config.mongo.sync) {
-      self.collections.config.findOne({}, function(error, config) {
-        if (config) {
-          athena.config = Object.merge(athena.config, config);
-          self.collections.config.updateOne({
-            _id: athena.config._id
-          },
-          {
-            $set: athena.config
-          },
-          {
-            upsert: true
-          },
-          callback);
-        } else {
-          self.collections.config.insertOne(athena.config, function(error, result) {
-            athena.config._id = result.insertedId.toString();
-            callback(null, athena.config);
-          });
-        }
-      });
-    } else {
-      callback();
-    }
+    self.collections.config.findOne({}, function(error, config) {
+      if (config) {
+        athena.config = config;
+        callback();
+      } else {
+        athena.config = require('./defaults');
+        self.collections.config.insertOne(athena.config, function(error) {
+          callback(error);
+        });
+      }
+    });
   };
 
   self.loadUsers = function(callback) {
@@ -71,12 +58,8 @@ function DataStore(athena) {
       if (error || !results) {
         return callback(error);
       } else if (results.length === 0) {
-        const admin = {
-          name: 'Athena',
-          username: 'athena',
-          password: athena.util.generateLocalPassword(),
-          isAdmin: true
-        };
+        const admin = athena.constants.users.admin;
+        admin.password = athena.util.generateLocalPassword();
         users.athena = athena.models.user(admin);
 
         console.log('-'.repeat(80));
@@ -95,28 +78,32 @@ function DataStore(athena) {
   self.boot = function(callback) {
     callback = athena.util.callback(callback);
 
+    const mongoUrl = process.env.ATHENA_MONGO_URL ||
+          'mongodb://localhost:27017';
+    const mongoDB = process.env.ATHENA_MONGO_DB ||
+          'athena';
+
     athena.events.on('created', function(node) {
       store[node.config.id] = node;
     });
 
-    self.client = new MongoClient(athena.config.mongo.url, {
+    self.client = new MongoClient(mongoUrl, {
       useNewUrlParser: true
     });
 
     self.client.connect(function(error) {
       assert.equal(null, error);
 
-      self.db = self.client.db(athena.config.mongo.db);
+      self.db = self.client.db(mongoDB);
       self.collections = {
         config: self.db.collection('config'),
         nodes: self.db.collection('nodes'),
         users: self.db.collection('users')
       };
 
-      // Sync config
-      self.syncConfig(function() {
+      self.loadConfig(function() {
         self.loadUsers(function() {
-          if (athena.config.mongo.autoload === false) {
+          if (athena.config.autoload === false) {
             return callback();
           }
 

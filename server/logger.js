@@ -7,7 +7,7 @@ function Logger(athena) {
 
   self.log = function(event, callback) {
     callback = athena.util.callback(callback);
-    if (athena.config.log.enabled) {
+    if (athena.config && athena.config.log && athena.config.log.enabled) {
       const item = {
         id: event.id,
         event: event.event

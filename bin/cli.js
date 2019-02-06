@@ -13,6 +13,14 @@ const options = minimist(process.argv.slice(2));
 
 if (options.bootstrap) {
   bootstrap(options);
+} else if (options.createConfig || options['create-config']) {
+  const config = require(path.resolve(__dirname + '/../server/defaults'));
+  const data = {
+    users: [],
+    nodes: [],
+    config
+  };
+  console.log(JSON.stringify(data, null, 2));
 } else {
   const baseDirectory = path.resolve(__dirname + '/../');
   const athenaCommand = path.resolve(__dirname + '/cli.js');

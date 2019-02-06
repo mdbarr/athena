@@ -1,8 +1,10 @@
 'use strict';
 
 const path = require('path');
-const util = require('./util');
+const uuid = require('uuid/v4');
 const crypto = require('crypto');
+
+const identity = uuid();
 
 const keys = crypto.generateKeyPairSync('rsa', {
   modulusLength: 4096,
@@ -14,14 +16,14 @@ const keys = crypto.generateKeyPairSync('rsa', {
     type: 'pkcs8',
     format: 'pem',
     cipher: 'aes-256-cbc',
-    passphrase: util.generateLocalPassword()
+    passphrase: identity
   }
 });
 
 module.exports = {
   object: 'config',
   athena: {
-    identity: util.id(),
+    identity,
     publicKey: keys.publicKey,
     privateKey: keys.privateKey
   },

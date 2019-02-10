@@ -19,6 +19,42 @@ function Nodes(athena) {
 
   //////////
 
+  class DataSet {
+    constructor(size = 1000) {
+      this.type = 'gauge';
+      this.size = size;
+
+      // Ring buffer
+      this.data = new Array(size);
+      this.first = 0;
+      this.length = 0;
+    }
+
+    push({
+      type = 'gauge', value, timestamp
+    }) {
+      const point = {
+        type,
+        value,
+        timestamp: timestamp || athena.util.timestamp
+      };
+
+      this.type = type;
+
+      if (this.length === this.size) {
+        this.data[this.first] = point;
+        this.first = (this.first + 1) % this.size;
+      } else {
+        this.data[(this.first + this.length) % this.size] = value;
+        this.length++;
+      }
+
+      return point;
+    }
+  }
+
+  //////////
+
   const nodes = {};
 
   class Node extends EventEmitter {
@@ -87,6 +123,8 @@ function Nodes(athena) {
         triggeredAt: null,
         children: []
       };
+
+      node.dataset = new DataSet();
 
       athena.util.addPrivate(node, '_computed', {
         aggregate: true, // include this computation

@@ -3,7 +3,7 @@
 module.exports = {
   name: 'api',
   dependencies: 'http',
-  load: function(athena) {
+  load(athena) {
     class API extends athena.nodes.HTTP {
       constructor(options = {}) {
         super(options);

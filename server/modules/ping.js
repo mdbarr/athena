@@ -1,12 +1,12 @@
 'use strict';
 
 const net = require('net');
-const ping = require ('net-ping');
+const ping = require('net-ping');
 
 module.exports = {
   name: 'ping',
   dependencies: 'node',
-  load: function(athena) {
+  load(athena) {
     class Ping extends athena.nodes.Node {
       constructor(options = {}) {
         const {
@@ -29,8 +29,8 @@ module.exports = {
 
         this.session = ping.createSession();
 
-        this.on('trigger', function() {
-          node.session.pingHost(node.config.address, function (error, target, sent, rcvd) {
+        this.on('trigger', () => {
+          node.session.pingHost(node.config.address, (error, target, sent, rcvd) => {
             let health = athena.constants.health.healthy;
             let description;
             let metric = 0;
@@ -46,7 +46,8 @@ module.exports = {
               if (node.latency > 0 && time > node.latency) {
                 health = athena.constants.health.failed;
               } else {
-                description = `<i class="mdi mdi-check-network-outline"></i> ${ node.config.address } is online (${ metric }ms latency)`;
+                description = '<i class="mdi mdi-check-network-outline"></i>' +
+                  `${ node.config.address } is online (${ metric }ms latency)`;
               }
             }
             node.update({

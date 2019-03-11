@@ -8,7 +8,7 @@ const totalMemory = os.totalmem();
 module.exports = [ {
   name: 'container',
   dependencies: 'docker',
-  load: function(athena) {
+  load(athena) {
     class Container extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -24,11 +24,8 @@ module.exports = [ {
         node._docker = options.docker;
         node._container = options.container;
 
-        node.on('trigger', function() {
-          node._docker.getContainer(node.id).stats({
-            stream: false
-          }, function(error, stats) {
-
+        node.on('trigger', () => {
+          node._docker.getContainer(node.id).stats({ stream: false }, (error, stats) => {
             const state = node._container.State;
             let health = athena.constants.health.healthy;
 
@@ -60,9 +57,9 @@ module.exports = [ {
             }
 
             if (node._container.Ports.length) {
-              description += '<br>Ports: ' + node._container.Ports.map(function(item) {
+              description += `<br>Ports: ${ node._container.Ports.map((item) => {
                 return `${ item.PublicPort } <i class="mdi mdi-arrow-right"></i> ${ item.PrivatePort }/${ item.Type }`;
-              }).join(', ');
+              }).join(', ') }`;
             }
 
             node.update({
@@ -74,14 +71,14 @@ module.exports = [ {
           });
         });
       }
-    };
+    }
 
     athena.nodes.register('container', Container);
   }
 }, {
   name: 'docker',
   dependencies: 'node',
-  load: function(athena) {
+  load(athena) {
     class Docker extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -110,11 +107,9 @@ module.exports = [ {
         node._docker = new Dockerode(dockerOptions);
         node._containers = {};
 
-        node.on('trigger', function() {
-          node._docker.info(function(error, info) {
-            node._docker.listContainers({
-              all: true
-            }, function(error, containers) {
+        node.on('trigger', () => {
+          node._docker.info((error, info) => {
+            node._docker.listContainers({ all: true }, (error, containers) => {
               for (const item of containers) {
                 if (node._containers[item.Id]) {
                   node._containers[item.Id].container = item;
@@ -157,7 +152,9 @@ module.exports = [ {
                 node._containers[container].trigger();
               }
 
-              const description = `<i class="mdi mdi-progress-check"></i> Running containers: ${ info.ContainersRunning }<br><i class="mdi mdi-folder-image"></i> Images: ${ info.Images }`;
+              const description = '<i class="mdi mdi-progress-check"></i> ' +
+                    `Running containers: ${ info.ContainersRunning }<br>` +
+                    `<i class="mdi mdi-folder-image"></i> Images: ${ info.Images }`;
               node.update({
                 health: athena.constants.health.healthy,
                 description,

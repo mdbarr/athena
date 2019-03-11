@@ -15,7 +15,7 @@ function Events(athena) {
     athena.logger.log({
       id: athena.util.id(),
       event: eventName,
-      args: args
+      args
     });
 
     emitter.emit.apply(this, [ eventName, ...args ]);

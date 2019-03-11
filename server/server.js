@@ -29,11 +29,14 @@ function Server(athena) {
   athena.api.use(restify.plugins.bodyParser());
   athena.api.use(restify.plugins.authorizationParser());
 
-  athena.api.use(function (req, res, next) {
+  athena.api.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT');
-    res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization');
+    res.header('Access-Control-Allow-Headers', [
+      'Access-Control-Allow-Headers', 'Origin', 'Accept', 'X-Requested-With',
+      'Content-Type', 'Access-Control-Request-Method', 'Access-Control-Request-Headers',
+      'Authorization' ].join(', '));
 
     res.header('athena-server-version', athena.version);
 
@@ -42,15 +45,14 @@ function Server(athena) {
 
   //////////
 
-  athena.api.post('/api/session', function(req, res, next) {
-
+  athena.api.post('/api/session', (req, res, next) => {
     res.send(200);
     next();
   });
 
   //////////
 
-  athena.api.get('/api/version', function(req, res, next) {
+  athena.api.get('/api/version', (req, res, next) => {
     const version = {
       name: 'athena-server',
       version: athena.version
@@ -61,7 +63,7 @@ function Server(athena) {
 
   /////////
 
-  self.pingInterval = setInterval(function() {
+  self.pingInterval = setInterval(() => {
     for (const clientId in self.clients) {
       try {
         self.clients[clientId].message(athena.constants.message.ping);
@@ -77,11 +79,10 @@ function Server(athena) {
     for (const clientId in self.clients) {
       const client = self.clients[clientId];
 
-      if ((client.session.focus === node.config.parent &&
-           client.session.mode === athena.constants.mode.focus) ||
+      if (client.session.focus === node.config.parent &&
+           client.session.mode === athena.constants.mode.focus ||
           client.session.mode === athena.constants.mode.table ||
           client.session.mode === athena.constants.mode.tree) {
-
         if (!renders[node.id]) {
           renders[node.id] = node.render();
         }
@@ -98,7 +99,7 @@ function Server(athena) {
     }
   };
 
-  athena.api.get('/ws/attach', function(req, res, next) {
+  athena.api.get('/ws/attach', (req, res, next) => {
     if (!res.claimUpgrade) {
       next(new Error('Connection Must Upgrade For WebSockets'));
       return;
@@ -120,12 +121,12 @@ function Server(athena) {
 
     console.log('CLIENT CONNECT', clientId);
 
-    shed.on('connectionReset', function() {
+    shed.on('connectionReset', () => {
       console.log('CLIENT RESET', clientId);
       delete self.clients[clientId];
     });
 
-    shed.on('text', function(msg) {
+    shed.on('text', (msg) => {
       if (msg === athena.constants.message.pong) {
         // console.log('Received PONG from websocket client', clientId);
         return;
@@ -140,23 +141,21 @@ function Server(athena) {
       }
     });
 
-    shed.on('end', function() {
+    shed.on('end', () => {
       console.log('CLIENT DISCONNECT', clientId);
       delete self.clients[clientId];
     });
 
-    shed.on(athena.constants.message.focus, function(message) {
+    shed.on(athena.constants.message.focus, (message) => {
       console.log('Focusing %s on %s', clientId, message.focus);
       shed.session.mode = athena.constants.mode.focus;
       shed.session.focus = message.focus;
 
       const focus = athena.store.resolve(shed.session.focus);
 
-      const nodes = athena.store.find({
-        parent: shed.session.focus
-      });
+      const nodes = athena.store.find({ parent: shed.session.focus });
 
-      shed.session.render = nodes.map(item => item.render());
+      shed.session.render = nodes.map(item => { return item.render(); });
 
       const response = {
         type: athena.constants.message.render,
@@ -167,7 +166,7 @@ function Server(athena) {
       shed.message(response);
     });
 
-    shed.on(athena.constants.message.tree, function() {
+    shed.on(athena.constants.message.tree, () => {
       console.log('Tree view %s', clientId);
       shed.session.mode = athena.constants.mode.tree;
 
@@ -185,7 +184,7 @@ function Server(athena) {
       shed.message(response);
     });
 
-    shed.on(athena.constants.message.table, function() {
+    shed.on(athena.constants.message.table, () => {
       console.log('Table view %s', clientId);
       shed.session.mode = athena.constants.mode.table;
 
@@ -202,7 +201,7 @@ function Server(athena) {
       shed.message(response);
     });
 
-    shed.on(athena.constants.message.action, function(message) {
+    shed.on(athena.constants.message.action, (message) => {
       console.log('Invoking %s on %s via %s', message.action, message.node, clientId);
 
       const node = athena.store.resolve(message.node);
@@ -263,10 +262,9 @@ function Server(athena) {
 
   self.findPort = function(callback) {
     if (athena.config.api.available) {
-      findFreePort(athena.config.api.port, callback);
-    } else {
-      callback(null, athena.config.api.port);
+      return findFreePort(athena.config.api.port, callback);
     }
+    return callback(null, athena.config.api.port);
   };
 
   self.boot = function(callback) {
@@ -276,7 +274,7 @@ function Server(athena) {
       return callback();
     }
 
-    self.findPort(function(error, port) {
+    return self.findPort((error, port) => {
       if (error) {
         console.log('Error finding free port');
         return callback(error);
@@ -284,14 +282,13 @@ function Server(athena) {
 
       athena.events.on('status', self.clientUpdate);
 
-      athena.api.listen(port, athena.config.api.host, function(error) {
+      return athena.api.listen(port, athena.config.api.host, (error) => {
         if (error) {
           return callback(error);
-        } else {
-          console.log(athena.constants.assets.owlPrompt,
-            `Athena Server running on http://${ athena.config.api.host}:${ port }`);
-          callback();
         }
+        console.log(athena.constants.assets.owlPrompt,
+          `Athena Server running on http://${ athena.config.api.host }:${ port }`);
+        return callback();
       });
     });
   };

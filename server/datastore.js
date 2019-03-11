@@ -13,6 +13,7 @@ function DataStore(athena) {
     if (store[id]) {
       return store[id];
     }
+    return null;
   };
 
   self.find = function(object) {
@@ -40,21 +41,20 @@ function DataStore(athena) {
   self.loadConfig = function(callback) {
     callback = athena.util.callback(callback);
 
-    self.collections.config.findOne({}, function(error, config) {
+    return self.collections.config.findOne({}, (error, config) => {
       if (config) {
         athena.config = config;
-        callback();
-      } else {
-        athena.config = require('./defaults');
-        self.collections.config.insertOne(athena.config, function(error) {
-          callback(error);
-        });
+        return callback();
       }
+      athena.config = require('./defaults');
+      return self.collections.config.insertOne(athena.config, (error) => {
+        return callback(error);
+      });
     });
   };
 
   self.loadUsers = function(callback) {
-    self.collections.users.find({}).toArray(function (error, results) {
+    return self.collections.users.find({}).toArray((error, results) => {
       if (error || !results) {
         return callback(error);
       } else if (results.length === 0) {
@@ -71,7 +71,7 @@ function DataStore(athena) {
           users[user.username] = user;
         }
       }
-      callback();
+      return callback();
     });
   };
 
@@ -83,15 +83,13 @@ function DataStore(athena) {
     const mongoDB = process.env.ATHENA_MONGO_DB ||
           'athena';
 
-    athena.events.on('created', function(node) {
+    athena.events.on('created', (node) => {
       store[node.config.id] = node;
     });
 
-    self.client = new MongoClient(mongoUrl, {
-      useNewUrlParser: true
-    });
+    self.client = new MongoClient(mongoUrl, { useNewUrlParser: true });
 
-    self.client.connect(function(error) {
+    self.client.connect((error) => {
       assert.equal(null, error);
 
       self.db = self.client.db(mongoDB);
@@ -101,8 +99,8 @@ function DataStore(athena) {
         users: self.db.collection('users')
       };
 
-      self.loadConfig(function() {
-        self.loadUsers(function() {
+      return self.loadConfig(() => {
+        return self.loadUsers(() => {
           if (athena.config.autoload === false) {
             return callback();
           }
@@ -114,11 +112,9 @@ function DataStore(athena) {
           athena.nodes.create(athena.constants.nodes.athena);
 
           // Load nodes
-          self.collections.nodes.find({}).forEach(function(node) {
-            athena.nodes.create(node, {
-              link: false
-            });
-          }, function(findError) {
+          return self.collections.nodes.find({}).forEach((node) => {
+            athena.nodes.create(node, { link: false });
+          }, (findError) => {
             assert.equal(null, findError);
 
             // Set linkages
@@ -136,7 +132,7 @@ function DataStore(athena) {
               store[id].activate();
             }
 
-            callback();
+            return callback();
           });
         });
       });
@@ -146,7 +142,7 @@ function DataStore(athena) {
   self.stop = function(callback) {
     callback = athena.util.callback(callback);
 
-    self.client.close(function() {
+    self.client.close(() => {
       for (const id in store) {
         const node = store[id];
 

@@ -5,7 +5,7 @@ const dns = require('dns');
 module.exports = {
   name: 'dns',
   dependencies: 'node',
-  load: function(athena) {
+  load(athena) {
     class DNS extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -25,9 +25,9 @@ module.exports = {
         node.config.family = family;
         node.config.server = server || null;
 
-        node.on('trigger', function() {
+        node.on('trigger', () => {
           const start = Date.now();
-          dns.lookup(node.config.hostname, function(error, dnsAddress, dnsFamily) {
+          dns.lookup(node.config.hostname, (error, dnsAddress, dnsFamily) => {
             let health = athena.constants.health.healthy;
             const metric = Date.now() - start;
             let description;

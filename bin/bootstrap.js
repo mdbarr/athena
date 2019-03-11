@@ -7,13 +7,11 @@ const MongoClient = require('mongodb').MongoClient;
 function bootstrap(options) {
   const athena = new Athena();
 
-  const data = require('../' + options.data);
+  const data = require(`../${ options.data }`);
 
-  const client = new MongoClient(athena.config.mongo.url, {
-    useNewUrlParser: true
-  });
+  const client = new MongoClient(athena.config.mongo.url, { useNewUrlParser: true });
 
-  client.connect(function(error) {
+  client.connect((error) => {
     assert.equal(null, error);
 
     const db = client.db(athena.config.mongo.db);
@@ -32,17 +30,16 @@ function bootstrap(options) {
       callback = athena.util.callback(callback);
 
       if (options.drop) {
-        conf.drop(function() {
-          nodes.drop(function() {
-            users.drop(function() {
+        return conf.drop(() => {
+          nodes.drop(() => {
+            users.drop(() => {
               console.log('Dropped users and nodes collections.');
-              callback();
+              return callback();
             });
           });
         });
-      } else {
-        callback();
       }
+      return callback();
     }
 
     function loadUsers(items, callback) {
@@ -56,14 +53,13 @@ function bootstrap(options) {
       }
 
       if (items && items.length) {
-        users.insertMany(items, function(error, result) {
+        return users.insertMany(items, (error, result) => {
           assert.equal(null, error);
           counts.users = result.insertedCount;
-          callback();
+          return callback();
         });
-      } else {
-        callback();
       }
+      return callback();
     }
 
     function loadNodes(items, callback) {
@@ -94,24 +90,23 @@ function bootstrap(options) {
           }
         }
 
-        nodes.insertMany(list, function(error, result) {
+        return nodes.insertMany(list, (error, result) => {
           assert.equal(null, error);
           counts.nodes = result.insertedCount;
-          callback();
+          return callback();
         });
-      } else {
-        callback();
       }
+      return callback();
     }
 
     //////////
 
-    drop(function() {
-      loadUsers(data.users, function() {
+    drop(() => {
+      loadUsers(data.users, () => {
         if (counts.users) {
           console.log('Inserted %d users.', counts.users);
         }
-        loadNodes(data.nodes, function() {
+        loadNodes(data.nodes, () => {
           if (counts.nodes) {
             console.log('Inserted %d nodes.', counts.nodes);
           }

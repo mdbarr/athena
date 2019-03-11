@@ -13,9 +13,9 @@ const services = {
 function Util() {
   const self = this;
 
-  self.id = () => uuid();
+  self.id = () => { return uuid(); };
 
-  self.noop = () => undefined;
+  self.noop = () => { return undefined; };
   self.camelize = barrkeep.camelize;
   self.clone = barrkeep.deepClone;
   self.merge = barrkeep.merge;
@@ -30,8 +30,8 @@ function Util() {
   };
 
   self.service = function(name) {
-    let port = parseInt(name);
-    if (port !== NaN && port > 0) {
+    let port = parseInt(name, 10);
+    if (!isNaN(port) && port > 0) {
       return port;
     }
     port = services[name];
@@ -41,20 +41,20 @@ function Util() {
   self.callback = function(callback) {
     if (callback) {
       return function(error, data) {
-        setImmediate(function() {
+        setImmediate(() => {
           callback(error, data);
         });
       };
-    } else {
-      return self.noop;
     }
+    return self.noop;
   };
 
   self.computeHash = function(input, hash = 'sha1') {
     if (typeof input !== 'string') {
       input = JSON.stringify(input);
     }
-    return crypto.createHash(hash).update(input).digest('hex');
+    return crypto.createHash(hash).update(input).
+      digest('hex');
   };
 
   self.sha256 = function(input) {
@@ -64,13 +64,16 @@ function Util() {
   self.timestamp = function(date) {
     if (date) {
       return new Date(date).getTime();
-    } else {
-      return Date.now();
     }
+    return Date.now();
   };
 
   self.generateLocalPassword = function() {
-    let localPassword = `${os.type() }/${ os.arch() }/${ os.platform() }/${ os.release() }-${ os.cpus().map((item) => item.model) }:${ os.totalmem() }-${ os.hostname() }:${ os.homedir() }>${ JSON.stringify(os.userInfo()) }`.replace(/\s+/g, ' ').replace(/["']/g, '');
+    let localPassword = (`${ os.type() }/${ os.arch() }/${ os.platform() }/${ os.release() }-` +
+                         `${ os.cpus().map((item) => { return item.model; }) }:` +
+                         `${ os.totalmem() }-${ os.hostname() }:${ os.homedir() }>` +
+                         `${ JSON.stringify(os.userInfo()) }`).
+      replace(/\s+/g, ' ').replace(/["']/g, '');
     localPassword = self.sha256(localPassword).substring(0, 24);
     return localPassword;
   };

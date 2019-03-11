@@ -3,7 +3,7 @@
 module.exports = {
   name: 'test',
   dependencies: 'node',
-  load: function(athena) {
+  load(athena) {
     class Test extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -14,12 +14,12 @@ module.exports = {
         node.config.icon = options.icon || 'progress-wrench';
         node.config.typeIcon = 'progress-wrench';
         node.config.folderIcon = options.folderIcon || 'fire';
-        node.config.behavior.status = (options.behavior && options.behavior.status) ?
+        node.config.behavior.status = options.behavior && options.behavior.status ?
           options.behavior.status : 'own';
 
         let healths = [];
 
-        node.on('trigger', function() {
+        node.on('trigger', () => {
           if (!healths.length) {
             healths = Object.keys(athena.constants.health);
           }
@@ -27,9 +27,9 @@ module.exports = {
           const health = healths.pop();
 
           let description = `Test health: ${ health }`;
-          if (this.status.children.length) {
-            for (let i = 0; i < this.status.children.length; i++) {
-              description += `<br> Child #${ i + 1 }: ${ this.status.children[i] }`;
+          if (node.status.children.length) {
+            for (let i = 0; i < node.status.children.length; i++) {
+              description += `<br> Child #${ i + 1 }: ${ node.status.children[i] }`;
             }
           }
 

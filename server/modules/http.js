@@ -5,7 +5,7 @@ const request = require('request');
 module.exports = {
   name: 'http',
   dependencies: 'node',
-  load: function(athena) {
+  load(athena) {
     class HTTP extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -41,8 +41,8 @@ module.exports = {
           time: true
         };
 
-        node.on('trigger', function() {
-          request(requestOptions, function(error, response) {
+        node.on('trigger', () => {
+          request(requestOptions, (error, response) => {
             let health = athena.constants.health.healthy;
             let metric = 0;
 

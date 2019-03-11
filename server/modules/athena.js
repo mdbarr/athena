@@ -4,7 +4,7 @@ const os = require('os');
 
 module.exports = {
   name: 'athena',
-  load: function(athena) {
+  load(athena) {
     class Athena extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -19,12 +19,12 @@ module.exports = {
 
         node.status.health = athena.constants.health.healthy;
 
-        node.on('trigger', function() {
+        node.on('trigger', () => {
           const loadavg = os.loadavg();
           const metric = Number(loadavg[0].toFixed(2));
 
           let freeMemory = os.freemem();
-          const percentMemory = Math.floor((freeMemory / os.totalmem()) * 100);
+          const percentMemory = Math.floor(freeMemory / os.totalmem() * 100);
           freeMemory = athena.util.formatBytes(freeMemory);
 
           const clients = Object.keys(athena.server.clients).length;

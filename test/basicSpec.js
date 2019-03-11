@@ -2,18 +2,18 @@
 
 const Athena = require('../server/athena');
 
-describe('Basic Spec', function() {
+describe('Basic Spec', () => {
   let athena;
   let root;
   let ping;
 
-  it('should create and boot an Athena instance', function(done) {
+  it('should create and boot an Athena instance', (done) => {
     athena = new Athena();
 
     athena.boot(done);
   });
 
-  it('should create the root node', function() {
+  it('should create the root node', () => {
     root = athena.nodes.create({
       name: 'root',
       id: 'root',
@@ -23,7 +23,7 @@ describe('Basic Spec', function() {
     });
   });
 
-  it('should create a ping node', function() {
+  it('should create a ping node', () => {
     ping = athena.nodes.create({
       name: 'localhost',
       id: '12fbf70a-fcc7-11e8-a2a8-32001b294000',
@@ -37,28 +37,28 @@ describe('Basic Spec', function() {
     });
   });
 
-  it('should add ping as a child of root', function() {
+  it('should add ping as a child of root', () => {
     root.addChild(ping);
   });
 
-  it('should enable the root and ping nodes', function() {
+  it('should enable the root and ping nodes', () => {
     root.actions.enable();
     ping.actions.enable();
   });
 
-  it('should manually trigger the ping node', function() {
+  it('should manually trigger the ping node', () => {
     ping.actions.trigger();
   });
 
-  it('should verify the ping is now healthy', function() {
+  it('should verify the ping is now healthy', () => {
     ping.status.health.should.equal(athena.constants.health.healthy);
   });
 
-  it('should activate the ping triggers', function() {
+  it('should activate the ping triggers', () => {
     athena.triggers.activate(ping);
   });
 
-  it('should stop the athena instance', function(done) {
+  it('should stop the athena instance', (done) => {
     athena.stop(done);
   });
 });

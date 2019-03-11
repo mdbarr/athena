@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
 const watch = require('glob-watcher');
-const child_process = require('child_process');
+const childProcess = require('child_process');
 const bootstrap = require('./bootstrap');
 
 const options = minimist(process.argv.slice(2));
@@ -14,7 +14,7 @@ const options = minimist(process.argv.slice(2));
 if (options.bootstrap) {
   bootstrap(options);
 } else if (options.createConfig || options['create-config']) {
-  const config = require(path.resolve(__dirname + '/../server/defaults'));
+  const config = require(path.resolve(`${ __dirname }/../server/defaults`));
   const data = {
     users: [],
     nodes: [],
@@ -22,9 +22,9 @@ if (options.bootstrap) {
   };
   console.log(JSON.stringify(data, null, 2));
 } else {
-  const baseDirectory = path.resolve(__dirname + '/../');
-  const athenaCommand = path.resolve(__dirname + '/cli.js');
-  const project = require(path.resolve(__dirname + '/../package.json'));
+  const baseDirectory = path.resolve(`${ __dirname }/../`);
+  const athenaCommand = path.resolve(`${ __dirname }/cli.js`);
+  const project = require(path.resolve(`${ __dirname }/../package.json`));
 
   let paused = false;
   let athenaProcess;
@@ -33,16 +33,14 @@ if (options.bootstrap) {
   function launchAthena() {
     clearTimeout(crashTimeout);
 
-    setTimeout(function() {
+    setTimeout(() => {
       paused = false;
     }, 5000);
 
     try {
       if (options.lint) {
         console.log('Linting...');
-        child_process.execSync(project.scripts['api:lint'] + ' --fix', {
-          stdio: 'inherit'
-        });
+        childProcess.execSync(`${ project.scripts['api:lint'] } --fix`, { stdio: 'inherit' });
       }
 
       if (athenaProcess) {
@@ -56,27 +54,26 @@ if (options.bootstrap) {
         args.push(`--config=${ options.config }`);
       }
 
-      athenaProcess = child_process.fork(athenaCommand, args, {
+      athenaProcess = childProcess.fork(athenaCommand, args, {
         detached: false,
         stdio: 'inherit'
       });
 
-      athenaProcess.on('message', function() {
+      athenaProcess.on('message', () => {
         paused = false;
       });
 
-      athenaProcess.on('exit', function(code) {
+      athenaProcess.on('exit', (code) => {
         athenaProcess = null;
 
         if (code !== 0) {
           console.log('Athena crashed, relaunching in 10s...');
           paused = false;
-          crashTimeout = setTimeout(function() {
+          crashTimeout = setTimeout(() => {
             launchAthena();
           }, 10000);
         }
       });
-
     } catch (error) {
       console.log('Error launching Athena:\n  ', error.message);
       paused = false;
@@ -86,7 +83,13 @@ if (options.bootstrap) {
 
   if (options.help) {
     const name = path.basename(process.argv[1]);
-    console.log(`Athena CLI - Usage:\n${ name } [--help] [--watch] [--config=FILE] [--bootstap] [--file=FILE] [--drop]`);
+    console.log(`Athena CLI - Usage:\n${ name } ${ [
+      '[--help]',
+      '[--watch]',
+      '[--config=FILE]',
+      '[--bootstap]',
+      '[--file=FILE]',
+      '[--drop]' ].join(' ') }`);
     process.exit(0);
   } else if (options.watch) {
     launchAthena();
@@ -98,7 +101,7 @@ if (options.bootstrap) {
         paused = true;
 
         if (athenaProcess) {
-          athenaProcess.on('exit', function() {
+          athenaProcess.on('exit', () => {
             launchAthena();
           });
 
@@ -110,18 +113,18 @@ if (options.bootstrap) {
     };
 
     const watcher = watch([
-      baseDirectory + '/server/**/*.js',
-      baseDirectory + '/common/**/*.js',
-      baseDirectory + '/bin/**/*.js',
-      baseDirectory + '/package.json',
-      baseDirectory + '/yarn.lock'
+      `${ baseDirectory }/server/**/*.js`,
+      `${ baseDirectory }/common/**/*.js`,
+      `${ baseDirectory }/bin/**/*.js`,
+      `${ baseDirectory }/package.json`,
+      `${ baseDirectory }/yarn.lock`
     ]);
 
     watcher.on('add', handler);
     watcher.on('change', handler);
   } else {
     process.title = 'athena';
-    process.on('SIGINT', () => process.exit(0));
+    process.on('SIGINT', () => { return process.exit(0); });
 
     let config = {};
     if (options.config) {
@@ -131,7 +134,7 @@ if (options.bootstrap) {
     const Athena = require('../server/athena');
     const athena = new Athena(config);
 
-    athena.boot(function() {
+    athena.boot(() => {
       if (process.send) {
         process.send('ready');
       }

@@ -96,7 +96,7 @@ function Nodes(athena) {
         ephemeral
       };
 
-      node.config.behavior = (behavior && typeof behavior === 'object') ?
+      node.config.behavior = behavior && typeof behavior === 'object' ?
         behavior : {};
 
       // status behavior: own, aggregate, children
@@ -104,7 +104,7 @@ function Nodes(athena) {
       // trigger behavior: self, children, all
       node.config.behavior.trigger = node.config.behavior.trigger || 'self';
       // sync behavior: true, false
-      node.config.behavior.sync = (node.config.behavior.sync !== undefined) ?
+      node.config.behavior.sync = node.config.behavior.sync !== undefined ?
         node.config.behavior.sync : true;
 
       node.id = node.config.id;
@@ -128,19 +128,16 @@ function Nodes(athena) {
 
       athena.util.addPrivate(node, '_computed', {
         aggregate: true, // include this computation
-        [Symbol.iterator]: function() {
+        [Symbol.iterator]() {
           return {
-            next: function() {
+            next() {
               if (this._index < this._keys.length) {
                 return {
                   value: this._keys[this._index++],
                   done: false
                 };
-              } else {
-                return {
-                  done: true
-                };
               }
+              return { done: true };
             },
             _index: 0,
             _keys: Object.keys(node.status).concat(Object.keys(node._computed))
@@ -153,30 +150,30 @@ function Nodes(athena) {
           tooltip: 'Enable node',
           icon: 'play',
           call: node.enable.bind(node),
-          available: () => !node.status.enabled
+          available: () => { return !node.status.enabled; }
         },
         disable: {
           tooltip: 'Disable node',
           icon: 'stop',
           call: node.disable.bind(node),
-          available: () => node.status.enabled
+          available: () => { return node.status.enabled; }
         },
         trigger: {
           tooltip: 'Trigger node',
           icon: 'update',
           call: node.trigger.bind(node),
-          available: () => node.status.enabled
+          available: () => { return node.status.enabled; }
         }
       };
 
       node.computed = new Proxy({}, {
-        enumerate: function() {
+        enumerate() {
           return Object.keys(node.status).concat(Object.keys(node._computed));
         },
-        ownKeys: function() {
+        ownKeys() {
           return Object.keys(node.status).concat(Object.keys(node._computed));
         },
-        getOwnPropertyDescriptor: function(object, property) {
+        getOwnPropertyDescriptor(object, property) {
           let value;
           if (node._computed.hasOwnProperty(property)) {
             value = node.computed[property];
@@ -193,7 +190,7 @@ function Nodes(athena) {
             configurable: true
           };
         },
-        get: function(object, property) {
+        get(object, property) {
           if (property === 'health') {
             if (node.config.behavior.status === 'own' || !node.status.children.length) {
               return node.status.health;
@@ -201,26 +198,24 @@ function Nodes(athena) {
               return aggregate([ node.status.health, ...node.status.children ]);
             } else if (node.config.behavior.status === 'children') {
               return aggregate(node.status.children);
-            } else {
-              return athena.constants.health.unknown;
             }
+            return athena.constants.health.unknown;
           } else if (property === 'aggregate') {
             return aggregate(node.status.children);
           } else if (node._computed[property] &&
                      typeof node._computed[property] === 'function') {
             return node._computed[property](object, property);
-          } else {
-            return node.status[property];
           }
+          return node.status[property];
         },
-        set: function(object, property, value) {
+        set(object, property, value) {
           if (typeof value === 'function') {
             node._computed[property] = value;
           }
         }
       });
 
-      node.on('config', function() {
+      node.on('config', () => {
         node.id = node.config.id;
         if (node.status.enabled && !node.config.ephemeral) {
           node.save();
@@ -292,7 +287,7 @@ function Nodes(athena) {
       const node = this;
       const childId = node.config.children.length;
 
-      child.on('status', function() {
+      child.on('status', () => {
         if (child.status.enabled) {
           node.status.children[childId] = child.computed.health;
           node.emit('status', child, child.status);
@@ -389,8 +384,8 @@ function Nodes(athena) {
       const render = this.render();
       render.depth = depth;
       render.children = this.config.children.
-        map(child => athena.store.resolve(child)).
-        map(child => child.tree(depth + 1));
+        map(child => { return athena.store.resolve(child); }).
+        map(child => { return child.tree(depth + 1); });
       return render;
     }
 
@@ -399,8 +394,8 @@ function Nodes(athena) {
       render.depth = depth;
 
       list.push(render);
-      this.config.children.map(child => athena.store.resolve(child)).
-        forEach(child => child.table(list, depth + 1));
+      this.config.children.map(child => { return athena.store.resolve(child); }).
+        forEach(child => { return child.table(list, depth + 1); });
       return list;
     }
 

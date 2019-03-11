@@ -37,9 +37,8 @@ function Athena() {
                  self.constants.assets.athena).
       style(self.constants.style.blue));
 
-    self.store.boot(function() {
-
-      self.server.boot(function() {
+    self.store.boot(() => {
+      self.server.boot(() => {
         callback();
       });
     });
@@ -48,8 +47,8 @@ function Athena() {
   self.stop = function(callback) {
     callback = self.util.callback(callback);
 
-    self.store.stop(function() {
-      self.server.stop(function() {
+    self.store.stop(() => {
+      self.server.stop(() => {
         callback();
       });
     });

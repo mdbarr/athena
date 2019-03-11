@@ -3,7 +3,7 @@
 module.exports = {
   name: 'folder',
   dependencies: 'http',
-  load: function(athena) {
+  load(athena) {
     class Folder extends athena.nodes.Node {
       constructor(options = {}) {
         super(options);
@@ -14,7 +14,7 @@ module.exports = {
         this.config.typeIcon = 'folder-open';
         this.config.folderIcon = options.folderIcon || 'folder';
 
-        this.config.behavior.status = (options.behavior && options.behavior.status) ?
+        this.config.behavior.status = options.behavior && options.behavior.status ?
           options.behavior.status : 'children';
 
         this.status.health = athena.constants.health.healthy;

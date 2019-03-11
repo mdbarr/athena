@@ -10,17 +10,16 @@ function Models(athena) {
     isAdmin = false, isSecure = false,
     requiresPasswordChange = false
   }) {
-
     const model = {
       id: id || athena.util.id(),
       name,
       email,
-      username: (username) ? username : name.toLowerCase(),
+      username: username ? username : name.toLowerCase(),
       password,
       // flags
-      isAdmin: !!isAdmin,
-      isSecure: !!isSecure,
-      requiresPasswordChange: !!requiresPasswordChange
+      isAdmin: Boolean(isAdmin),
+      isSecure: Boolean(isSecure),
+      requiresPasswordChange: Boolean(requiresPasswordChange)
     };
 
     if (!model.isSecure) {
@@ -32,9 +31,7 @@ function Models(athena) {
     return model;
   };
 
-  self.session = function({
-    user = {}
-  }) {
+  self.session = function({ user = {} }) {
     const model = {
       id: athena.util.id(),
       timestamp: athena.util.timestamp(),

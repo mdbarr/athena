@@ -6,6 +6,12 @@ const MongoClient = require('mongodb').MongoClient;
 
 function bootstrap(options) {
   const athena = new Athena();
+  athena.config = require('../server/defaults')
+
+  athena.config.mongo = {
+    url: process.env.ATHENA_MONGO_URL || 'mongodb://localhost:27017',
+    db: process.env.ATHENA_MONGO_DB || 'athena'
+  };
 
   const data = require(`../${ options.data }`);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-require('barrkeep');
+require('barrkeep/shim');
 
 function Athena() {
   const self = this;
@@ -35,7 +35,7 @@ function Athena() {
 
     console.log((self.constants.assets.banner +
                  self.constants.assets.athena).
-      style(self.constants.style.blue));
+      $style(self.constants.style.blue));
 
     self.store.boot(() => {
       self.server.boot(() => {

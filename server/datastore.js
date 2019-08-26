@@ -3,7 +3,7 @@
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 
-function DataStore(athena) {
+function DataStore (athena) {
   const self = this;
 
   const users = {};

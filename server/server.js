@@ -6,7 +6,7 @@ const Watershed = require('watershed').Watershed;
 
 const PING_INTERVAL = 5000;
 
-function Server(athena) {
+function Server (athena) {
   const self = this;
 
   self.clients = {};

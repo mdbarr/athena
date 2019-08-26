@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events');
 
-function Events(athena) {
+function Events (athena) {
   const self = this;
 
   const emitter = new EventEmitter();

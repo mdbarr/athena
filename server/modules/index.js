@@ -12,7 +12,7 @@ const fields = [
 ];
 
 class Module {
-  constructor(name, dependencies, loader, resolved = false) {
+  constructor (name, dependencies, loader, resolved = false) {
     this.name = name;
     this.dependencies = dependencies;
     this.loader = loader;
@@ -21,11 +21,11 @@ class Module {
     this.loaded = false;
   }
 
-  dependsOn(module) {
+  dependsOn (module) {
     this.edges.push(module);
   }
 
-  resolve(resolved = [], seen = new WeakSet()) {
+  resolve (resolved = [], seen = new WeakSet()) {
     if (!this.resolved) {
       for (const item of this.dependencies) {
         if (modules[item]) {
@@ -49,7 +49,7 @@ class Module {
     return this.resolved;
   }
 
-  load(athena) {
+  load (athena) {
     if (!this.loaded) {
       this.loader(athena);
       this.loaded = true;

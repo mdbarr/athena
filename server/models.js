@@ -1,6 +1,6 @@
 'use strict';
 
-function Models(athena) {
+function Models (athena) {
   const self = this;
 
   //////////

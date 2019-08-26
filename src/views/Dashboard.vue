@@ -46,20 +46,18 @@ import Breadcrumbs from '../components/Breadcrumbs.vue';
 
 export default {
   name: 'dashboard',
-  props: {
-    id: {
-      type: String,
-      required: false,
-      default: 'root'
-    }
-  },
+  props: { id: {
+    type: String,
+    required: false,
+    default: 'root'
+  } },
   components: {
     'athena-node': Node,
     'athena-footer': Footer,
     'athena-toolbar': Toolbar,
     'athena-breadcrumbs': Breadcrumbs
   },
-  data() {
+  data () {
     return {
       state: store.state,
       filter: '',
@@ -70,35 +68,32 @@ export default {
     };
   },
   methods: {
-    strcmp: function(a, b, inverted) {
+    strcmp (a, b, inverted) {
       if (a < b) {
         return (inverted) ? 1 : -1;
       } else if (b < a) {
         return (inverted) ? -1 : 1;
-      } else {
-        return 0;
       }
+      return 0;
     },
-    filterNodes: function() {
+    filterNodes () {
       if (!this.filter.length) {
         return this.nodes;
       }
 
-      return this.nodes.filter(item =>
-        item.name.includes(this.filter));
+      return this.nodes.filter(item => { return item.name.includes(this.filter); });
     },
-    filterSort: function() {
+    filterSort () {
       const filtered = this.filterNodes().slice();
 
       if (this.sort === 'a-z') {
-        return filtered.sort((a, b) => this.strcmp(a.name, b.name));
+        return filtered.sort((a, b) => { return this.strcmp(a.name, b.name); });
       } else if (this.sort === 'z-a') {
-        return filtered.sort((a, b) => this.strcmp(a.name, b.name, true));
-      } else {
-        return filtered;
+        return filtered.sort((a, b) => { return this.strcmp(a.name, b.name, true); });
       }
+      return filtered;
     },
-    refocus: function(id) {
+    refocus (id) {
       if (id) {
         this.focus = id;
       }
@@ -108,12 +103,12 @@ export default {
         focus: this.focus
       });
     },
-    reconnect() {
+    reconnect () {
       if (this.state.mode === this.$constants.mode.focus) {
         this.refocus();
       }
     },
-    render(message) {
+    render (message) {
       this.state.loading = false;
       this.path.splice(0, this.path.length);
       for (const item of message.path) {
@@ -125,7 +120,7 @@ export default {
         this.nodes.push(item);
       }
     },
-    update(message) {
+    update (message) {
       const node = message.node;
       for (let i = 0; i < this.nodes.length; i++) {
         if (this.nodes[i].id === node.id) {
@@ -134,30 +129,28 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
-  mounted() {
+  mounted () {
     this.$events.$on(this.$constants.message.render, this.render);
     this.$events.$on(this.$constants.message.update, this.update);
 
     this.state.mode = this.$constants.mode.focus;
     this.refocus();
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.render, this.render);
     this.$events.$off(this.$constants.message.update, this.update);
   },
-  watch: {
-    $route: function(route) {
-      if (route.params && route.params.id) {
-        this.refocus(route.params.id);
-      } else {
-        this.refocus('root');
-      }
+  watch: { $route (route) {
+    if (route.params && route.params.id) {
+      this.refocus(route.params.id);
+    } else {
+      this.refocus('root');
     }
-  }
+  } }
 };
 </script>
 

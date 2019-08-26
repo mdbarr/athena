@@ -6,9 +6,9 @@ const ping = require('net-ping');
 module.exports = {
   name: 'ping',
   dependencies: 'node',
-  load(athena) {
+  load (athena) {
     class Ping extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         const {
           address, latency
         } = options;
@@ -59,7 +59,7 @@ module.exports = {
         });
       }
 
-      stop() {
+      stop () {
         this.session.close();
       }
     }

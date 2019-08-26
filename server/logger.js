@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-function Logger(athena) {
+function Logger (athena) {
   const self = this;
 
   self.log = function(event, callback) {

@@ -27,7 +27,7 @@ export default {
     'athena-footer': Footer,
     'athena-toolbar': Toolbar
   },
-  data() {
+  data () {
     return {
       state: store.state,
       open: [],
@@ -37,33 +37,31 @@ export default {
     };
   },
   methods: {
-    expandAll() {
+    expandAll () {
       this.open = [];
       for (const item in this.lookup) {
         this.open.push(this.lookup[item].id);
       }
     },
-    collapseAll() {
+    collapseAll () {
       this.open = [];
     },
-    detree(node) {
+    detree (node) {
       this.lookup[node.id] = node;
       for (const child of node.children) {
         this.detree(child);
       }
     },
-    retree() {
+    retree () {
       this.state.loading = true;
-      this.$events.$send({
-        type: this.$constants.message.tree
-      });
+      this.$events.$send({ type: this.$constants.message.tree });
     },
-    reconnect() {
+    reconnect () {
       if (this.state.mode === this.$constants.mode.tree) {
         this.render();
       }
     },
-    render(message) {
+    render (message) {
       this.state.loading = false;
       this.items = message.items;
       if (!this.open.length) {
@@ -72,7 +70,7 @@ export default {
 
       this.detree(this.items[0]);
     },
-    update(message) {
+    update (message) {
       const node = message.node;
       const target = this.lookup[node.id];
       if (target) {
@@ -87,17 +85,17 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
-  mounted() {
+  mounted () {
     this.$events.$on(this.$constants.message.tree, this.render);
     this.$events.$on(this.$constants.message.update, this.update);
 
     this.state.mode = this.$constants.mode.tree;
     this.retree();
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.tree, this.render);
     this.$events.$off(this.$constants.message.update, this.update);

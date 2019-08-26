@@ -1,6 +1,6 @@
 'use strict';
 
-function Triggers(athena) {
+function Triggers (athena) {
   const self = this;
 
   const triggers = require('requireindex')(__dirname);

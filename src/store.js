@@ -1,6 +1,6 @@
 import constants from '../common/constants';
 
-function Store() {
+function Store () {
   const self = this;
 
   self.state = {
@@ -15,9 +15,7 @@ function Store() {
 
     loading: false,
 
-    tree: {
-      open: [ 'root' ]
-    },
+    tree: { open: [ 'root' ] },
 
     terminals: []
   };

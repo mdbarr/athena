@@ -3,9 +3,9 @@
 module.exports = {
   name: 'test',
   dependencies: 'node',
-  load(athena) {
+  load (athena) {
     class Test extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         const node = this;

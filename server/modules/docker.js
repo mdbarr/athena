@@ -8,9 +8,9 @@ const totalMemory = os.totalmem();
 module.exports = [ {
   name: 'container',
   dependencies: 'docker',
-  load(athena) {
+  load (athena) {
     class Container extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         const node = this;
@@ -52,13 +52,15 @@ module.exports = [ {
               const cpu = athena.util.precisionRound(cpuDelta / systemDelta, 4);
 
               const memory = athena.util.precisionRound(stats.memory_stats.usage / totalMemory, 4);
-              description += `<br>CPU: ${ Math.round(cpu * 100) }% Memory: ${ Math.round(memory * 100) }%`;
+              description += `<br>CPU: ${ Math.round(cpu * 100) }%` +
+                ` Memory: ${ Math.round(memory * 100) }%`;
               metric = cpu;
             }
 
             if (node._container.Ports.length) {
               description += `<br>Ports: ${ node._container.Ports.map((item) => {
-                return `${ item.PublicPort } <i class="mdi mdi-arrow-right"></i> ${ item.PrivatePort }/${ item.Type }`;
+                return `${ item.PublicPort } <i class="mdi mdi-arrow-right"></i>` +
+` ${ item.PrivatePort }/${ item.Type }`;
               }).join(', ') }`;
             }
 
@@ -78,9 +80,9 @@ module.exports = [ {
 }, {
   name: 'docker',
   dependencies: 'node',
-  load(athena) {
+  load (athena) {
     class Docker extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         const node = this;

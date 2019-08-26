@@ -17,15 +17,12 @@
 <script>
 export default {
   name: 'athena-breadcrumbs',
-  props: {
-    path: {
-      type: Array,
-      required: true
-    }
-  },
-  data() {
-    return {
-    };
+  props: { path: {
+    type: Array,
+    required: true
+  } },
+  data () {
+    return {};
   }
 };
 </script>

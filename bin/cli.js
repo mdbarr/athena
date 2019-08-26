@@ -30,7 +30,7 @@ if (options.bootstrap) {
   let athenaProcess;
   let crashTimeout = 0;
 
-  function launchAthena() {
+  function launchAthena () {
     clearTimeout(crashTimeout);
 
     setTimeout(() => {

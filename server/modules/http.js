@@ -5,9 +5,9 @@ const request = require('request');
 module.exports = {
   name: 'http',
   dependencies: 'node',
-  load(athena) {
+  load (athena) {
     class HTTP extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         const {

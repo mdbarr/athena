@@ -4,9 +4,9 @@ const os = require('os');
 
 module.exports = {
   name: 'athena',
-  load(athena) {
+  load (athena) {
     class Athena extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
         const node = this;
 

@@ -59,28 +59,20 @@ import Sparkline from 'vue-sparklines';
 
 export default {
   name: 'athena-node',
-  props: {
-    node: Object
-  },
-  components: {
-    sparkline: Sparkline
-  },
-  data() {
+  props: { node: Object },
+  components: { sparkline: Sparkline },
+  data () {
     return {
       margin: 2,
-      barStyles: {
-        fill: '#377eb8'
-      },
-      lineStyles: {
-        stroke: '#377eb8'
-      }
+      barStyles: { fill: '#377eb8' },
+      lineStyles: { stroke: '#377eb8' }
     };
   },
   computed: {
-    icon() {
-      return 'mdi mdi-' + this.node.icon + ' node-title-icon';
+    icon () {
+      return `mdi mdi-${ this.node.icon } node-title-icon`;
     },
-    statusIcon() {
+    statusIcon () {
       if (this.node.status.health === this.$constants.health.healthy) {
         return 'mdi mdi-check-circle-outline';
       } else if (this.node.status.health === this.$constants.health.unknown) {
@@ -91,11 +83,10 @@ export default {
         return 'mdi mdi-alert-outline';
       } else if (this.node.status.health === this.$constants.health.failed) {
         return 'mdi mdi-alert-circle';
-      } else {
-        return 'mdi mdi-help-rhombus-outline';
       }
+      return 'mdi mdi-help-rhombus-outline';
     },
-    aggregateIcon() {
+    aggregateIcon () {
       if (this.node.status.aggregate === this.$constants.health.unknown) {
         return 'pl-3 mdi mdi-help-circle-outline';
       } else if (this.node.status.aggregate === this.$constants.health.unstable) {
@@ -104,27 +95,23 @@ export default {
         return 'pl-3 mdi mdi-alert-outline';
       } else if (this.node.status.aggregate === this.$constants.health.failed) {
         return 'pl-3 mdi mdi-alert-circle';
-      } else {
-        return 'pl-3 mdi mdi-help-rhombus-outline';
       }
+      return 'pl-3 mdi mdi-help-rhombus-outline';
     },
-    folderIcon() {
+    folderIcon () {
       if (this.node.folderIcon) {
-        return 'mdi mdi-' + this.node.folderIcon;
-      } else {
-        return 'mdi mdi-folder';
+        return `mdi mdi-${ this.node.folderIcon }`;
       }
+      return 'mdi mdi-folder';
     }
   },
-  methods: {
-    invoke: function(action) {
-      this.$events.$send({
-        type: this.$constants.message.action,
-        action,
-        node: this.node.id
-      });
-    }
-  }
+  methods: { invoke (action) {
+    this.$events.$send({
+      type: this.$constants.message.action,
+      action,
+      node: this.node.id
+    });
+  } }
 };
 //////////
 // Colors:

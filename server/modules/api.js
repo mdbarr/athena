@@ -3,9 +3,9 @@
 module.exports = {
   name: 'api',
   dependencies: 'http',
-  load(athena) {
+  load (athena) {
     class API extends athena.nodes.HTTP {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         this.config.type = 'api';

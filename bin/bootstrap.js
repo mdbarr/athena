@@ -4,9 +4,9 @@ const assert = require('assert');
 const Athena = require('../server/athena');
 const MongoClient = require('mongodb').MongoClient;
 
-function bootstrap(options) {
+function bootstrap (options) {
   const athena = new Athena();
-  athena.config = require('../server/defaults')
+  athena.config = require('../server/defaults');
 
   athena.config.mongo = {
     url: process.env.ATHENA_MONGO_URL || 'mongodb://localhost:27017',
@@ -32,7 +32,7 @@ function bootstrap(options) {
 
     //////////
 
-    function drop(callback) {
+    function drop (callback) {
       callback = athena.util.callback(callback);
 
       if (options.drop) {
@@ -48,7 +48,7 @@ function bootstrap(options) {
       return callback();
     }
 
-    function loadUsers(items, callback) {
+    function loadUsers (items, callback) {
       callback = athena.util.callback(callback);
 
       for (const user of items) {
@@ -68,7 +68,7 @@ function bootstrap(options) {
       return callback();
     }
 
-    function loadNodes(items, callback) {
+    function loadNodes (items, callback) {
       callback = athena.util.callback(callback);
 
       if (items && items.length) {

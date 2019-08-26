@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events');
 
-function Nodes(athena) {
+function Nodes (athena) {
   const self = this;
 
   //////////
@@ -20,7 +20,7 @@ function Nodes(athena) {
   //////////
 
   class DataSet {
-    constructor(size = 1000) {
+    constructor (size = 1000) {
       this.type = 'gauge';
       this.size = size;
 
@@ -30,7 +30,7 @@ function Nodes(athena) {
       this.length = 0;
     }
 
-    push({
+    push ({
       type = 'gauge', value, timestamp
     }) {
       const point = {
@@ -58,7 +58,7 @@ function Nodes(athena) {
   const nodes = {};
 
   class Node extends EventEmitter {
-    constructor({
+    constructor ({
       id,
       name,
       parent = 'root',
@@ -128,9 +128,9 @@ function Nodes(athena) {
 
       athena.util.addPrivate(node, '_computed', {
         aggregate: true, // include this computation
-        [Symbol.iterator]() {
+        [Symbol.iterator] () {
           return {
-            next() {
+            next () {
               if (this._index < this._keys.length) {
                 return {
                   value: this._keys[this._index++],
@@ -167,13 +167,13 @@ function Nodes(athena) {
       };
 
       node.computed = new Proxy({}, {
-        enumerate() {
+        enumerate () {
           return Object.keys(node.status).concat(Object.keys(node._computed));
         },
-        ownKeys() {
+        ownKeys () {
           return Object.keys(node.status).concat(Object.keys(node._computed));
         },
-        getOwnPropertyDescriptor(object, property) {
+        getOwnPropertyDescriptor (object, property) {
           let value;
           if (node._computed.hasOwnProperty(property)) {
             value = node.computed[property];
@@ -190,7 +190,7 @@ function Nodes(athena) {
             configurable: true
           };
         },
-        get(object, property) {
+        get (object, property) {
           if (property === 'health') {
             if (node.config.behavior.status === 'own' || !node.status.children.length) {
               return node.status.health;
@@ -208,7 +208,7 @@ function Nodes(athena) {
           }
           return node.status[property];
         },
-        set(object, property, value) {
+        set (object, property, value) {
           if (typeof value === 'function') {
             node._computed[property] = value;
           }
@@ -223,33 +223,33 @@ function Nodes(athena) {
       });
     }
 
-    enable() {
+    enable () {
       if (!this.status.enabled) {
         this.status.enabled = true;
       }
     }
 
-    disable() {
+    disable () {
       if (this.status.enabled) {
         this.status.enabled = true;
       }
     }
 
-    activate() {
+    activate () {
       if (!this.status.active) {
         athena.triggers.activate(this);
         this.status.active = true;
       }
     }
 
-    deactivate() {
+    deactivate () {
       if (this.status.active) {
         athena.triggers.deactivate(this);
         this.status.active = false;
       }
     }
 
-    reconfigure(config) {
+    reconfigure (config) {
       Object.merge(this.config, config);
 
       if (this.status.enabled) {
@@ -258,7 +258,7 @@ function Nodes(athena) {
       }
     }
 
-    update({
+    update ({
       health, state = null, description, metric
     }) {
       if (health !== undefined) {
@@ -279,11 +279,11 @@ function Nodes(athena) {
       }
     }
 
-    save() {
+    save () {
       this.emit('save', this.serialize());
     }
 
-    addChild(child) {
+    addChild (child) {
       const node = this;
       const childId = node.config.children.length;
 
@@ -298,7 +298,7 @@ function Nodes(athena) {
       node.config.children.push(child.id);
     }
 
-    link() {
+    link () {
       if (this.config.parent && !this._linked) {
         const parent = athena.store.resolve(this.config.parent);
         parent.addChild(this);
@@ -308,7 +308,7 @@ function Nodes(athena) {
       }
     }
 
-    path() {
+    path () {
       const path = [];
       let current = this;
 
@@ -332,7 +332,7 @@ function Nodes(athena) {
       return path;
     }
 
-    describe() {
+    describe () {
       return {
         name: 'String',
         parent: 'String',
@@ -343,7 +343,7 @@ function Nodes(athena) {
       };
     }
 
-    render() {
+    render () {
       const object = {};
       for (const item in this.config) {
         if (item.startsWith('_') ||
@@ -380,7 +380,7 @@ function Nodes(athena) {
       return object;
     }
 
-    tree(depth = 0) {
+    tree (depth = 0) {
       const render = this.render();
       render.depth = depth;
       render.children = this.config.children.
@@ -389,7 +389,7 @@ function Nodes(athena) {
       return render;
     }
 
-    table(list = [], depth = 0) {
+    table (list = [], depth = 0) {
       const render = this.render();
       render.depth = depth;
 
@@ -399,7 +399,7 @@ function Nodes(athena) {
       return list;
     }
 
-    serialize() {
+    serialize () {
       const object = {};
       for (const item in this.config) {
         if (item.startsWith('_') ||
@@ -412,7 +412,7 @@ function Nodes(athena) {
       return object;
     }
 
-    trigger(...args) {
+    trigger (...args) {
       if (this.status.enabled) {
         this.status.triggeredAt = Date.now();
 

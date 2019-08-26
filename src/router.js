@@ -11,39 +11,40 @@ const router = new Router({
     {
       path: '/',
       name: 'dashboard',
-      component: () => import('./views/Dashboard.vue')
+      component: () => { return import('./views/Dashboard.vue'); }
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('./views/Login.vue')
+      component: () => { return import('./views/Login.vue'); }
     },
     {
       path: '/view/:id',
       name: 'view',
-      component: () => import('./views/Dashboard.vue')
+      component: () => { return import('./views/Dashboard.vue'); }
     },
     {
       path: '/table',
       name: 'table',
-      component: () => import('./views/Table.vue')
+      component: () => { return import('./views/Table.vue'); }
     },
     {
       path: '/tree',
       name: 'tree',
-      component: () => import('./views/Tree.vue')
+      component: () => { return import('./views/Tree.vue'); }
     },
 
-    { path: '*', redirect: '/' }
+    {
+      path: '*', redirect: '/'
+    }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   if (!store.state.loggedIn && to.name !== 'login') {
-    next({ path: '/login' });
-  } else {
-    next();
+    return next({ path: '/login' });
   }
+  return next();
 });
 
 export default router;

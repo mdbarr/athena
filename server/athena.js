@@ -2,7 +2,7 @@
 
 require('barrkeep/shim');
 
-function Athena() {
+function Athena () {
   const self = this;
 
   //////////

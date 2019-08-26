@@ -132,18 +132,15 @@ import store from '../store';
 
 export default {
   name: 'athena-toolbar',
-  props: {
-  },
-  data() {
-    return {
-      state: store.state
-    };
+  props: {},
+  data () {
+    return { state: store.state };
   },
   methods: {
-    navigate(where) {
+    navigate (where) {
       this.$router.push({ name: where });
     },
-    logout() {
+    logout () {
       this.state.loggedIn = false;
       this.$router.push({ name: 'login' });
     }

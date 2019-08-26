@@ -5,9 +5,9 @@ const dns = require('dns');
 module.exports = {
   name: 'dns',
   dependencies: 'node',
-  load(athena) {
+  load (athena) {
     class DNS extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         const node = this;

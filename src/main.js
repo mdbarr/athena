@@ -13,15 +13,15 @@ import moment from 'moment';
 Vue.config.productionTip = false;
 
 const websocketUrl = (process.env.NODE_ENV === 'production')
-  ? 'wss://' + window.location.hostname + '/ws/attach'
-  : 'ws://' + window.location.hostname + ':6250/ws/attach';
+  ? `wss://${ window.location.hostname }/ws/attach`
+  : `ws://${ window.location.hostname }:6250/ws/attach`;
 
 Vue.use(VueNativeSock, websocketUrl, {
   format: 'json',
   reconnection: true
 });
 
-Vue.filter('capitalize', function(value) {
+Vue.filter('capitalize', (value) => {
   if (!value) {
     return '';
   }
@@ -29,22 +29,22 @@ Vue.filter('capitalize', function(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 });
 
-Vue.filter('uppercase', function(value) {
+Vue.filter('uppercase', (value) => {
   return (value || '').toUpperCase();
 });
 
-Vue.filter('calendar', function(value) {
+Vue.filter('calendar', (value) => {
   if (!value) {
     return '';
   }
   return moment(value).calendar();
 });
 
-Vue.filter('timestamp', function(value) {
+Vue.filter('timestamp', (value) => {
   return moment(value).format('MMMM Do YYYY, h:mm a');
 });
 
-Vue.filter('uuid', function(value) {
+Vue.filter('uuid', (value) => {
   if (!value) {
     return '';
   }
@@ -53,20 +53,14 @@ Vue.filter('uuid', function(value) {
 
 Vue.prototype.$constants = constants;
 
-Vue.prototype.$events = new Vue({
-  methods: {
-    $send(object) {
-      this.$emit(constants.message.send, object);
-    }
-  }
-});
+Vue.prototype.$events = new Vue({ methods: { $send (object) {
+  this.$emit(constants.message.send, object);
+} } });
 
 new Vue({
-  data: {
-    state: store.state
-  },
+  data: { state: store.state },
   router,
-  render: h => h(App)
+  render: h => { return h(App); }
 }).$mount('#app');
 
-console.log(constants.assets.banner + '\n' + constants.assets.athena);
+console.log(`${ constants.assets.banner }\n${ constants.assets.athena }`);

@@ -29,17 +29,13 @@
 import store from '../store';
 export default {
   name: 'Login',
-  data() {
-    return {
-      state: store.state
-    };
+  data () {
+    return { state: store.state };
   },
-  methods: {
-    login() {
-      this.state.loggedIn = true;
-      this.$router.replace({ name: 'dashboard' });
-    }
-  }
+  methods: { login () {
+    this.state.loggedIn = true;
+    this.$router.replace({ name: 'dashboard' });
+  } }
 };
 </script>
 

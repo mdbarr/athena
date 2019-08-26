@@ -10,7 +10,7 @@ const services = {
   https: 443
 };
 
-function Util() {
+function Util () {
   const self = this;
 
   self.id = () => { return uuid(); };

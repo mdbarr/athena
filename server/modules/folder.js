@@ -3,9 +3,9 @@
 module.exports = {
   name: 'folder',
   dependencies: 'http',
-  load(athena) {
+  load (athena) {
     class Folder extends athena.nodes.Node {
-      constructor(options = {}) {
+      constructor (options = {}) {
         super(options);
 
         this.config.type = 'folder';

@@ -19,12 +19,9 @@ import store from '../store';
 
 export default {
   name: 'athena-footer',
-  props: {
-  },
-  data() {
-    return {
-      state: store.state
-    };
+  props: {},
+  data () {
+    return { state: store.state };
   }
 };
 </script>

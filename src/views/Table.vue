@@ -32,7 +32,7 @@ export default {
     'athena-footer': Footer,
     'athena-toolbar': Toolbar
   },
-  data() {
+  data () {
     return {
       state: store.state,
       headers: [ {
@@ -67,24 +67,24 @@ export default {
         sortable: true,
         value: 'parent'
       } ],
-      rows: [25, 50, 100, { 'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1 }],
+      rows: [ 25, 50, 100, {
+        'text': '$vuetify.dataIterator.rowsPerPageAll', 'value': -1
+      } ],
       items: [],
       lookup: {}
     };
   },
   methods: {
-    retable() {
+    retable () {
       this.state.loading = true;
-      this.$events.$send({
-        type: this.$constants.message.table
-      });
+      this.$events.$send({ type: this.$constants.message.table });
     },
-    reconnect() {
+    reconnect () {
       if (this.state.mode === this.$constants.mode.table) {
         this.render();
       }
     },
-    render(message) {
+    render (message) {
       this.state.loading = false;
       this.items = message.items;
       for (let i = 0; i < this.items.length; i++) {
@@ -92,7 +92,7 @@ export default {
         this.lookup[item.id] = i;
       }
     },
-    update(message) {
+    update (message) {
       const node = message.node;
       const index = this.lookup[node.id];
       if (index !== undefined) {
@@ -100,17 +100,17 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.$events.$on(this.$constants.message.connected, this.reconnect);
   },
-  mounted() {
+  mounted () {
     this.$events.$on(this.$constants.message.table, this.render);
     this.$events.$on(this.$constants.message.update, this.update);
 
     this.state.mode = this.$constants.mode.table;
     this.retable();
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$events.$off(this.$constants.message.connected, this.reconnect);
     this.$events.$off(this.$constants.message.table, this.render);
     this.$events.$off(this.$constants.message.update, this.update);

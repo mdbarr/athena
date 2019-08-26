@@ -11,7 +11,7 @@ const methods = [
   'put'
 ];
 
-function Webhook(athena, node, options, id) {
+function Webhook (athena, node, options, id) {
   const url = `/api/triggers/${ node.id }`;
 
   options = options.split(/,\s*/);

@@ -1,6 +1,6 @@
 {
-  "name": "athena",
-  "version": "0.3.0",
+  "name": "@mdbarr/athena",
+  "version": "0.4.0",
   "private": false,
   "license": "MIT",
   "bin": {

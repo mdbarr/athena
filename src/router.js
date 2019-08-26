@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Login from './views/Login.vue';
-import Dashboard from './views/Dashboard.vue';
-import Table from './views/Table.vue';
-import Tree from './views/Tree.vue';
-
 import store from './store';
 
 Vue.use(Router);
@@ -16,27 +11,27 @@ const router = new Router({
     {
       path: '/',
       name: 'dashboard',
-      component: Dashboard
+      component: () => import('./views/Dashboard.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: () => import('./views/Login.vue')
     },
     {
       path: '/view/:id',
       name: 'view',
-      component: Dashboard
+      component: () => import('./views/Dashboard.vue')
     },
     {
       path: '/table',
       name: 'table',
-      component: Table
+      component: () => import('./views/Table.vue')
     },
     {
       path: '/tree',
       name: 'tree',
-      component: Tree
+      component: () => import('./views/Tree.vue')
     },
 
     { path: '*', redirect: '/' }

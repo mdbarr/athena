@@ -4,7 +4,7 @@
     <v-container grid-list-lg fluid>
       <v-layout row wrap>
         <v-treeview v-model="tree" :open.sync="open" :items="items" activatable open-on-click>
-          <template slot="prepend" slot-scope="{ item, open, leaf }">
+          <template slot="prepend" slot-scope="{ item }">
             <v-icon :class="'node-icon node-' + item.status.health">
               {{ 'mdi-' + item.icon }}
             </v-icon>

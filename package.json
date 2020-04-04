@@ -12,7 +12,7 @@
     "cron": "^1.7.1",
     "dockerode": "^2.5.8",
     "find-free-port": "^2.0.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "moment": "^2.24.0",
     "mongodb": "^3.3.1",
     "net-ping": "^1.2.3",

@@ -24,7 +24,7 @@
     "vue-native-websocket": "^2.0.13",
     "vue-router": "^3.1.2",
     "vue-sparklines": "^0.1.9",
-    "vuetify": "^2.1.1",
+    "vuetify": "^2.6.10",
     "watershed": "^0.4.0"
   },
   "devDependencies": {
